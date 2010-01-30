@@ -1,0 +1,17 @@
+PersistentProxyConnection=false
+
+[$Version]
+update_info=kioslave.upd:kde2.2/r1,kioslave.upd:kde2.2/r2,kioslave.upd:kde2.2/r3
+
+[Notification Messages]
+WarnOnLeaveSSLMode=false
+
+[Proxy Settings]
+AuthMode=0
+NoProxyFor=no_proxy.unit-test.invalid,.unit-test.invalid
+Proxy Config Script=
+ProxyType=1
+ReversedException=false
+ftpProxy=ftp://ftp_proxy.unit-test.invalid:8092
+httpProxy=http://http_proxy.unit-test.invalid:8090
+httpsProxy=https://https_proxy.unit-test.invalid:8091

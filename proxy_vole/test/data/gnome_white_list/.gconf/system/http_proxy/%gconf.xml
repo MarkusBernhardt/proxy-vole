@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<gconf>
+        <entry name="port" mtime="1243184973" type="int" value="8090">
+        </entry>
+        <entry name="use_same_proxy" mtime="1243184977" type="bool" value="false">
+        </entry>
+        <entry name="ignore_hosts" mtime="1243185198" type="list" ltype="string">
+                <li type="string">
+                        <stringvalue>localhost</stringvalue>
+                </li>
+                <li type="string">
+                        <stringvalue>127.0.0.0/8</stringvalue>
+                </li>
+                <li type="string">
+                        <stringvalue>*.local</stringvalue>
+                </li>
+                <li type="string">
+                        <stringvalue>no_proxy.unit-test.invalid</stringvalue>
+                </li>
+        </entry>
+        <entry name="host" mtime="1243184967" type="string">
+                <stringvalue>http_proxy.unit-test.invalid</stringvalue>
+        </entry>
+        <entry name="use_http_proxy" mtime="1243185171" type="bool" value="true">
+        </entry>
+</gconf>

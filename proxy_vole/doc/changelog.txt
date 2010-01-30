@@ -1,0 +1,12 @@
+Change Log:
+This file contains the change log. The changes are marked with the following symbology.
+
++ for a new feature
+- for a removed feature
+* for a modified feature or a bugfix
+
+-----------------
+
+18.Oct 2009
++ Added caching for PAC proxy selector for performance reasons
+* BufferedProxySelector will now cache per URL and no longer per "Host". This is more save.

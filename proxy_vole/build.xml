@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ====================================================================== 
+ Proxy Vole    
+ Build file mainly used to create a deployment jar.
+                  
+ - Bernd Rosstauscher                                                                 
+====================================================================== -->
+
+<project name="proxy-vole" default="all">
+
+	<description>
+    	Build file mainly used to create a deployment jar. 
+    </description>
+
+	<!-- Properties ======================================================= -->
+
+	<property name="src" location="src"/>
+	<property name="classes" location="bin"/>
+	<property name="doc" location="doc"/>
+	<property name="libs" location="lib"/>
+	<property name="deploy" location="deploy"/>
+
+	<!-- Tasks ============================================================ -->
+
+	<target name="init">
+		<delete dir="${classes}" />
+		<mkdir dir="${classes}" />
+		<mkdir dir="${deploy}" />
+	</target>
+
+	<target name="compile" depends="init" description="compile the source " >
+		<javac debug="true" classpath="${libs}/js.jar" srcdir="${src}" destdir="${classes}" />
+	</target>
+
+	<target name="build_src_zip" depends="gen_doc" description="generate the src zip">
+		<tstamp />
+		<zip destfile="${deploy}/proxy-vole_${DSTAMP}_src.zip">
+			<fileset dir="">
+				<include name="**/*" />
+				<exclude name="bin/**/*" />
+				<exclude name="**/*.zip" />
+				<exclude name="**/.svn" />
+			</fileset>
+		</zip>
+	</target>
+	
+	<target name="build_bin_zip" depends="create_jar" description="generate the binary zip">
+			<tstamp />
+			<zip destfile="${deploy}/proxy-vole_${DSTAMP}_bin.zip">
+				<fileset dir="deploy">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="">
+					<include name="*.txt" />
+				</fileset>
+			</zip>
+		</target>
+	
+	<target name="create_jar" depends="compile" description="generate the main jar">
+		<tstamp />
+		<jar jarfile="${deploy}/proxy-vole_${DSTAMP}.jar" basedir="${classes}">
+			<fileset dir="">
+				<include name="lib/*.dll" />
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Implementation-Vendor" value="BTR" />
+				<attribute name="Implementation-Title" value="Proxy-Vole" />
+				<attribute name="Implementation-Version" value="${DSTAMP}" />
+
+				<attribute name="Class-Path" value="js.jar" />
+				<attribute name="Main-Class" value="com.btr.proxy.search.ProxySearch" />
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="gen_doc" description="Generate the JavaDoc.">
+		<javadoc classpath="${libs}/js.jar" sourcepath="${src}" excludepackagenames="org.mozilla.*" destdir="${doc}/api"></javadoc>
+		<copy file="misc/stylesheet.css" todir="${doc}/api/" overwrite="true" />
+	</target>
+	
+	<target name="all" depends="build_bin_zip, build_src_zip" description="Build all" />
+
+</project>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<gconf>
+        <entry name="old_socks_port" mtime="1243184977" type="int" value="8889">
+        </entry>
+        <entry name="old_socks_host" mtime="1243184977" type="string">
+                <stringvalue>sodddddd</stringvalue>
+        </entry>
+        <entry name="old_ftp_port" mtime="1243184977" type="int" value="8099">
+        </entry>
+        <entry name="old_ftp_host" mtime="1243184977" type="string">
+                <stringvalue>ftpproxy</stringvalue>
+        </entry>
+        <entry name="old_secure_port" mtime="1243184977" type="int" value="8090">
+        </entry>
+        <entry name="old_secure_host" mtime="1243184977" type="string">
+                <stringvalue>sslproxy</stringvalue>
+        </entry>
+        <entry name="socks_port" mtime="1243185041" type="int" value="8093">
+        </entry>
+        <entry name="socks_host" mtime="1243185029" type="string">
+                <stringvalue>socks_proxy.unit-test.invalid</stringvalue>
+        </entry>
+        <entry name="ftp_port" mtime="1243185020" type="int" value="8092">
+        </entry>
+        <entry name="ftp_host" mtime="1243185014" type="string">
+                <stringvalue>ftp_proxy.unit-test.invalid</stringvalue>
+        </entry>
+        <entry name="secure_port" mtime="1243185005" type="int" value="8091">
+        </entry>
+        <entry name="secure_host" mtime="1243184991" type="string">
+                <stringvalue>https_proxy.unit-test.invalid</stringvalue>
+        </entry>
+        <entry name="mode" mtime="1243184951" type="string">
+                <stringvalue>manual</stringvalue>
+        </entry>
+</gconf>
