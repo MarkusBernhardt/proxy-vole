@@ -4,6 +4,8 @@ import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.btr.proxy.selector.fixed.FixedProxySelector;
 
@@ -18,10 +20,11 @@ public class ProxyUtil {
 	public static final int DEFAULT_PROXY_PORT = 80;
 	
 	private static List<Proxy> noProxyList;
+    private static Pattern pattern = Pattern.compile("\\w*?:?/*([^:/]+):?(\\d*)/?");
 	
 	/*************************************************************************
 	 * Parse host and port out of a proxy variable.
-	 * @param proxyVar the proxy string.
+	 * @param proxyVar the proxy string. example: http://192.168.10.9:8080/
 	 * @return a FixedProxySelector using this settings, null on parse error.
 	 ************************************************************************/
 	
@@ -29,23 +32,19 @@ public class ProxyUtil {
 		if (proxyVar == null || proxyVar.trim().length() == 0) {
 			return null;
 		}
-		int index = proxyVar.lastIndexOf(':');
-		if (index != -1) {
-			String host = proxyVar.substring(0, index).trim();
-			int port = Integer.parseInt(proxyVar.substring(index+1));
-			
-			// Remove protocol part.
-			index = host.indexOf(":/");
-			if (index >= 0) {
-				while (host.charAt(++index) == '/') {
-					// Increment
-				}
-				host = host.substring(index);
-			}
-			
-			return new FixedProxySelector(host, port);
+		Matcher matcher = pattern.matcher(proxyVar);
+		if (matcher.matches()) {
+		    String host = matcher.group(1);
+		    int port;
+		    if (!"".equals(matcher.group(2))) {
+		        port = Integer.parseInt(matcher.group(2));
+		    } else {
+		        port = DEFAULT_PROXY_PORT;
+		    }
+            return new FixedProxySelector(host.trim(), port);
+		} else {
+		    return null;
 		}
-		return new FixedProxySelector(proxyVar.trim(), DEFAULT_PROXY_PORT);
 	}
 	
 	/*************************************************************************
