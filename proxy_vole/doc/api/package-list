@@ -1,0 +1,17 @@
+com.btr.proxy.search
+com.btr.proxy.search.browser.firefox
+com.btr.proxy.search.browser.ie
+com.btr.proxy.search.desktop
+com.btr.proxy.search.desktop.gnome
+com.btr.proxy.search.desktop.kde
+com.btr.proxy.search.desktop.win
+com.btr.proxy.search.env
+com.btr.proxy.search.java
+com.btr.proxy.search.wpad
+com.btr.proxy.selector.direct
+com.btr.proxy.selector.fixed
+com.btr.proxy.selector.misc
+com.btr.proxy.selector.pac
+com.btr.proxy.selector.whitelist
+com.btr.proxy.test
+com.btr.proxy.util
