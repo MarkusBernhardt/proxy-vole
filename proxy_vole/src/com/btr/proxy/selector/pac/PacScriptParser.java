@@ -33,6 +33,8 @@ import com.btr.proxy.util.Logger.LogLevel;
 
 public class PacScriptParser extends ScriptableObject {
 	
+	private static final long serialVersionUID = 1L;
+
 	private static final String GMT = "GMT";
 	
 	private static List<String> DAYS = Collections.unmodifiableList(
@@ -51,8 +53,7 @@ public class PacScriptParser extends ScriptableObject {
 			"dateRange", "timeRange"
 		};
 	
-	private Context context;
-	private Scriptable script;
+	private Scriptable scope;
 	private PacScriptSource source;
 
 	/*************************************************************************
@@ -75,7 +76,7 @@ public class PacScriptParser extends ScriptableObject {
 	
 	public void setupEngine() throws ProxyEvaluationException {
 
-		this.context = new ContextFactory().enterContext();
+		Context context = new ContextFactory().enterContext();
 		try {
 			defineFunctionProperties(JS_FUNCTION_NAMES, PacScriptParser.class, ScriptableObject.DONTENUM);
 		} catch (Exception e) {
@@ -83,7 +84,7 @@ public class PacScriptParser extends ScriptableObject {
 			throw new ProxyEvaluationException(e.getMessage(), e);
 		}
 
-		this.script = this.context.initStandardObjects(this);
+		this.scope = context.initStandardObjects(this);
 	}
 	
 	/***************************************************************************
@@ -110,10 +111,15 @@ public class PacScriptParser extends ScriptableObject {
 			String evalMethod = " ;FindProxyForURL (\"" + url + "\",\"" + host + "\")";
 			script.append(evalMethod);
 
-			Object result = this.context.evaluateString(this.script,
-					script.toString(), "userPacFile", 1, null);
-			
-			return Context.toString(result);
+			Context context = Context.enter();
+			try {
+				Object result = context.evaluateString(this.scope,
+						script.toString(), "userPacFile", 1, null);
+				
+				return Context.toString(result);
+			} finally {
+				Context.exit();
+			}
 		} catch (Exception e) {
 			Logger.log(getClass(), LogLevel.ERROR, "JS evaluation error.", e);
 			throw new ProxyEvaluationException(
