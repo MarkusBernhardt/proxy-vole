@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <gconf>
         <entry name="autoconfig_url" mtime="1243185338" type="string">
-                <stringvalue>file://test/data/wpad/wpad.pac</stringvalue>
+                <stringvalue>test/data/pac/test1.pac</stringvalue>
         </entry>
         <entry name="old_socks_port" mtime="1243184977" type="int" value="8889">
         </entry>

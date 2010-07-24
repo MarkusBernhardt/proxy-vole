@@ -40,10 +40,15 @@ public class PacProxySelectorTest {
 	 ************************************************************************/
 	@Test
 	public void testScriptExecution2() throws ProxyException, MalformedURLException {
-		List<Proxy> result = new PacProxySelector(
-				new UrlPacScriptSource(toUrl("test2.pac"))).select(TestUtil.HTTP_TEST_URI);
-		
+		PacProxySelector pacProxySelector = new PacProxySelector(
+				new UrlPacScriptSource(toUrl("test2.pac")));
+		List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
 		assertEquals(Proxy.NO_PROXY, result.get(0));
+		
+		result = pacProxySelector.select(TestUtil.HTTPS_TEST_URI);
+		assertEquals(Proxy.NO_PROXY, result.get(0));
+
+		
 	}
 	
 	/*************************************************************************

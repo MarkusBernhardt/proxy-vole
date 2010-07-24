@@ -9,7 +9,7 @@ WarnOnLeaveSSLMode=false
 [Proxy Settings]
 AuthMode=0
 NoProxyFor=
-Proxy Config Script=file://test/data/wpad/wpad.pac
+Proxy Config Script=test/data/pac/test1.pac
 ProxyType=2
 ReversedException=false
 ftpProxy=

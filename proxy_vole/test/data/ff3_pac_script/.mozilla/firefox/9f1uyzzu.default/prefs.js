@@ -47,7 +47,7 @@ user_pref("intl.charsetmenu.browser.cache", "us-ascii, ISO-8859-15, ISO-8859-1, 
 user_pref("javascript.enabled", true);
 user_pref("network.cookie.lifetimePolicy", 2);
 user_pref("network.cookie.prefsMigrated", true);
-user_pref("network.proxy.autoconfig_url", "file://test/data/wpad/wpad.pac");
+user_pref("network.proxy.autoconfig_url", "test/data/pac/test1.pac");
 user_pref("network.proxy.ftp", "ftp_proxy.unit-test.invalid");
 user_pref("network.proxy.ftp_port", 8092);
 user_pref("network.proxy.gopher", "gopher_proxy.unit-test.invalid");
