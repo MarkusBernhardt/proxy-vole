@@ -46,7 +46,7 @@ public class UrlPacScriptSource implements PacScriptSource {
 				(this.expireAtMillis > 0 
 						&& this.expireAtMillis > System.currentTimeMillis())) {
 			try {
-				if (this.scriptUrl.startsWith("file:/")) {
+				if (this.scriptUrl.startsWith("file:/") || this.scriptUrl.indexOf(":/") == -1) {
 					this.scriptContent = readPacFileContent(this.scriptUrl);
 				} else {
 					this.scriptContent = downloadPacContent(this.scriptUrl);
@@ -70,7 +70,12 @@ public class UrlPacScriptSource implements PacScriptSource {
 	
 	private String readPacFileContent(String scriptUrl) throws IOException {
 		try {
-			File file = new File(new URL(scriptUrl).toURI());
+			File file = null;
+			if (scriptUrl.indexOf(":/") == -1) {
+				file = new File(scriptUrl);
+			} else {
+				file = new File(new URL(scriptUrl).toURI());
+			}
 			BufferedReader r = new BufferedReader(new FileReader(file));
 			StringBuilder result = new StringBuilder();
 			try {
