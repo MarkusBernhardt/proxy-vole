@@ -173,7 +173,11 @@ JNIEXPORT jstring JNICALL Java_com_btr_proxy_search_desktop_win_Win32ProxyUtils_
 (JNIEnv *env, jobject source) {
 	HKEY key;
 	int result = RegOpenKeyEx(HKEY_CURRENT_USER, 
+#ifdef _WIN64			
+				"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+#else				
 				L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+#endif				
 				0, KEY_QUERY_VALUE, &key); 
 	if (0 != ERROR_SUCCESS) {
 		LPWSTR errorMsg = L"ERROR: Key open failed";
@@ -183,7 +187,11 @@ JNIEXPORT jstring JNICALL Java_com_btr_proxy_search_desktop_win_Win32ProxyUtils_
 	BYTE pvData[1000];
 	DWORD dataSize = 1000;
 	
+#ifdef _WIN64			
+	result = RegQueryValueEx(key, "AppData", NULL, NULL, pvData, &dataSize);
+#else
 	result = RegQueryValueEx(key, L"AppData", NULL, NULL, pvData, &dataSize);
+#endif	
 	RegCloseKey(key);
 	if (result != ERROR_SUCCESS) {
 		LPWSTR errorMsg = L"ERROR: Read value failed";

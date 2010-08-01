@@ -29,7 +29,7 @@ public class WinProxySearchStrategy implements ProxySearchStrategy {
 	 ************************************************************************/
 
 	public ProxySelector getProxySelector() throws ProxyException {
-		// TODO Rossi 08.05.2009 Implement this by using Win32 API calls.
+		// TODO Rossi 08.05.2009 Implement this by using Win API calls.
 		// new Win32ProxyUtils().winHttpGetDefaultProxyConfiguration()
 		// Current fallback is to use the IE settings. This is better
 		// because the registry settings are most of the time not set.
@@ -39,10 +39,10 @@ public class WinProxySearchStrategy implements ProxySearchStrategy {
 	
 	/*************************************************************************
 	 * Loads the settings. 
-	 * @return a Win32IESettings object containing all proxy settings.
+	 * @return a WinIESettings object containing all proxy settings.
 	 ************************************************************************/
 	
-	public Win32IESettings readSettings() {
+	public WinIESettings readSettings() {
 		return new IEProxySearchStrategy().readSettings();		
 	}
 

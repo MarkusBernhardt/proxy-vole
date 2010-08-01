@@ -6,7 +6,7 @@ import java.net.ProxySelector;
 import java.util.Properties;
 
 import com.btr.proxy.search.ProxySearchStrategy;
-import com.btr.proxy.search.desktop.win.Win32IESettings;
+import com.btr.proxy.search.desktop.win.WinIESettings;
 import com.btr.proxy.search.desktop.win.Win32ProxyUtils;
 import com.btr.proxy.selector.misc.ProtocolDispatchSelector;
 import com.btr.proxy.selector.pac.PacProxySelector;
@@ -35,7 +35,7 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 		
 		Logger.log(getClass(), LogLevel.TRACE, "Detecting IE proxy settings");
 		
-		Win32IESettings ieSettings = readSettings();
+		WinIESettings ieSettings = readSettings();
 		
 		ProxySelector result = createPacSelector(ieSettings);
 		if (result == null) {
@@ -46,11 +46,11 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 
 	/*************************************************************************
 	 * Loads the settings from the windows registry.
-	 * @return Win32IESettings containing all proxy settings.
+	 * @return WinIESettings containing all proxy settings.
 	 ************************************************************************/
 	
-	public Win32IESettings readSettings() {
-		Win32IESettings ieSettings = new Win32ProxyUtils().winHttpGetIEProxyConfigForCurrentUser();
+	public WinIESettings readSettings() {
+		WinIESettings ieSettings = new Win32ProxyUtils().winHttpGetIEProxyConfigForCurrentUser();
 		return ieSettings;
 	}
 
@@ -60,7 +60,7 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 	 * @return a PacProxySelector the selector or null.
 	 ************************************************************************/
 	
-	private PacProxySelector createPacSelector(Win32IESettings ieSettings) {
+	private PacProxySelector createPacSelector(WinIESettings ieSettings) {
 		String pacUrl = null;
 
 		if (ieSettings.isAutoDetect()) {
@@ -88,7 +88,7 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 	 * @throws ProxyException on error.
 	 ************************************************************************/
 	
-	private ProxySelector createFixedProxySelector(Win32IESettings ieSettings) throws ProxyException {
+	private ProxySelector createFixedProxySelector(WinIESettings ieSettings) throws ProxyException {
 		String proxyString = ieSettings.getProxy();
 		String bypassList = ieSettings.getProxyBypass();
 

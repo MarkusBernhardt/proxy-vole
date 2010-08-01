@@ -8,7 +8,7 @@ package com.btr.proxy.search.desktop.win;
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/
 
-public class Win32IESettings {
+public class WinIESettings {
 	
 	private boolean autoDetect;
 	private String autoConfigUrl;
@@ -23,7 +23,7 @@ public class Win32IESettings {
 	 * @param proxyBypass the proxy bypass address list.
 	 ************************************************************************/
 	
-	public Win32IESettings(boolean autoDetect, String autoConfigUrl, String proxy, String proxyBypass) {
+	public WinIESettings(boolean autoDetect, String autoConfigUrl, String proxy, String proxyBypass) {
 		super();
 		this.autoDetect = autoDetect;
 		this.autoConfigUrl = autoConfigUrl;
