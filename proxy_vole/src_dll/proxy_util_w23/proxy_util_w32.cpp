@@ -113,7 +113,7 @@ JNIEXPORT jstring JNICALL Java_com_btr_proxy_search_desktop_win_Win32ProxyUtils_
 /*****************************************************************************
  * Class:     com_btr_proxy_search_desktop_win_Win32ProxyUtils
  * Method:    WinHttpGetIEProxyConfigForCurrentUser
- * Signature: ()Lcom/btr/proxy/search/desktop/win/Win32IESettings;
+ * Signature: ()Lcom/btr/proxy/search/desktop/win/WinIESettings;
  ****************************************************************************/
 
 JNIEXPORT jobject JNICALL Java_com_btr_proxy_search_desktop_win_Win32ProxyUtils_winHttpGetIEProxyConfigForCurrentUser
@@ -147,7 +147,7 @@ JNIEXPORT jobject JNICALL Java_com_btr_proxy_search_desktop_win_Win32ProxyUtils_
     }
 
 	// Build result container object.
-	jclass retValueClass = env->FindClass("com/btr/proxy/search/desktop/win/Win32IESettings");
+	jclass retValueClass = env->FindClass("com/btr/proxy/search/desktop/win/WinIESettings");
 	if ( retValueClass == NULL ) {
 		return NULL;
 	}
@@ -157,7 +157,7 @@ JNIEXPORT jobject JNICALL Java_com_btr_proxy_search_desktop_win_Win32ProxyUtils_
 		return NULL;
 	}
 
-	// Win32IESettings(boolean autoDetect, String autoConfigUrl, String proxy, String proxyBypass)
+	// WinIESettings(boolean autoDetect, String autoConfigUrl, String proxy, String proxyBypass)
 	jobject retValue = env->NewObject(retValueClass, jmid, autoDetect, autoConfigUrl, proxy, proxyBypass);
 
 	return retValue;
