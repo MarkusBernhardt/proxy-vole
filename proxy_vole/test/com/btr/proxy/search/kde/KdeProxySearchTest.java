@@ -7,6 +7,7 @@ import java.net.ProxySelector;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.btr.proxy.TestUtil;
@@ -110,6 +111,7 @@ public class KdeProxySearchTest {
 	 * @throws URISyntaxException on invalid URL syntax.
 	 ************************************************************************/
 	@Test
+	@Ignore
 	public void testEnvHttp() throws ProxyException, URISyntaxException {
 		// There is no good was to initialize environment variables in the running process.
 		//System.getenv().put("HTTP_PROXY", "http://http_proxy.unit-test.invalid:8090"); // Does not work
@@ -127,6 +129,7 @@ public class KdeProxySearchTest {
 	 * @throws URISyntaxException on invalid URL syntax.
 	 ************************************************************************/
 	@Test
+	@Ignore
 	public void testEnvHttps() throws ProxyException, URISyntaxException {
 		// There is no good was to initialize environment variables in the running process.
 		// System.getenv().put("HTTPS_PROXY", "http://http_proxy.unit-test.invalid:8090"); // Does not work
@@ -144,6 +147,7 @@ public class KdeProxySearchTest {
 	 * @throws URISyntaxException on invalid URL syntax.
 	 ************************************************************************/
 	@Test
+	@Ignore
 	public void testEnvFtp() throws ProxyException, URISyntaxException {
 		// there is no good was to initialize environment variables in the running process.
 		//System.getenv().put("FTP_PROXY", "http://http_proxy.unit-test.invalid:8090"); // Does not work
