@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.btr.proxy.util.Logger;
-import com.btr.proxy.util.ProxyUtil;
 import com.btr.proxy.util.Logger.LogLevel;
+import com.btr.proxy.util.ProxyUtil;
 
 
 /*****************************************************************************
@@ -21,24 +21,42 @@ import com.btr.proxy.util.Logger.LogLevel;
  *
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/
-
 public class PacProxySelector extends ProxySelector {
 
-	// private static final String PAC_PROXY  = "PROXY";
-	private static final String PAC_SOCKS  = "SOCKS";
+	private final boolean JAVAX_PARSER = ScriptAvailability.isJavaxScriptingAvailable();
+
+	// private static final String PAC_PROXY = "PROXY";
+	private static final String PAC_SOCKS = "SOCKS";
 	private static final String PAC_DIRECT = "DIRECT";
 
-	private PacScriptParser	pacScriptParser;
-	
+	private PacScriptParser pacScriptParser;
+
 	/*************************************************************************
 	 * Constructor
 	 * @param pacSource the source for the PAC file. 
 	 ************************************************************************/
-	
+
 	public PacProxySelector(PacScriptSource pacSource) {
 		super();
+		selectEngine(pacSource);
+	}
+
+	/*************************************************************************
+	 * Selects one of the available PAC parser engines.
+	 * @param pacSource to use as input.
+	 ************************************************************************/
+	
+	private void selectEngine(PacScriptSource pacSource) {
 		try {
-			this.pacScriptParser = new PacScriptParser(pacSource);
+			if (this.JAVAX_PARSER) {
+				Logger.log(getClass(), LogLevel.INFO,
+						"Using javax.script JavaScript engine.");
+				this.pacScriptParser = new JavaxPacScriptParser(pacSource);
+			} else {
+				Logger.log(getClass(), LogLevel.INFO,
+						"Using Rhino JavaScript engine.");
+				this.pacScriptParser = new RhinoPacScriptParser(pacSource);
+			}
 		} catch (Exception e) {
 			Logger.log(getClass(), LogLevel.ERROR, "PAC parser error.", e);
 		}
@@ -69,7 +87,7 @@ public class PacProxySelector extends ProxySelector {
 		if (String.valueOf(scriptSource).contains(uri.getHost())) {
 			return ProxyUtil.noProxyList();
 		}
-		
+
 		return findProxy(uri);
 	}
 
@@ -83,15 +101,16 @@ public class PacProxySelector extends ProxySelector {
 	 * @param uri <code>URI</code> to be evaluated.
 	 * @return <code>Proxy</code>-object list as result of the evaluation.
 	 ************************************************************************/
-	
+
 	private List<Proxy> findProxy(URI uri) {
 		try {
 			Set<Proxy> proxies = new HashSet<Proxy>();
 
-			String parseResult = this.pacScriptParser.evaluate(uri.toString(), uri.getHost());
+			String parseResult = this.pacScriptParser.evaluate(uri.toString(),
+					uri.getHost());
 			String[] proxyDefinitions = parseResult.split("[;]");
 			for (String proxyDef : proxyDefinitions) {
-				proxies.add(buildProxyFromPacResult(proxyDef));	
+				proxies.add(buildProxyFromPacResult(proxyDef));
 			}
 			return new ArrayList<Proxy>(proxies);
 		} catch (ProxyEvaluationException e) {
@@ -99,16 +118,16 @@ public class PacProxySelector extends ProxySelector {
 			return ProxyUtil.noProxyList();
 		}
 	}
-	
+
 	/*************************************************************************
 	 * The proxy evaluator will return a proxy string. This method will
 	 * take this string and build a matching <code>Proxy</code> for it.
 	 * @param pacResult the result from the PAC parser.
 	 * @return a Proxy
 	 ************************************************************************/
-	
+
 	private Proxy buildProxyFromPacResult(String pacResult) {
-		if(pacResult == null || pacResult.trim().length() < 6) { 
+		if (pacResult == null || pacResult.trim().length() < 6) {
 			return Proxy.NO_PROXY;
 		}
 		if (pacResult.trim().toUpperCase().startsWith(PAC_DIRECT)) {
@@ -117,10 +136,10 @@ public class PacProxySelector extends ProxySelector {
 
 		// Check proxy type.
 		Proxy.Type type = Proxy.Type.HTTP;
-		if(pacResult.trim().toUpperCase().startsWith(PAC_SOCKS)) {
+		if (pacResult.trim().toUpperCase().startsWith(PAC_SOCKS)) {
 			type = Proxy.Type.SOCKS;
-		} 
-		
+		}
+
 		String host = pacResult.substring(6, pacResult.length());
 		Integer port = ProxyUtil.DEFAULT_PROXY_PORT;
 
@@ -130,9 +149,8 @@ public class PacProxySelector extends ProxySelector {
 			host = token[0];
 			port = Integer.parseInt(token[1]);
 		}
-		
+
 		SocketAddress adr = new InetSocketAddress(host, port);
 		return new Proxy(type, adr);
 	}
-	
 }
