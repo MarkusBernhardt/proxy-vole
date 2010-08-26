@@ -29,8 +29,8 @@
 		<mkdir dir="${deploy}" />
 	</target>
 
-	<target name="compile" depends="init" description="compile the source " >
-		<javac debug="true" classpath="${libs}/js.jar" srcdir="${src}" destdir="${classes}" />
+	<target name="compile" depends="init" description="compile the source ">
+		<javac debug="true" classpath="${libs}/js.jar" srcdir="${src}" destdir="${classes}" source="1.5" target="1.5" />
 	</target>
 
 	<target name="build_src_zip" depends="gen_doc" description="generate the src zip">
