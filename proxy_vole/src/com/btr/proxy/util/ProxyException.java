@@ -8,6 +8,8 @@ package com.btr.proxy.util;
 
 public class ProxyException extends Exception {
 
+	private static final long serialVersionUID = 1L;
+
 	/*************************************************************************
 	 * Constructor
 	 ************************************************************************/
