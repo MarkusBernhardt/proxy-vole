@@ -42,7 +42,7 @@ public class WinProxySearchStrategy implements ProxySearchStrategy {
 	 * @return a WinIESettings object containing all proxy settings.
 	 ************************************************************************/
 	
-	public WinIESettings readSettings() {
+	public Win32IESettings readSettings() {
 		return new IEProxySearchStrategy().readSettings();		
 	}
 

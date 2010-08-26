@@ -102,7 +102,7 @@ public class Win32ProxyUtils {
 	 * @return a data structure containing all details, null on fail.
 	 ************************************************************************/
 	
-	public native WinIESettings winHttpGetIEProxyConfigForCurrentUser();
+	public native Win32IESettings winHttpGetIEProxyConfigForCurrentUser();
 	
 	/*************************************************************************
 	 * Extracts the Internet Explorer proxy settings from the Windows system. 
