@@ -27,6 +27,8 @@ import com.btr.proxy.search.ProxySearch.Strategy;
 
 public class ProxyTester extends JFrame {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private JComboBox modes;
 	private JButton testButton;
 	private JTextField urlField;
