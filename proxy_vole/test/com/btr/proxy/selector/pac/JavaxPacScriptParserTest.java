@@ -54,7 +54,7 @@ public class JavaxPacScriptParserTest {
 	 ************************************************************************/
 	@Test
 	public void testScriptExecution() throws ProxyException, MalformedURLException {
-		PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("test1.pac")));
+		PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("test1.pac")));
 		p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
 	}
 
@@ -65,7 +65,7 @@ public class JavaxPacScriptParserTest {
 	 ************************************************************************/
 	@Test
 	public void testCommentsInScript() throws ProxyException, MalformedURLException {
-		PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("test2.pac")));
+		PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("test2.pac")));
 		p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
 	}
 	
@@ -77,7 +77,7 @@ public class JavaxPacScriptParserTest {
 	@Test
 	@Ignore //Test deactivated because it will not run in Java 1.5 and time based test are unstable 
 	public void testScriptWeekDayScript() throws ProxyException, MalformedURLException {
-		PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("testWeekDay.pac")));
+		PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testWeekDay.pac")));
 		p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
 	}
 
@@ -89,7 +89,7 @@ public class JavaxPacScriptParserTest {
 	@Test
 	@Ignore //Test deactivated because it will not run in Java 1.5 and time based test are unstable 
 	public void testDateRangeScript() throws ProxyException, MalformedURLException {
-		PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("testDateRange.pac")));
+		PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testDateRange.pac")));
 		p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
 	}
 
@@ -101,7 +101,7 @@ public class JavaxPacScriptParserTest {
 	@Test
 	@Ignore //Test deactivated because it will not run in Java 1.5 and time based test are unstable 
 	public void testTimeRangeScript() throws ProxyException, MalformedURLException {
-		PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("testTimeRange.pac")));
+		PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testTimeRange.pac")));
 		p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
 	}
 	
