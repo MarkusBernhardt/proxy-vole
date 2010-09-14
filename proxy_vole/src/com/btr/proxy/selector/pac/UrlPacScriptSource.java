@@ -107,7 +107,8 @@ public class UrlPacScriptSource implements PacScriptSource {
 
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection(Proxy.NO_PROXY);
 		con.setInstanceFollowRedirects(true);
-		con.setRequestProperty("accept", "application/x-ns-proxy-autoconfig");
+		con.setRequestProperty("accept", "application/x-ns-proxy-autoconfig, */*;q=0.8");
+		
 		if (con.getResponseCode() != 200) {
 			throw new IOException("Server returned: "+con.getResponseCode()+" "+con.getResponseMessage());
 		}
@@ -115,11 +116,8 @@ public class UrlPacScriptSource implements PacScriptSource {
 		// Read expire date.
 		this.expireAtMillis = con.getExpiration();
 
-		// Response could be:  
-		// Content-Type: application/x-ns-proxy-autoconfig; charset=ISO-8859-1
-		// Charset is not extracted for now.
-
-		BufferedReader r = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String charsetName = parseCharsetFromHeader(con.getContentType());
+		BufferedReader r = new BufferedReader(new InputStreamReader(con.getInputStream(), charsetName));
 		try {
 			StringBuilder result = new StringBuilder();
 			try {
@@ -135,6 +133,26 @@ public class UrlPacScriptSource implements PacScriptSource {
 		} finally {
 			r.close();
 		}
+	}
+
+	/*************************************************************************
+	 * Response Content-Type could be something like this:   
+	 *    application/x-ns-proxy-autoconfig; charset=UTF-8
+	 * @param contentType header field.
+	 * @return the extracted charset if set else a default charset.
+	 ************************************************************************/
+	
+	String parseCharsetFromHeader(String contentType) {
+		String result = "ISO-8859-1";
+		if (contentType != null) {
+			String[] paramList = contentType.split(";");
+			for (String param : paramList) {
+				if (param.toLowerCase().trim().startsWith("charset") && param.indexOf("=") != -1) {
+					result = param.substring(param.indexOf("=")+1).trim();
+				}
+			}
+		}
+		return result;
 	}
 
 	/***************************************************************************
