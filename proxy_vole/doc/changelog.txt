@@ -7,6 +7,17 @@ This file contains the change log. The changes are marked with the following sym
 
 -----------------
 
-18.Oct 2009
-+ Added caching for PAC proxy selector for performance reasons
-* BufferedProxySelector will now cache per URL and no longer per "Host". This is more save.
+20100914
++ PAC support on Java 1.6 will now use the javax.script framework and the internal javascript engine that is shipped with JRE6. This will allow you to support PAC without bundling the Rhino engine which will dramatically reduce the footprint of the library. Java 1.5 will still be supported but then you need to bundle it with the Rhino engine.
++ Added contributed dlls to support 64 windows version for the IE proxy detection.
+* Some fixes for the http client that is used to download PAC scripts from a webserver. We accept now all content-type send by the server and we support now different charsets for the scripts.
+* Fixed some unit tests that did not pass and did some other small fixes.
+
+20100724
+* Fixed Issue 5: PAC Parser was not working correctly in multithreaded environments.
+
+20100411
+* Fixed Issue 4: Improved parser used to parse proxy urls from environment varibales and other places
+
+Older
+Did not track changes for older releases 
