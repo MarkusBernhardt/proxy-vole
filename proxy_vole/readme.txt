@@ -11,12 +11,13 @@ There is also a change log in the doc folder.
 
 Building
 --------
-The source can be found on the homepage at: http://kenai.com/projects/proxy-vole 
+The source can be found on the homepage at: http://code.google.com/p/proxy-vole/ 
 An Eclipse project to build the source is included. 
 For windows some native code is used to read the IE proxy configuration.
 For the windows dll an Visual Studio project is included.
 There is also an ANT build file to create an JAR file for deployment.
 To build and use the library you will need Java 1.5 or higher.
+For some features you will need Java 1.6
 
 License:
 --------
