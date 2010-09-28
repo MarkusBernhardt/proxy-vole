@@ -22,11 +22,11 @@ public class PlatformUtil {
 	public static Platform getCurrentPlattform() {
 		String osName = System.getProperty("os.name");
 		
-		if (osName.startsWith("Windows")) {
+		if (osName.toLowerCase().contains("windows")) {
 			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Windows platform: {0}", osName);
 			return Platform.WIN;
 		} 
-		if (osName.startsWith("Linux")) {
+		if (osName.toLowerCase().contains("linux")) {
 			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Linux platform: {0}", osName);
 			return Platform.LINUX;
 		} 
@@ -34,7 +34,7 @@ public class PlatformUtil {
 			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Mac OS platform: {0}", osName);
 			return Platform.MAC_OS;
 		} 
-		if (osName.startsWith("Solaris")) {
+		if (osName.startsWith("SunOS")) {
 			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Solaris platform: {0}", osName);
 			return Platform.SOLARIS;
 		}
@@ -64,20 +64,20 @@ public class PlatformUtil {
 	 ************************************************************************/
 	
 	public static Desktop getCurrentDesktop() {
-		String osName = System.getProperty("os.name");
+		Platform platf = getCurrentPlattform();
 		
-		if (osName.startsWith("Windows")) {
+		if (platf == Platform.WIN) {
 			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Windows desktop");
 			return Desktop.WIN;
 		} 
-		if (osName.startsWith("MacOS")) {
+		if (platf == Platform.MAC_OS) {
 			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Mac OS desktop");
 			return Desktop.MAC_OS;
 		} 
 
-		if (osName.startsWith("Linux") 
-				|| osName.contains("Unix") 
-				|| osName.startsWith("Solaris") ) {
+		if (platf == Platform.LINUX 
+				|| platf == Platform.SOLARIS 
+				|| platf == Platform.OTHER) {
 			
 			if (isKDE()) {
 				Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected KDE desktop");
