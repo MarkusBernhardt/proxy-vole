@@ -8,6 +8,7 @@ import java.util.Properties;
 import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.search.desktop.win.Win32IESettings;
 import com.btr.proxy.search.desktop.win.Win32ProxyUtils;
+import com.btr.proxy.selector.fixed.FixedProxySelector;
 import com.btr.proxy.selector.misc.ProtocolDispatchSelector;
 import com.btr.proxy.selector.pac.PacProxySelector;
 import com.btr.proxy.selector.pac.UrlPacScriptSource;
@@ -91,7 +92,6 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 	private ProxySelector createFixedProxySelector(Win32IESettings ieSettings) throws ProxyException {
 		String proxyString = ieSettings.getProxy();
 		String bypassList = ieSettings.getProxyBypass();
-
 		if (proxyString == null) {
 			return null;
 		}
@@ -101,42 +101,60 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 		Properties p = parseProxyList(proxyString);
 		
 		ProtocolDispatchSelector ps = new ProtocolDispatchSelector();
-		String proxy = p.getProperty("default");
-		if (proxy != null) {
-			ps.setFallbackSelector(ProxyUtil.parseProxySettings(proxy));
-		}
-		
-		proxy = p.getProperty("http");
-		if (proxy != null) {
-			ps.setSelector("http", ProxyUtil.parseProxySettings(proxy));
-		}
-		
-		proxy = p.getProperty("https");
-		if (proxy != null) {
-			ps.setSelector("https", ProxyUtil.parseProxySettings(proxy));
-		}
+		addSelectorForProtocol(p, "http", ps);
+		addSelectorForProtocol(p, "https", ps);
+		addSelectorForProtocol(p, "ftp", ps);
+		addSelectorForProtocol(p, "gopher", ps);
+		addSelectorForProtocol(p, "socks", ps);
+		addFallbackSelector(p, ps);
 
-		proxy = p.getProperty("ftp");
-		if (proxy != null) {
-			ps.setSelector("ftp", ProxyUtil.parseProxySettings(proxy));
-		}
+		ProxySelector result = setByPassListOnSelector(bypassList, ps);
+		return result;
+	}
 
-		proxy = p.getProperty("gopher");
-		if (proxy != null) {
-			ps.setSelector("gopher", ProxyUtil.parseProxySettings(proxy));
-		}
-
-		proxy = p.getProperty("socks");
-		if (proxy != null) {
-			ps.setSelector("socks", ProxyUtil.parseProxySettings(proxy));
-		}
-
+	/*************************************************************************
+	 * @param bypassList
+	 * @param ps
+	 * @return 
+	 ************************************************************************/
+	
+	private ProxySelector setByPassListOnSelector(String bypassList,
+			ProtocolDispatchSelector ps) {
 		if (bypassList != null && bypassList.trim().length() > 0) {
 			bypassList = bypassList.replace(';', ',');
 			return new ProxyBypassListSelector(bypassList, ps);
 		}
-		
 		return ps;
+	}
+
+	/*************************************************************************
+	 * Installs a fallback selector that is used whenever no protocol specific
+	 * selector is defined.
+	 * @param settings to take the proxy settings from.
+	 * @param ps to install the created selector on.
+	 ************************************************************************/
+	
+	private void addFallbackSelector(Properties settings, ProtocolDispatchSelector ps) {
+		String proxy = settings.getProperty("default");
+		if (proxy != null) {
+			ps.setFallbackSelector(ProxyUtil.parseProxySettings(proxy));
+		}
+	}
+
+	/*************************************************************************
+	 * Creates a selector for a given protocol. The proxy will be taken
+	 * from the settings and installed on the dispatch selector.
+	 * @param settings to take the proxy settings from.
+	 * @param protocol to create a selector for.
+	 * @param ps to install the created selector on.
+	 ************************************************************************/
+	
+	private void addSelectorForProtocol(Properties settings, String protocol, ProtocolDispatchSelector ps) {
+		String proxy = settings.getProperty(protocol);
+		if (proxy != null) {
+			FixedProxySelector protocolSelector = ProxyUtil.parseProxySettings(proxy);
+			ps.setSelector(protocol, protocolSelector);
+		}
 	}
 
 	/*************************************************************************
