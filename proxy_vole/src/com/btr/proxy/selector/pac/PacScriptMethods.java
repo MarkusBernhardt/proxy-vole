@@ -23,7 +23,9 @@ import com.btr.proxy.util.Logger.LogLevel;
  */
 public class PacScriptMethods implements ScriptMethods {
 
-    private final static String GMT = "GMT";
+    public static final String OVERRIDE_LOCAL_IP = "com.btr.proxy.pac.overrideLocalIP";
+
+	private final static String GMT = "GMT";
     
     private final static List<String> DAYS = Collections.unmodifiableList(
             Arrays.asList("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")); 
@@ -172,6 +174,10 @@ public class PacScriptMethods implements ScriptMethods {
 
     public String myIpAddress() {
         try {
+        	String overrideIP = System.getProperty(OVERRIDE_LOCAL_IP);
+        	if (overrideIP != null && overrideIP.trim().length() > 0) {
+        		return overrideIP.trim(); 
+        	}
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG,
