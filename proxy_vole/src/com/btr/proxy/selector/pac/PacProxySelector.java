@@ -150,7 +150,7 @@ public class PacProxySelector extends ProxySelector {
 			port = Integer.parseInt(token[1]);
 		}
 
-		SocketAddress adr = new InetSocketAddress(host, port);
+		SocketAddress adr = InetSocketAddress.createUnresolved(host, port);
 		return new Proxy(type, adr);
 	}
 }
