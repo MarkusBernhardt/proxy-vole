@@ -169,54 +169,110 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 	 ************************************************************************/
 	
 	private ProxySelector setupFixedProxySelector(Properties settings) {
-
-		ProtocolDispatchSelector ps = new ProtocolDispatchSelector();
-
-		// Initial check
-		FixedProxySelector httpPS;
-		String proxyHost = settings.getProperty("/system/http_proxy/host", null);
-		if (proxyHost == null || proxyHost.length() == 0) {
+		if (!hasProxySettings(settings)) {
 			return null;
 		}
+		ProtocolDispatchSelector ps = new ProtocolDispatchSelector();
+		installHttpSelector(settings, ps);
 
-		// Add http proxy
-		int proxyPort = Integer.parseInt(settings.getProperty("/system/http_proxy/port", "0").trim());
-		httpPS = new FixedProxySelector(proxyHost.trim(), proxyPort);
-		Logger.log(getClass(), LogLevel.TRACE, "Gnome http proxy is {0}:{1}", proxyHost, proxyPort);
-		ps.setSelector("http", httpPS);
-		
-		boolean useSame = Boolean.parseBoolean(settings.getProperty("/system/http_proxy/use_same_proxy", "false"));
-		if (!useSame) {
-
-			// Add ssl proxies
-			proxyHost = settings.getProperty("/system/proxy/secure_host", null);
-			proxyPort = Integer.parseInt(settings.getProperty("/system/proxy/secure_port", "0").trim());
-			if (proxyHost != null && proxyHost.length() > 0 && proxyPort > 0) {
-				Logger.log(getClass(), LogLevel.TRACE, "Gnome secure proxy is {0}:{1}", proxyHost, proxyPort);
-				ps.setSelector("https", new FixedProxySelector(proxyHost.trim(), proxyPort));
-				ps.setSelector("sftp", new FixedProxySelector(proxyHost.trim(), proxyPort));
-			}
-	
-			// Add ftp proxy
-			proxyHost = settings.getProperty("/system/proxy/ftp_host", null);
-			proxyPort = Integer.parseInt(settings.getProperty("/system/proxy/ftp_port", "0").trim());
-			if (proxyHost != null && proxyHost.length() > 0 && proxyPort > 0) {
-				Logger.log(getClass(), LogLevel.TRACE, "Gnome ftp proxy is {0}:{1}", proxyHost, proxyPort);
-				ps.setSelector("ftp", new FixedProxySelector(proxyHost.trim(), proxyPort));
-			}
-	
-			// Add socks proxy
-			proxyHost = settings.getProperty("/system/proxy/socks_host", null);
-			proxyPort = Integer.parseInt(settings.getProperty("/system/proxy/socks_port", "0").trim());
-			if (proxyHost != null && proxyHost.length() > 0 && proxyPort > 0) {
-				Logger.log(getClass(), LogLevel.TRACE, "Gnome socks proxy is {0}:{1}", proxyHost, proxyPort);
-				ps.setSelector("socks", new FixedProxySelector(proxyHost.trim(), proxyPort));
-			}
-		
+		if (useForAllProtocols(settings)) {
+			ps.setFallbackSelector(ps.getSelector("http"));
 		} else {
-			ps.setFallbackSelector(httpPS);
+			installSecureSelector(settings, ps);
+			installFtpSelector(settings, ps);
+			installSocksSelector(settings, ps);
 		}
 		return ps;
+	}
+
+	/*************************************************************************
+	 * Check if the http proxy should also be used for all other protocols.
+	 * @param settings to inspect.
+	 * @return true if only one proxy is configured else false.
+	 ************************************************************************/
+	
+	private boolean useForAllProtocols(Properties settings) {
+		return Boolean.parseBoolean(
+				settings.getProperty("/system/http_proxy/use_same_proxy", "false"));
+	}
+
+	/*************************************************************************
+	 * Checks if we have Proxy configuration settings in the properties.
+	 * @param settings to inspect.
+	 * @return true if we have found Proxy settings.
+	 ************************************************************************/
+	
+	private boolean hasProxySettings(Properties settings) {
+		String proxyHost = settings.getProperty("/system/http_proxy/host", null);
+		return proxyHost != null && proxyHost.length() > 0;
+	}
+	
+	/*************************************************************************
+	 * Install a http proxy from the given settings.
+	 * @param settings to inspect
+	 * @param ps the dispatch selector to configure.
+	 * @throws NumberFormatException
+	 ************************************************************************/
+	
+	private void installHttpSelector(Properties settings,
+			ProtocolDispatchSelector ps) throws NumberFormatException {
+		String proxyHost = settings.getProperty("/system/http_proxy/host", null);
+		int proxyPort = Integer.parseInt(settings.getProperty("/system/http_proxy/port", "0").trim());
+		if (proxyHost != null && proxyHost.length() > 0 && proxyPort > 0) {
+			Logger.log(getClass(), LogLevel.TRACE, "Gnome http proxy is {0}:{1}", proxyHost, proxyPort);
+			ps.setSelector("http", new FixedProxySelector(proxyHost.trim(), proxyPort));
+		}
+	}
+
+	/*************************************************************************
+	 * Install a socks proxy from the given settings.
+	 * @param settings to inspect
+	 * @param ps the dispatch selector to configure.
+	 * @throws NumberFormatException
+	 ************************************************************************/
+	
+	private void installSocksSelector(Properties settings,
+			ProtocolDispatchSelector ps) throws NumberFormatException {
+		String proxyHost = settings.getProperty("/system/proxy/socks_host", null);
+		int proxyPort = Integer.parseInt(settings.getProperty("/system/proxy/socks_port", "0").trim());
+		if (proxyHost != null && proxyHost.length() > 0 && proxyPort > 0) {
+			Logger.log(getClass(), LogLevel.TRACE, "Gnome socks proxy is {0}:{1}", proxyHost, proxyPort);
+			ps.setSelector("socks", new FixedProxySelector(proxyHost.trim(), proxyPort));
+		}
+	}
+
+	/*************************************************************************
+	 * @param settings
+	 * @param ps
+	 * @throws NumberFormatException
+	 ************************************************************************/
+	
+	private void installFtpSelector(Properties settings,
+			ProtocolDispatchSelector ps) throws NumberFormatException {
+		String proxyHost = settings.getProperty("/system/proxy/ftp_host", null);
+		int proxyPort = Integer.parseInt(settings.getProperty("/system/proxy/ftp_port", "0").trim());
+		if (proxyHost != null && proxyHost.length() > 0 && proxyPort > 0) {
+			Logger.log(getClass(), LogLevel.TRACE, "Gnome ftp proxy is {0}:{1}", proxyHost, proxyPort);
+			ps.setSelector("ftp", new FixedProxySelector(proxyHost.trim(), proxyPort));
+		}
+	}
+
+	/*************************************************************************
+	 * @param settings
+	 * @param ps
+	 * @throws NumberFormatException
+	 ************************************************************************/
+	
+	
+	private void installSecureSelector(Properties settings,
+			ProtocolDispatchSelector ps) throws NumberFormatException {
+		String proxyHost = settings.getProperty("/system/proxy/secure_host", null);
+		int proxyPort = Integer.parseInt(settings.getProperty("/system/proxy/secure_port", "0").trim());
+		if (proxyHost != null && proxyHost.length() > 0 && proxyPort > 0) {
+			Logger.log(getClass(), LogLevel.TRACE, "Gnome secure proxy is {0}:{1}", proxyHost, proxyPort);
+			ps.setSelector("https", new FixedProxySelector(proxyHost.trim(), proxyPort));
+			ps.setSelector("sftp", new FixedProxySelector(proxyHost.trim(), proxyPort));
+		}
 	}
 	
 	/*************************************************************************
