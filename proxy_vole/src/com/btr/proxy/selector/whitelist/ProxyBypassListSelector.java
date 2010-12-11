@@ -22,15 +22,17 @@ public class ProxyBypassListSelector extends ProxySelector {
 	
 	private ProxySelector delegate;
 	private List<UriFilter> whiteListFilter;
-
+	
+	
 	/*************************************************************************
 	 * Constructor
+	 * @param whiteListFilter a list of filters for whitelist URLs.
 	 * @param proxySelector the proxy selector to use.
 	 ************************************************************************/
 	
-	public ProxyBypassListSelector(String whiteList, ProxySelector proxySelector) {
+	public ProxyBypassListSelector(List<UriFilter> whiteListFilter, ProxySelector proxySelector) {
 		super();
-		if (whiteList == null) {
+		if (whiteListFilter == null) {
 			throw new NullPointerException("Whitelist must not be null.");
 		}
 		if (proxySelector == null) {
@@ -38,9 +40,18 @@ public class ProxyBypassListSelector extends ProxySelector {
 		}
 		
 		this.delegate = proxySelector;
+		this.whiteListFilter = whiteListFilter;
+	}
 
-		WhiteListParser parser = new DefaultWhiteListParser();
-		this.whiteListFilter = parser.parseWhiteList(whiteList);
+
+	/*************************************************************************
+	 * Constructor
+	 * @param whiteList a list of filters for whitelist URLs as comma/space separated string.
+	 * @param proxySelector the proxy selector to use.
+	 ************************************************************************/
+	
+	public ProxyBypassListSelector(String whiteList, ProxySelector proxySelector) {
+		this(new DefaultWhiteListParser().parseWhiteList(whiteList), proxySelector);
 	}
 	
 	/*************************************************************************

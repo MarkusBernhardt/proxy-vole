@@ -3,6 +3,8 @@ package com.btr.proxy.search.browser.ie;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.ProxySelector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import com.btr.proxy.search.ProxySearchStrategy;
@@ -17,6 +19,7 @@ import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.ProxyException;
 import com.btr.proxy.util.ProxyUtil;
 import com.btr.proxy.util.Logger.LogLevel;
+import com.btr.proxy.util.UriFilter;
 
 /*****************************************************************************
  * Extracts the proxy settings for Microsoft Internet Explorer.
@@ -121,10 +124,28 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 	private ProxySelector setByPassListOnSelector(String bypassList,
 			ProtocolDispatchSelector ps) {
 		if (bypassList != null && bypassList.trim().length() > 0) {
-			bypassList = bypassList.replace(';', ',');
-			return new ProxyBypassListSelector(bypassList, ps);
+			ProxyBypassListSelector result; 
+			if ("<local>".equals(bypassList.trim())) {
+				result = buildLocalBypassSelector(ps);
+			} else {
+				bypassList = bypassList.replace(';', ',');
+				result = new ProxyBypassListSelector(bypassList, ps);
+			}
+			return result;
 		}
 		return ps;
+	}
+
+	/*************************************************************************
+	 * @param ps
+	 * @return
+	 ************************************************************************/
+	
+	private ProxyBypassListSelector buildLocalBypassSelector(
+			ProtocolDispatchSelector ps) {
+		List<UriFilter> localBypassFilter = new ArrayList<UriFilter>();
+		localBypassFilter.add(new IELocalByPassFilter());
+		return new ProxyBypassListSelector(localBypassFilter, ps);
 	}
 
 	/*************************************************************************
