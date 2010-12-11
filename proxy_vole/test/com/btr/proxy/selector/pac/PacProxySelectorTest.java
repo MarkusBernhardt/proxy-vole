@@ -3,8 +3,10 @@ package com.btr.proxy.selector.pac;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
+import java.net.Proxy.Type;
 import java.util.List;
 
 import org.junit.Test;
@@ -48,6 +50,25 @@ public class PacProxySelectorTest {
 		result = pacProxySelector.select(TestUtil.HTTPS_TEST_URI);
 		assertEquals(Proxy.NO_PROXY, result.get(0));
 
+		
+	}
+	
+	/*************************************************************************
+	 * Test method for the override local IP feature.
+	 * @throws ProxyException on proxy detection error.
+	 * @throws MalformedURLException on URL erros 
+	 ************************************************************************/
+	@Test
+	public void testLocalIPOverride() throws ProxyException, MalformedURLException {
+		System.setProperty(PacScriptMethods.OVERRIDE_LOCAL_IP, "123.123.123.123");
+		try {
+			PacProxySelector pacProxySelector = new PacProxySelector(
+					new UrlPacScriptSource(toUrl("testLocalIP.pac")));
+			List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
+			assertEquals(result.get(0), new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("123.123.123.123", 8080)));
+		} finally {
+			System.setProperty(PacScriptMethods.OVERRIDE_LOCAL_IP, "");
+		}
 		
 	}
 	

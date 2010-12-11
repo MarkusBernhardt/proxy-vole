@@ -25,7 +25,9 @@ public class TestUtil {
 	public static final URI HTTP_TEST_URI;
 	public static final URI HTTPS_TEST_URI;
 	public static final URI FTP_TEST_URI;
-
+	public static final URI LOCAL_TEST_URI;
+	public static final URI SOCKET_TEST_URI;
+	
 	// Setup some testing constants.
 	static {
 		try {
@@ -33,6 +35,8 @@ public class TestUtil {
 			HTTP_TEST_URI 	= new URI("http://host1.unit-test.invalid/");
 			HTTPS_TEST_URI 	= new URI("https://host1.unit-test.invalid/");
 			FTP_TEST_URI 	= new URI("ftp://host1.unit-test.invalid/");
+			LOCAL_TEST_URI 	= new URI("http://myhost");
+			SOCKET_TEST_URI	= new URI("socket://host1.unit-test.invalid/");
 		} catch (URISyntaxException e) {
 			throw new RuntimeException("URI error"+e.getMessage());
 		}
