@@ -7,10 +7,7 @@ import java.net.ProxySelector;
 import java.net.SocketAddress;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.Logger.LogLevel;
 import com.btr.proxy.util.ProxyUtil;
@@ -104,15 +101,16 @@ public class PacProxySelector extends ProxySelector {
 
 	private List<Proxy> findProxy(URI uri) {
 		try {
-			Set<Proxy> proxies = new HashSet<Proxy>();
-
+			List<Proxy> proxies = new ArrayList<Proxy>();
 			String parseResult = this.pacScriptParser.evaluate(uri.toString(),
 					uri.getHost());
 			String[] proxyDefinitions = parseResult.split("[;]");
 			for (String proxyDef : proxyDefinitions) {
-				proxies.add(buildProxyFromPacResult(proxyDef));
+				if (proxyDef.trim().length() > 0) {
+					proxies.add(buildProxyFromPacResult(proxyDef));
+				}
 			}
-			return new ArrayList<Proxy>(proxies);
+			return proxies;
 		} catch (ProxyEvaluationException e) {
 			Logger.log(getClass(), LogLevel.ERROR, "PAC resolving error.", e);
 			return ProxyUtil.noProxyList();
@@ -130,24 +128,25 @@ public class PacProxySelector extends ProxySelector {
 		if (pacResult == null || pacResult.trim().length() < 6) {
 			return Proxy.NO_PROXY;
 		}
-		if (pacResult.trim().toUpperCase().startsWith(PAC_DIRECT)) {
+		String proxyDef = pacResult.trim();
+		if (proxyDef.toUpperCase().startsWith(PAC_DIRECT)) {
 			return Proxy.NO_PROXY;
 		}
 
 		// Check proxy type.
 		Proxy.Type type = Proxy.Type.HTTP;
-		if (pacResult.trim().toUpperCase().startsWith(PAC_SOCKS)) {
+		if (proxyDef.toUpperCase().startsWith(PAC_SOCKS)) {
 			type = Proxy.Type.SOCKS;
 		}
 
-		String host = pacResult.substring(6, pacResult.length());
+		String host = proxyDef.substring(6);
 		Integer port = ProxyUtil.DEFAULT_PROXY_PORT;
 
 		// Split port from host
-		String[] token = host.split("[: ]+");
-		if (token.length == 2) {
-			host = token[0];
-			port = Integer.parseInt(token[1]);
+		int indexOfPort = host.indexOf(':');
+		if (indexOfPort != -1) {
+			port = Integer.parseInt(host.substring(indexOfPort+1).trim());
+			host = host.substring(0, indexOfPort).trim();
 		}
 
 		SocketAddress adr = InetSocketAddress.createUnresolved(host, port);

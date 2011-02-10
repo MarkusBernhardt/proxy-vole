@@ -49,8 +49,22 @@ public class PacProxySelectorTest {
 		
 		result = pacProxySelector.select(TestUtil.HTTPS_TEST_URI);
 		assertEquals(Proxy.NO_PROXY, result.get(0));
+	}
+	
 
-		
+	/*************************************************************************
+	 * Test method
+	 * @throws ProxyException on proxy detection error.
+	 * @throws MalformedURLException on URL erros 
+	 ************************************************************************/
+	@Test
+	public void testScriptMuliProxy() throws ProxyException, MalformedURLException {
+		PacProxySelector pacProxySelector = new PacProxySelector(
+				new UrlPacScriptSource(toUrl("testMultiProxy.pac")));
+		List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
+		assertEquals(2, result.size());
+		assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy.com", 80)), result.get(0));
+		assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy2.com", 8080)), result.get(1));
 	}
 	
 	/*************************************************************************
