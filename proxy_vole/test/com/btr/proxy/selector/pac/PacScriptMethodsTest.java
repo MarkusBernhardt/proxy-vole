@@ -80,6 +80,14 @@ public class PacScriptMethodsTest {
 	 * Test method
 	 ************************************************************************/
 	@Test
+	public void testIsInNet2() {
+		assertEquals(true, buildParser().isInNet("10.13.75.47", "10.13.72.0", "255.255.252.0"));
+	}
+	
+	/*************************************************************************
+	 * Test method
+	 ************************************************************************/
+	@Test
 	public void testIsPlainHostName() {
 		assertEquals(false, buildParser().isPlainHostName("host1.unit-test.invalid"));
 		assertEquals(true, buildParser().isPlainHostName("host1"));

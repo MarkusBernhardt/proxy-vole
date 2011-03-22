@@ -123,28 +123,32 @@ public class PacScriptMethods implements ScriptMethods {
      ************************************************************************/
 
     public boolean isInNet(String host, String pattern, String mask) {
-        // int count= number of 255's in mask
-        int count = 0;
-        int startPos = 0;
-        while ((startPos = mask.indexOf("255", startPos + 1)) > -1) {
-            count++;
-        }
-
-        // String tokenize host and pattern with "." as delimiter
-        StringTokenizer hostTok = new StringTokenizer(host, ".");
-        StringTokenizer patternTok = new StringTokenizer(pattern, ".");
-
-        for (int i = 0; i <= count; i++) {
-            if ((!hostTok.hasMoreTokens()) || (!patternTok.hasMoreTokens())) {
-                return false;
-            }
-            if (!(hostTok.nextToken()).equals(patternTok.nextToken())) {
-                return false;
-            }
-        }
-        return true;
+        long lhost = parseIpAddressToLong(host);
+        long lpattern = parseIpAddressToLong(pattern);
+        long lmask = parseIpAddressToLong(mask);
+        boolean result = (lhost & lmask) == lpattern; 
+        return result;
     }
 
+	/*************************************************************************
+	 * Convert a string representation of a IP to a long.
+	 * @param address to convert.
+	 * @return the address as long.
+	 ************************************************************************/
+	
+	private long parseIpAddressToLong(String address) {
+		long result = 0;
+		String[] parts = address.split("\\.");
+		long shift = 24;	    
+		for (String part : parts) {
+			long lpart = Long.parseLong(part);
+	       
+			result |= (lpart << shift);
+			shift -= 8;
+		}
+       return result;
+	 }
+	 
     /*************************************************************************
      * Resolves the given DNS host name into an IP address, and returns it in
      * the dot separated format as a string.
