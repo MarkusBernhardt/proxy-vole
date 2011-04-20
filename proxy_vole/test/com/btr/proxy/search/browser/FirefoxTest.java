@@ -91,6 +91,22 @@ public class FirefoxTest {
 		List<Proxy> result = ps.select(TestUtil.FTP_TEST_URI);
 		assertEquals(TestUtil.FTP_TEST_PROXY, result.get(0));
 	}
+	
+	/*************************************************************************
+	 * Test method
+	 * @throws ProxyException on proxy detection error.
+	 * @throws URISyntaxException on invalid URL syntax.
+	 ************************************************************************/
+	@Test
+	public void testManualSocks() throws ProxyException, URISyntaxException {
+		TestUtil.setTestDataFolder("ff3_manual");
+		
+		ProxySelector ps = new FirefoxProxySearchStrategy().getProxySelector();
+
+		List<Proxy> result = ps.select(TestUtil.SOCKS_TEST_URI);
+		assertEquals(TestUtil.SOCKS_TEST_PROXY, result.get(0));
+	}
+
 
 	/*************************************************************************
 	 * Test method

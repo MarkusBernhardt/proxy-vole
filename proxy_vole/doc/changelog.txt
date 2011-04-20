@@ -7,6 +7,9 @@ This file contains the change log. The changes are marked with the following sym
 
 -----------------
 
++ Fixed  issue 15 : The Firefox proxy search lacked support for socks proxy. This is now available.
+* Fixed  issue 12 : The PAC JavaScript method isInNet did not work for all patterns. This is fixed now.
+
 20110210
 * Fixed issue 11: Parsing was unreliable when a PAC script returned more than one proxy 
 * Some code cleanup to fix some minor problems (platform detection issues and others) 

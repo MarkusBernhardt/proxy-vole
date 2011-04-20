@@ -1,6 +1,8 @@
 package com.btr.proxy.search.browser.firefox;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.ProxySelector;
 import java.util.Properties;
 
@@ -189,12 +191,14 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
 			ps.setSelector("sftp", new FixedProxySelector(proxyHost, proxyPort));
 		}
 
-		proxyHost = settings.getProperty("network.proxy.gopher", null);
-		proxyPort = Integer.parseInt(settings.getProperty("network.proxy.gopher_port", "0"));
-		if (proxyHost != null && proxyPort != 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "Firefox gopher proxy is {0}:{1}", proxyHost, proxyPort);
-			ps.setSelector("gopher", new FixedProxySelector(proxyHost, proxyPort));
-		}
+        proxyHost = settings.getProperty("network.proxy.socks", null);
+        proxyPort = Integer.parseInt(settings.getProperty("network.proxy.socks_port", "0"));
+        if (proxyHost != null && proxyPort != 0) {
+                Logger.log(getClass(), LogLevel.TRACE, "Firefox socks proxy is {0}:{1}", proxyHost, proxyPort);
+                Proxy socksProxy =  new Proxy(Proxy.Type.SOCKS, 
+        				InetSocketAddress.createUnresolved(proxyHost, proxyPort));
+                ps.setSelector("socks", new FixedProxySelector(socksProxy));
+        }
 		
 		return ps;
 	}
