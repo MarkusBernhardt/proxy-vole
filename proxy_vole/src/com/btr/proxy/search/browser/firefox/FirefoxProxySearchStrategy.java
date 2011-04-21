@@ -158,49 +158,113 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
 	 ************************************************************************/
 	
 	private ProxySelector setupFixedProxySelector(Properties settings) {
-		boolean shared = "true".equals(settings.getProperty("network.proxy.share_proxy_settings", "false").toLowerCase());
-
-		// HTTP Proxy
-		String proxyHost = settings.getProperty("network.proxy.http", null);
-		int proxyPort = Integer.parseInt(settings.getProperty("network.proxy.http_port", "0"));
-		if (proxyHost == null) {
-			return null;
-		}
-		FixedProxySelector httpProxy = new FixedProxySelector(proxyHost, proxyPort);
-		Logger.log(getClass(), LogLevel.TRACE, "Firefox http proxy is {0}:{1}", proxyHost, proxyPort);
-		if (shared) {
-			return httpProxy;
-		}
-		
 		ProtocolDispatchSelector ps = new ProtocolDispatchSelector();
-		ps.setSelector("http", httpProxy);
-		
-		// All other proxy server
-		proxyHost = settings.getProperty("network.proxy.ftp", null);
-		proxyPort = Integer.parseInt(settings.getProperty("network.proxy.ftp_port", "0"));
-		if (proxyHost != null && proxyPort != 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "Firefox ftp proxy is {0}:{1}", proxyHost, proxyPort);
-			ps.setSelector("ftp", new FixedProxySelector(proxyHost, proxyPort));
+		installHttpProxy(ps, settings);
+		if (isProxyShared(settings)) {
+			installSharedProxy(ps);
+		} else {
+			installFtpProxy(ps, settings);
+			installSecureProxy(ps, settings);
+	        installSocksProxy(ps, settings);
 		}
-		
-		proxyHost = settings.getProperty("network.proxy.ssl", null);
-		proxyPort = Integer.parseInt(settings.getProperty("network.proxy.ssl_port", "0"));
-		if (proxyHost != null && proxyPort != 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "Firefox secure proxy is {0}:{1}", proxyHost, proxyPort);
-			ps.setSelector("https", new FixedProxySelector(proxyHost, proxyPort));
-			ps.setSelector("sftp", new FixedProxySelector(proxyHost, proxyPort));
-		}
+		return ps;
+	}
 
-        proxyHost = settings.getProperty("network.proxy.socks", null);
-        proxyPort = Integer.parseInt(settings.getProperty("network.proxy.socks_port", "0"));
+	/*************************************************************************
+	 * @param ps
+	 * @param settings
+	 * @throws NumberFormatException
+	 ************************************************************************/
+	
+	private void installFtpProxy(ProtocolDispatchSelector ps,
+			Properties settings) throws NumberFormatException {
+		installSelectorForProtocol(ps, settings, "ftp");
+	}
+
+	/*************************************************************************
+	 * @param ps
+	 * @param settings
+	 * @throws NumberFormatException
+	 ************************************************************************/
+	
+	private void installHttpProxy(ProtocolDispatchSelector ps,
+			Properties settings) throws NumberFormatException {
+		installSelectorForProtocol(ps, settings, "http");
+	}
+
+	/*************************************************************************
+	 * @param settings
+	 * @return
+	 ************************************************************************/
+	
+	private boolean isProxyShared(Properties settings) {
+		return Boolean.TRUE.toString().equals(settings.getProperty("network.proxy.share_proxy_settings", "false").toLowerCase());
+	}
+
+	/*************************************************************************
+	 * @param ps
+	 ************************************************************************/
+	
+	private void installSharedProxy(ProtocolDispatchSelector ps) {
+		ProxySelector httpProxy = ps.getSelector("http");
+		if (httpProxy != null) {
+			ps.setFallbackSelector(httpProxy);
+		}
+	}
+
+	/*************************************************************************
+	 * @param ps
+	 * @param settings
+	 * @throws NumberFormatException
+	 ************************************************************************/
+	
+	private void installSocksProxy(ProtocolDispatchSelector ps,
+			Properties settings) throws NumberFormatException {
+		String proxyHost = settings.getProperty("network.proxy.socks", null);
+        int proxyPort = Integer.parseInt(settings.getProperty("network.proxy.socks_port", "0"));
         if (proxyHost != null && proxyPort != 0) {
                 Logger.log(getClass(), LogLevel.TRACE, "Firefox socks proxy is {0}:{1}", proxyHost, proxyPort);
                 Proxy socksProxy =  new Proxy(Proxy.Type.SOCKS, 
         				InetSocketAddress.createUnresolved(proxyHost, proxyPort));
                 ps.setSelector("socks", new FixedProxySelector(socksProxy));
         }
+	}
+
+	/*************************************************************************
+	 * @param ps
+	 * @param settings
+	 * @throws NumberFormatException
+	 ************************************************************************/
+	
+	private void installSecureProxy(ProtocolDispatchSelector ps,
+			Properties settings) throws NumberFormatException {
+		String proxyHost = settings.getProperty("network.proxy.ssl", null);
+		int proxyPort = Integer.parseInt(settings.getProperty("network.proxy.ssl_port", "0"));
+		if (proxyHost != null && proxyPort != 0) {
+			Logger.log(getClass(), LogLevel.TRACE, "Firefox secure proxy is {0}:{1}", proxyHost, proxyPort);
+			ps.setSelector("https", new FixedProxySelector(proxyHost, proxyPort));
+			ps.setSelector("sftp", new FixedProxySelector(proxyHost, proxyPort));
+		}
+	}
+
+	/*************************************************************************
+	 * Installs a proxy selector for the given protocol when settings are 
+	 * available.
+	 * @param ps a ProtocolDispatchSelector to configure.
+	 * @param settings to read the config from.
+	 * @param protocol to configure.
+	 * @throws NumberFormatException
+	 ************************************************************************/
+	
+	private void installSelectorForProtocol(ProtocolDispatchSelector ps,
+			Properties settings, String protocol) throws NumberFormatException {
 		
-		return ps;
+		String proxyHost = settings.getProperty("network.proxy."+protocol, null);
+		int proxyPort = Integer.parseInt(settings.getProperty("network.proxy."+protocol+"_port", "0"));
+		if (proxyHost != null && proxyPort != 0) {
+			Logger.log(getClass(), LogLevel.TRACE, "Firefox "+protocol+" proxy is {0}:{1}", proxyHost, proxyPort);
+			ps.setSelector(protocol, new FixedProxySelector(proxyHost, proxyPort));
+		}
 	}
 	
 
