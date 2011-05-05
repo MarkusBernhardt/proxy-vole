@@ -5,6 +5,7 @@ import java.net.ProxySelector;
 import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.search.desktop.gnome.GnomeProxySearchStrategy;
 import com.btr.proxy.search.desktop.kde.KdeProxySearchStrategy;
+import com.btr.proxy.search.desktop.osx.OsxProxySearchStrategy;
 import com.btr.proxy.search.desktop.win.WinProxySearchStrategy;
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.PlatformUtil;
@@ -48,6 +49,12 @@ public class DesktopProxySearchStrategy implements ProxySearchStrategy {
 			Logger.log(getClass(), LogLevel.TRACE, "We are running on Gnome.");
 			return new GnomeProxySearchStrategy().getProxySelector();
 		}
+
+		if (dt == Desktop.MAC_OS) {
+			Logger.log(getClass(), LogLevel.TRACE, "We are running on Mac OSX.");
+			return new OsxProxySearchStrategy().getProxySelector();
+		}
+
 		
 		return null;
 	}

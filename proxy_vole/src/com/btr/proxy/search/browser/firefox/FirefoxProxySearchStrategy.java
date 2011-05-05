@@ -1,8 +1,6 @@
 package com.btr.proxy.search.browser.firefox;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.net.ProxySelector;
 import java.util.Properties;
 
@@ -11,6 +9,7 @@ import com.btr.proxy.search.desktop.DesktopProxySearchStrategy;
 import com.btr.proxy.search.wpad.WpadProxySearchStrategy;
 import com.btr.proxy.selector.direct.NoProxySelector;
 import com.btr.proxy.selector.fixed.FixedProxySelector;
+import com.btr.proxy.selector.fixed.FixedSocksSelector;
 import com.btr.proxy.selector.misc.ProtocolDispatchSelector;
 import com.btr.proxy.selector.pac.PacProxySelector;
 import com.btr.proxy.selector.pac.UrlPacScriptSource;
@@ -224,9 +223,7 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
         int proxyPort = Integer.parseInt(settings.getProperty("network.proxy.socks_port", "0"));
         if (proxyHost != null && proxyPort != 0) {
                 Logger.log(getClass(), LogLevel.TRACE, "Firefox socks proxy is {0}:{1}", proxyHost, proxyPort);
-                Proxy socksProxy =  new Proxy(Proxy.Type.SOCKS, 
-        				InetSocketAddress.createUnresolved(proxyHost, proxyPort));
-                ps.setSelector("socks", new FixedProxySelector(socksProxy));
+                ps.setSelector("socks", new FixedSocksSelector(proxyHost, proxyPort));
         }
 	}
 
