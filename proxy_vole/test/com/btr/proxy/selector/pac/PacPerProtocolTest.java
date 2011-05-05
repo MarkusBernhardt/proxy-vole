@@ -19,8 +19,8 @@ public class PacPerProtocolTest {
 	
 	/*************************************************************************
 	 * Test the PAC selector for a given protocol.
-	 * @throws IOException 
-	 * @throws URISyntaxException 
+	 * @throws IOException of read error.
+	 * @throws URISyntaxException on uri syntax error.
 	 ************************************************************************/
 	@Test
 	public void testPacForSocket() throws IOException, URISyntaxException {

@@ -55,6 +55,33 @@ public class ProtocolDispatchTest {
 		List<Proxy> result = ps.select(TestUtil.FTP_TEST_URI);
 		assertEquals(TestUtil.FTP_TEST_PROXY, result.get(0));
 	}
+	
+	/*************************************************************************
+	 * Test method
+	 ************************************************************************/
+	@Test
+	public void testRemove() {
+		ProtocolDispatchSelector px = new ProtocolDispatchSelector();
+		FixedProxySelector selector = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
+		px.setSelector("http", selector);
+		assertEquals(selector, px.getSelector("http"));
+		px.removeSelector("http");
+		assertNull(px.getSelector("http"));
+	}
+	
+	/*************************************************************************
+	 * Test method
+	 ************************************************************************/
+	@Test
+	public void testFallback() {
+		ProtocolDispatchSelector px = new ProtocolDispatchSelector();
+		FixedProxySelector selector = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
+		px.setFallbackSelector(selector);
+		
+		List<Proxy> proxies = px.select(TestUtil.HTTP_TEST_URI);
+		
+		assertEquals(TestUtil.HTTP_TEST_PROXY, proxies.get(0));
+	}
 
 }
 
