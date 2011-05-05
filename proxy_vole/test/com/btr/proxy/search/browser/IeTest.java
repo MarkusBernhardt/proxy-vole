@@ -44,8 +44,8 @@ public class IeTest {
 	/*************************************************************************
 	 * Test method.
 	 * @throws ProxyException on proxy detection error.
-	 * @throws URISyntaxException 
-	 * @throws MalformedURLException 
+	 * @throws URISyntaxException if url syntax is wrong.
+	 * @throws MalformedURLException on wrong url format. 
 	 ************************************************************************/
 	@Test
 	public void testLocalByPassFilter() throws ProxyException, MalformedURLException, URISyntaxException {
