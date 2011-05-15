@@ -6,7 +6,9 @@ This file contains the change log. The changes are marked with the following sym
 * for a modified feature or a bugfix
 
 -----------------
-+ Added experiemental support for Max OSX. This is work in progress 
+
+20110515
++ Added (experiemental) support for Max OSX. This is not very well tested yet but should work. 
 + Fixed  issue 15 : The Firefox proxy search lacked support for socks proxy. This is now available.
 * Fixed  issue 12 : The PAC JavaScript method isInNet did not work for all patterns. This is fixed now.
 
