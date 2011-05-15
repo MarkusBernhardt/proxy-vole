@@ -21,6 +21,7 @@ public class PlatformUtil {
 	
 	public static Platform getCurrentPlattform() {
 		String osName = System.getProperty("os.name");
+		Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detecting platform. Name is: {0}", osName);
 		
 		if (osName.toLowerCase().contains("windows")) {
 			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Windows platform: {0}", osName);
@@ -30,7 +31,7 @@ public class PlatformUtil {
 			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Linux platform: {0}", osName);
 			return Platform.LINUX;
 		} 
-		if (osName.startsWith("MacOS")) {
+		if (osName.startsWith("Mac OS")) {
 			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Mac OS platform: {0}", osName);
 			return Platform.MAC_OS;
 		} 
