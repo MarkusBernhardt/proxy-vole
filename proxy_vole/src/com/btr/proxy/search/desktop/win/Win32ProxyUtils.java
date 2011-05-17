@@ -1,9 +1,7 @@
 package com.btr.proxy.search.desktop.win;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 /*****************************************************************************
  *  Defines the native methods used for windows to extract some system information.
@@ -31,39 +29,13 @@ public class Win32ProxyUtils {
 	public static final int WINHTTP_AUTO_DETECT_TYPE_DHCP  = 0x00000001;
 	public static final int WINHTTP_AUTO_DETECT_TYPE_DNS_A = 0x00000002;
 
-	private static String LIB_NAME_BASE = "proxy_util_";
 
 	// Code for loading the windows native dll
 	static {
 		try {
-			String LIB_NAME  = LIB_NAME_BASE + "w32.dll";
-			if( !System.getProperty("os.arch").equals("x86") ) {
-				LIB_NAME = LIB_NAME_BASE + System.getProperty("os.arch") + ".dll";
-			}
-
-			String libDir = System.getProperty("proxy_vole_lib_dir");
-			if (libDir != null && new File(libDir, LIB_NAME).exists()) {
-				System.load(new File(libDir, LIB_NAME).getAbsolutePath());
-			} else  
-			if (new File("lib", LIB_NAME).exists()) {
-				System.load(new File("lib", LIB_NAME).getAbsolutePath());
-			} else {
-				InputStream source = Win32ProxyUtils.class.getResourceAsStream("/lib/"+LIB_NAME);
-				File tempFile = File.createTempFile("proxy_vole", ".dll");
-				tempFile.deleteOnExit();
-
-				FileOutputStream fout = new FileOutputStream(tempFile);
-				byte[] buffer = new byte[1024];
-				int read = 0;
-				while (read >= 0) {
-					fout.write(buffer, 0, read);
-					read = source.read(buffer);
-				}
-				fout.flush();
-				fout.close();
-				source.close();
-				System.load(tempFile.getAbsolutePath());
-			}
+			File libFile = DLLManager.findLibFile(); 
+			System.load(libFile.getAbsolutePath());
+			DLLManager.cleanupTempFiles();
 		} catch (IOException e) {
 			throw new RuntimeException("Error loading dll"+e.getMessage(), e); 
 		} 

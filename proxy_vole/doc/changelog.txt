@@ -6,6 +6,8 @@ This file contains the change log. The changes are marked with the following sym
 * for a modified feature or a bugfix
 
 -----------------
+Current version
+* Fixed  issue 14 : Added code to cleanup temporary dll files that were not deleted on VM exit.
 
 20110515
 + Added (experiemental) support for Max OSX. This is not very well tested yet but should work. 
