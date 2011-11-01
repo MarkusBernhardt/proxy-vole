@@ -15,6 +15,7 @@ import com.btr.proxy.search.desktop.win.WinProxySearchStrategy;
 import com.btr.proxy.search.env.EnvProxySearchStrategy;
 import com.btr.proxy.search.java.JavaProxySearchStrategy;
 import com.btr.proxy.selector.misc.BufferedProxySelector;
+import com.btr.proxy.selector.misc.ProxyListFallbackSelector;
 import com.btr.proxy.selector.pac.PacProxySelector;
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.PlatformUtil;
@@ -191,11 +192,7 @@ public class ProxySearch implements ProxySearchStrategy {
 			try {
 				ProxySelector selector = strat.getProxySelector();
 				if (selector != null) {
-					
-					// if is PAC and we have caching enabled set it here.
-					if (selector instanceof PacProxySelector && this.pacCacheSize > 0) {
-						selector = new BufferedProxySelector(this.pacCacheSize, this.pacCacheTTL, selector);
-					}
+					selector = installBufferingAndFallbackBehaviour(selector);
 					return selector;
 				}
 			} catch (ProxyException e) {
@@ -205,6 +202,22 @@ public class ProxySearch implements ProxySearchStrategy {
 		}
 		
 		return null;
+	}
+
+	/*************************************************************************
+	 * If it is PAC and we have caching enabled set it here.
+	 * @param selector
+	 * @return
+	 ************************************************************************/
+	
+	private ProxySelector installBufferingAndFallbackBehaviour(ProxySelector selector) {
+		if (selector instanceof PacProxySelector) {
+			if (this.pacCacheSize > 0) {
+				selector = new BufferedProxySelector(this.pacCacheSize, this.pacCacheTTL, selector);
+			}
+			selector = new ProxyListFallbackSelector(selector);
+		}
+		return selector;
 	}
 
 	/*************************************************************************
