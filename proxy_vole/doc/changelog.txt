@@ -8,6 +8,9 @@ This file contains the change log. The changes are marked with the following sym
 -----------------
 Current version
 * Fixed  issue 14 : Added code to cleanup temporary dll files that were not deleted on VM exit.
+* Fixed  issue 18 : Added code to support the https.proxy system properties too.
++ Added support for automatic retry if PAC returns a list of fallback proxies.
++ Started to implement IPv6 support
 
 20110515
 + Added (experiemental) support for Max OSX. This is not very well tested yet but should work. 
