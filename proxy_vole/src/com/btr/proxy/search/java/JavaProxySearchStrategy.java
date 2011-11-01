@@ -52,53 +52,54 @@ public class JavaProxySearchStrategy implements ProxySearchStrategy {
 		
 		Logger.log(getClass(), LogLevel.TRACE, "Using settings from Java System Properties");
 		
-		// Parse http properties
-		String host = System.getProperty("http.proxyHost");
-		String port = System.getProperty("http.proxyPort", "80");
-		String whiteList = System.getProperty("http.nonProxyHosts", "").replace('|', ',');
-		
-		if (host == null || host.trim().length() == 0) {
-			return null;
-		}
+		setupProxyForProtocol(ps, "http");
+		setupProxyForProtocol(ps, "https");
+		setupProxyForProtocol(ps, "ftp");
+		setupProxyForProtocol(ps, "ftps");
+		setupSocktProxy(ps);
+		return ps;
+	}
 
-		Logger.log(getClass(), LogLevel.TRACE, "HTTP(S) proxy {0}:{1} found using whitelist: {2}", host, port, whiteList);
-		
-		if (whiteList.trim().length() > 0) {
-			ps.setSelector("http", new ProxyBypassListSelector(whiteList, 
-					new FixedProxySelector(host, Integer.parseInt(port))));
-			ps.setSelector("https", new ProxyBypassListSelector(whiteList, 
-					new FixedProxySelector(host, Integer.parseInt(port))));
-		} else {
-			ps.setSelector("http", new FixedProxySelector(host, Integer.parseInt(port)));
-			ps.setSelector("https", new FixedProxySelector(host, Integer.parseInt(port)));
-		}
-
-		// Parse ftp properties
-		host = System.getProperty("ftp.proxyHost");
-		port = System.getProperty("ftp.proxyPort", "80");
-		whiteList = System.getProperty("ftp.nonProxyHosts", "").replace('|', ',');
-		if (host != null && host.trim().length() > 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "Ftp proxy {0}:{1} found using whitelist: {2}", host, port, whiteList);
-			if (whiteList.trim().length() > 0) {
-				ps.setSelector("ftp", new ProxyBypassListSelector(whiteList, 
-						new FixedProxySelector(host, Integer.parseInt(port))));
-				ps.setSelector("ftps", new ProxyBypassListSelector(whiteList, 
-						new FixedProxySelector(host, Integer.parseInt(port))));
-			} else {
-				ps.setSelector("ftp", new FixedProxySelector(host, Integer.parseInt(port)));
-				ps.setSelector("ftps", new FixedProxySelector(host, Integer.parseInt(port)));
-			}
-		}
-
-		// Parse SOCKS settings
-		host = System.getProperty("socksProxyHost");
-		port = System.getProperty("socksProxyPort", "1080");
+	/*************************************************************************
+	 * Parse SOCKS settings
+	 * @param ps
+	 * @throws NumberFormatException
+	 ************************************************************************/
+	
+	
+	private void setupSocktProxy(ProtocolDispatchSelector ps) {
+		String host = System.getProperty("socksProxyHost");
+		String port = System.getProperty("socksProxyPort", "1080");
 		if (host != null && host.trim().length() > 0) {
 			Logger.log(getClass(), LogLevel.TRACE, "Socks proxy {0}:{1} found", host, port);
 			ps.setSelector("socks", new FixedSocksSelector(host, Integer.parseInt(port)));
 		}
+	}
+
+	/*************************************************************************
+	 * Parse properties for the given protocol.
+	 * @param ps
+	 * @param protocol
+	 * @throws NumberFormatException
+	 ************************************************************************/
+	
+	private void setupProxyForProtocol(ProtocolDispatchSelector ps, String protocol) {
+		String host = System.getProperty(protocol+".proxyHost");
+		String port = System.getProperty(protocol+".proxyPort", "80");
+		String whiteList = System.getProperty(protocol+".nonProxyHosts", "").replace('|', ',');
+
+		if (host == null || host.trim().length() == 0) {
+			return;
+		}
 		
-		return ps;
+		Logger.log(getClass(), LogLevel.TRACE, protocol.toUpperCase()+" proxy {0}:{1} found using whitelist: {2}", host, port, whiteList);
+		
+		ProxySelector protocolSelector = new FixedProxySelector(host, Integer.parseInt(port));
+		if (whiteList.trim().length() > 0) {
+			protocolSelector = new ProxyBypassListSelector(whiteList, protocolSelector);
+		}
+	
+		ps.setSelector(protocol, protocolSelector);
 	}
 
 }
