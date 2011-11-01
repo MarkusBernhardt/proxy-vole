@@ -44,6 +44,17 @@ public interface ScriptMethods {
      ************************************************************************/
 
     public boolean isResolvable(String host);
+    
+    /*************************************************************************
+     * Tries to resolve the host name. Returns true if succeeds to resolve
+     * the host to an IPv4 or IPv6 address.
+     * 
+     * @param host
+     *            is the host name from the URL.
+     * @return true if resolvable else false.
+     ************************************************************************/
+
+    public boolean isResolvableEx(String host);
 
     /*************************************************************************
      * Returns true if the IP address of the host matches the specified IP
@@ -66,6 +77,17 @@ public interface ScriptMethods {
      ************************************************************************/
 
     public boolean isInNet(String host, String pattern, String mask);
+    
+    /*************************************************************************
+     * Extension of the isInNet method to support IPv6.
+     * @param ipAddress an IP4 or IP6 address
+     * @param ipPrefix A string containing colon delimited IP prefix 
+     * 			with top n bits specified in the bit field 
+     * 			(i.e. 3ffe:8311:ffff::/48 or 123.112.0.0/16).
+     * @return true if the host is in the given subnet, else false.
+     ************************************************************************/
+    
+    public boolean isInNetEx(String ipAddress, String ipPrefix);
 
     /*************************************************************************
      * Resolves the given DNS host name into an IP address, and returns it in
@@ -77,6 +99,14 @@ public interface ScriptMethods {
      ************************************************************************/
 
     public String dnsResolve(String host);
+    
+    /*************************************************************************
+     * @param host the host to resolve
+     * @return a semicolon separated list of IP6 and IP4 addresses the host 
+     * 			name resolves to, empty string if not resolvable.
+     ************************************************************************/
+    
+    public String dnsResolveEx(String host);
 
     /*************************************************************************
      * Returns the IP address of the host that the process is running on, as a
@@ -86,6 +116,14 @@ public interface ScriptMethods {
      ************************************************************************/
 
     public String myIpAddress();
+    
+    /*************************************************************************
+     * Returns a list of IP4 and IP6 addresses of the host that the process 
+     * is running on. The list is separated with semicolons.
+     * @return the list, empty string if not available.
+     ************************************************************************/
+
+    public String myIpAddressEx();
 
     /*************************************************************************
      * Returns the number of DNS domain levels (number of dots) in the host
@@ -199,4 +237,20 @@ public interface ScriptMethods {
 
     public boolean timeRange(Object hour1, Object min1, Object sec1, Object hour2, Object min2, Object sec2, Object gmt);
 
+    /*************************************************************************
+     * Sorts a list of IP4 and IP6 addresses. Separated by semicolon.
+     * Dual addresses first, then IPv6 and last IPv4.
+     * @param ipAddressList the address list.
+     * @return the sorted list, empty string if sort is not possible
+     ************************************************************************/
+    
+    public String sortIpAddressList(String ipAddressList);
+    
+    /*************************************************************************
+     * Gets the version of the PAC extension that is available.
+     * @return the extension version, currently 1.0
+     ************************************************************************/
+    
+    public String getClientVersion(); 
+    
 }

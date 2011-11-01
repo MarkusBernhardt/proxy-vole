@@ -2,6 +2,7 @@ package com.btr.proxy.selector.pac;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -534,5 +535,92 @@ public class PacScriptMethods implements ScriptMethods {
 
         return current.compareTo(from) >= 0 && current.compareTo(to) <= 0;
     }
+    
+    // Microsoft PAC extensions for IPv6 support.
+
+	/*************************************************************************
+	 * isResolvableEx
+	 * @see com.btr.proxy.selector.pac.ScriptMethods#isResolvableEx(java.lang.String)
+	 ************************************************************************/
+	@Override
+	public boolean isResolvableEx(String host) {
+		return isResolvable(host);
+	}
+
+	/*************************************************************************
+	 * isInNetEx
+	 * @see com.btr.proxy.selector.pac.ScriptMethods#isInNetEx(java.lang.String, java.lang.String)
+	 ************************************************************************/
+	@Override
+	public boolean isInNetEx(String ipAddress, String ipPrefix) {
+		// TODO rossi 27.06.2011 Auto-generated method stub
+		return false;
+	}
+
+	/*************************************************************************
+	 * dnsResolveEx
+	 * @see com.btr.proxy.selector.pac.ScriptMethods#dnsResolveEx(java.lang.String)
+	 ************************************************************************/
+	@Override
+	public String dnsResolveEx(String host) {
+        StringBuilder result = new StringBuilder();
+		try {
+            InetAddress[] list = InetAddress.getAllByName(host);
+            for (InetAddress inetAddress : list) {
+            	result.append(inetAddress.getHostAddress());
+            	result.append("; ");
+			}
+        } catch (UnknownHostException e) {
+            Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG,
+                    "DNS name not resolvable {0}.", host);
+        }
+        return result.toString();
+    }
+
+	/*************************************************************************
+	 * myIpAddressEx
+	 * @see com.btr.proxy.selector.pac.ScriptMethods#myIpAddressEx()
+	 ************************************************************************/
+	@Override
+	public String myIpAddressEx() {
+		String overrideIP = System.getProperty(OVERRIDE_LOCAL_IP);
+		if (overrideIP != null && overrideIP.trim().length() > 0) {
+			return overrideIP.trim();
+		}
+		return dnsResolveEx("localhost");
+	}
+
+	/*************************************************************************
+	 * sortIpAddressList
+	 * @see com.btr.proxy.selector.pac.ScriptMethods#sortIpAddressList(java.lang.String)
+	 ************************************************************************/
+	@Override
+	public String sortIpAddressList(String ipAddressList) {
+		if (ipAddressList == null || ipAddressList.trim().length() == 0) {
+			return "";
+		}
+		String[] ipAddressToken = ipAddressList.split(";");
+		List<InetAddress> parsedAddresses = new ArrayList<InetAddress>();
+		for (String ip : ipAddressToken) {
+			try {
+				parsedAddresses.add(InetAddress.getByName(ip));
+			} catch (UnknownHostException e) {
+				// TODO rossi 01.11.2011 Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		Collections.sort(parsedAddresses, null);
+		// TODO rossi 27.06.2011 Implement me.
+		return ipAddressList;
+	}
+
+	/*************************************************************************
+	 * getClientVersion
+	 * @see com.btr.proxy.selector.pac.ScriptMethods#getClientVersion()
+	 ************************************************************************/
+	@Override
+	public String getClientVersion() {
+		return "1.0";
+	}
 
 }
