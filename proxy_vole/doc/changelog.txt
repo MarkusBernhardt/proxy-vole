@@ -7,8 +7,11 @@ This file contains the change log. The changes are marked with the following sym
 
 -----------------
 Current version
+
+20111102
 * Fixed  issue 14 : Added code to cleanup temporary dll files that were not deleted on VM exit.
 * Fixed  issue 18 : Added code to support the https.proxy system properties too.
+* Fixed  issue  9 : IE PAC file urls are now patched to be in line with Firefox URLs.
 + Added support for automatic retry if PAC returns a list of fallback proxies.
 + Started to implement IPv6 support
 
