@@ -19,6 +19,10 @@ import com.btr.proxy.util.Logger.LogLevel;
  * <li><i>http.nonProxyHosts</i> (default: none)</li>
  * </ul>
  * <ul>
+ * <li><i>https.proxyHost</i> (default: none)</li>
+ * <li><i>https.proxyPort</i> (default: 443 if https.proxyHost specified)</li>
+ * </ul>
+ * <ul>
  * <li><i>ftp.proxyHost</i> (default: none)</li>
  * <li><i>ftp.proxyPort</i> (default: 80 if ftp.proxyHost specified)</li>
  * <li><i>ftp.nonProxyHosts</i> (default: none)</li> 
@@ -27,7 +31,10 @@ import com.btr.proxy.util.Logger.LogLevel;
  * <li><i>socksProxyHost</i></li>
  * <li><i>socksProxyPort</i> (default: 1080)</li>
  * </ul>
- * 
+ * <p>
+ * This is based on information found here: <br/>
+ * http://download.oracle.com/javase/6/docs/technotes/guides/net/proxies.html
+ * </p>
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/
 
@@ -52,10 +59,10 @@ public class JavaProxySearchStrategy implements ProxySearchStrategy {
 		
 		Logger.log(getClass(), LogLevel.TRACE, "Using settings from Java System Properties");
 		
-		setupProxyForProtocol(ps, "http");
-		setupProxyForProtocol(ps, "https");
-		setupProxyForProtocol(ps, "ftp");
-		setupProxyForProtocol(ps, "ftps");
+		setupProxyForProtocol(ps, "http", 80);
+		setupProxyForProtocol(ps, "https", 443);
+		setupProxyForProtocol(ps, "ftp", 80);
+		setupProxyForProtocol(ps, "ftps", 80);
 		setupSocktProxy(ps);
 		return ps;
 	}
@@ -83,10 +90,14 @@ public class JavaProxySearchStrategy implements ProxySearchStrategy {
 	 * @throws NumberFormatException
 	 ************************************************************************/
 	
-	private void setupProxyForProtocol(ProtocolDispatchSelector ps, String protocol) {
+	private void setupProxyForProtocol(ProtocolDispatchSelector ps, String protocol, int defaultPort) {
 		String host = System.getProperty(protocol+".proxyHost");
-		String port = System.getProperty(protocol+".proxyPort", "80");
+		String port = System.getProperty(protocol+".proxyPort", ""+defaultPort);
 		String whiteList = System.getProperty(protocol+".nonProxyHosts", "").replace('|', ',');
+		
+		if ("https".equalsIgnoreCase(protocol)) { // This is dirty but https has no own property for it.
+			whiteList = System.getProperty("http.nonProxyHosts", "").replace('|', ',');
+		}
 
 		if (host == null || host.trim().length() == 0) {
 			return;

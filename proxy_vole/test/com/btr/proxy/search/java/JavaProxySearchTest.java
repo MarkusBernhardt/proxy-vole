@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.net.Proxy;
 import java.net.ProxySelector;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.junit.Before;
@@ -28,9 +30,11 @@ public class JavaProxySearchTest {
 	public void setup() {
 		System.setProperty("http.proxyHost", "http_proxy.unit-test.invalid");
 		System.setProperty("http.proxyPort", "8090");
+		System.setProperty("http.nonProxyHosts", "no_proxy.unit-test.invalid");
 		System.setProperty("https.proxyHost", "https_proxy.unit-test.invalid");
 		System.setProperty("https.proxyPort", "8091");
 		System.setProperty("ftp.proxyHost", "ftp_proxy.unit-test.invalid");
+		System.setProperty("ftp.nonProxyHosts", "no_proxy.unit-test.invalid");
 		System.setProperty("ftp.proxyPort", "8092");
 		System.setProperty("socksProxyHost", "socks_proxy.unit-test.invalid");
 		System.setProperty("socksProxyPort", "8095");
@@ -46,6 +50,16 @@ public class JavaProxySearchTest {
 		List<Proxy> result = this.selector.select(TestUtil.HTTP_TEST_URI);
 		assertEquals(TestUtil.HTTP_TEST_PROXY, result.get(0));
 	}
+
+	/*************************************************************************
+	 * Test method
+	 * @throws URISyntaxException on wrong URI. 
+	 ************************************************************************/
+	@Test
+	public void testHTTPnoProxy() throws URISyntaxException {
+		List<Proxy> result = this.selector.select(new URI("http://no_proxy.unit-test.invalid"));
+		assertEquals(Proxy.NO_PROXY, result.get(0));
+	}
 	
 	/*************************************************************************
 	 * Test method
@@ -55,6 +69,16 @@ public class JavaProxySearchTest {
 		List<Proxy> result = this.selector.select(TestUtil.HTTPS_TEST_URI);
 		assertEquals(TestUtil.HTTPS_TEST_PROXY, result.get(0));
 	}
+
+	/*************************************************************************
+	 * Test method
+	 * @throws URISyntaxException on wrong URI. 
+	 ************************************************************************/
+	@Test
+	public void testHTTPSnoProxy() throws URISyntaxException {
+		List<Proxy> result = this.selector.select(new URI("https://no_proxy.unit-test.invalid"));
+		assertEquals(Proxy.NO_PROXY, result.get(0));
+	}
 	
 	/*************************************************************************
 	 * Test method
@@ -63,6 +87,16 @@ public class JavaProxySearchTest {
 	public void testFTP() {
 		List<Proxy> result = this.selector.select(TestUtil.FTP_TEST_URI);
 		assertEquals(TestUtil.FTP_TEST_PROXY, result.get(0));
+	}
+	
+	/*************************************************************************
+	 * Test method
+	 * @throws URISyntaxException on wrong URI. 
+	 ************************************************************************/
+	@Test
+	public void testFTPnoProxy() throws URISyntaxException {
+		List<Proxy> result = this.selector.select(new URI("ftp://no_proxy.unit-test.invalid"));
+		assertEquals(Proxy.NO_PROXY, result.get(0));
 	}
 	
 	/*************************************************************************
