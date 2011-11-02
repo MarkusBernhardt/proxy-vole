@@ -79,7 +79,15 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 		}
 		if (pacUrl != null && pacUrl.trim().length() > 0) {
 			Logger.log(getClass(), LogLevel.TRACE, "IE uses script: "+pacUrl);
-			return new PacProxySelector(new UrlPacScriptSource(pacUrl));
+		     
+			// Fix for issue 9
+			// If the IE has a file URL and it only starts has 2 slashes, 
+			// add a third so it can be properly converted to the URL class
+		    if (pacUrl.startsWith("file://") && !pacUrl.startsWith("file:///")) {
+		    	pacUrl = "file:///" + pacUrl.substring(7);
+		    }
+
+		    return new PacProxySelector(new UrlPacScriptSource(pacUrl));
 		}
 		
 		return null;
