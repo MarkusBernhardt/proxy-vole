@@ -70,6 +70,9 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 		Logger.log(getClass(), LogLevel.TRACE, "Detecting Kde proxy settings");
 
 		Properties settings = readSettings();
+		if (settings == null) {
+			return null;
+		}
 		
 		ProxySelector result = null; 
 		int type = Integer.parseInt(settings.getProperty("ProxyType", "-1"));
