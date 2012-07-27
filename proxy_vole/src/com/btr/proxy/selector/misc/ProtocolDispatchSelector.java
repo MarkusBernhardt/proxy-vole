@@ -104,10 +104,10 @@ public class ProtocolDispatchSelector extends ProxySelector {
 
 	@Override
 	public List<Proxy> select(URI uri) {
+		ProxySelector selector = this.fallbackSelector;
 		String protocol = uri.getScheme();
-		ProxySelector selector = this.selectors.get(protocol);
-		if (selector == null) {
-			selector = this.fallbackSelector;
+		if (protocol != null) {
+			selector = this.selectors.get(protocol);
 		}
 		return selector.select(uri);
 	}
