@@ -89,10 +89,10 @@ public class ProtocolDispatchSelector extends ProxySelector {
 
 	@Override
 	public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+		ProxySelector selector = this.fallbackSelector;
 		String protocol = uri.getScheme();
-		ProxySelector selector = this.selectors.get(protocol);
-		if (selector == null) {
-			selector = this.fallbackSelector;
+		if (protocol != null && this.selectors.get(protocol) != null) {
+			selector = this.selectors.get(protocol);
 		}
 		selector.connectFailed(uri, sa, ioe);
 	}
@@ -106,7 +106,7 @@ public class ProtocolDispatchSelector extends ProxySelector {
 	public List<Proxy> select(URI uri) {
 		ProxySelector selector = this.fallbackSelector;
 		String protocol = uri.getScheme();
-		if (protocol != null) {
+		if (protocol != null && this.selectors.get(protocol) != null) {
 			selector = this.selectors.get(protocol);
 		}
 		return selector.select(uri);

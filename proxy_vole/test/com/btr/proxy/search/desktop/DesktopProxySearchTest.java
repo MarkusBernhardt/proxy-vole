@@ -1,7 +1,12 @@
 package com.btr.proxy.search.desktop;
 
+import java.net.ProxySelector;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.junit.Test;
 
+import com.btr.proxy.search.ProxySearch;
 import com.btr.proxy.util.ProxyException;
 
 /*****************************************************************************
@@ -20,6 +25,19 @@ public class DesktopProxySearchTest {
 	public void testDesktopStrategsIsWorking() throws ProxyException {
 		new DesktopProxySearchStrategy().getProxySelector();
 	}
+	
+	/*************************************************************************
+	 * Test method.
+	 * @throws URISyntaxException on error parsing the URI. 
+	 * @throws ProxyException on selector error.
+	 ************************************************************************/
+	@Test
+	public void emptyURIShouldNotRaiseNPE() throws URISyntaxException, ProxyException {
+		ProxySearch proxySearch = ProxySearch.getDefaultProxySearch();
+		ProxySelector myProxySelector = proxySearch.getProxySelector();
+		myProxySelector.select(new URI(""));
+	}
+
 
 }
 

@@ -7,6 +7,9 @@ This file contains the change log. The changes are marked with the following sym
 
 -----------------
 Current version
+* Fixed  issue 19 : Added check to return null if no KDE settings are available.
+* Fixed  issue 20 : Fix in isInNet method. Resolve host names to IP addresses.
+* Fixed  issue 21 : Improved handling of empty/invalid URIs
 
 20111102
 * Fixed  issue 14 : Added code to cleanup temporary dll files that were not deleted on VM exit.

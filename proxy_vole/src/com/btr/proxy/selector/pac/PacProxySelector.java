@@ -81,7 +81,7 @@ public class PacProxySelector extends ProxySelector {
 		// Fix for Java 1.6.16 where we get a infinite loop because
 		// URL.connect(Proxy.NO_PROXY) does not work as expected.
 		PacScriptSource scriptSource = this.pacScriptParser.getScriptSource();
-		if (String.valueOf(scriptSource).contains(uri.getHost())) {
+		if (uri.getHost() == null || String.valueOf(scriptSource).contains(uri.getHost())) {
 			return ProxyUtil.noProxyList();
 		}
 

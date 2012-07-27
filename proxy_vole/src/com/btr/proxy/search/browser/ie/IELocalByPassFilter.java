@@ -21,7 +21,7 @@ public class IELocalByPassFilter implements UriFilter {
 			return false;
 		}
 		String host = uri.getAuthority();
-		return !host.contains(".");
+		return host != null && !host.contains(".");
 	}
 
 }

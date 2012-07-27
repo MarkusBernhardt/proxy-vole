@@ -48,7 +48,7 @@ public class IpRangeFilter implements UriFilter {
 	 ************************************************************************/
 
 	public boolean accept(URI uri) {
-		if (uri == null) {
+		if (uri == null || uri.getHost() == null) {
 			return false;
 		}
 		try {

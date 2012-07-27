@@ -34,7 +34,7 @@ public class HostnameFilter implements UriFilter {
 	 ************************************************************************/
 	
 	public boolean accept(URI uri) {
-		if (uri == null) {
+		if (uri == null || uri.getAuthority() == null) {
 			return false;
 		}
 		
