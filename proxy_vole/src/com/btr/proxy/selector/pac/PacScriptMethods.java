@@ -124,11 +124,14 @@ public class PacScriptMethods implements ScriptMethods {
      ************************************************************************/
 
     public boolean isInNet(String host, String pattern, String mask) {
+    	host = dnsResolve(host);
+    	if (host == null || host.length() == 0) {
+    		return false;
+    	}
         long lhost = parseIpAddressToLong(host);
         long lpattern = parseIpAddressToLong(pattern);
         long lmask = parseIpAddressToLong(mask);
-        boolean result = (lhost & lmask) == lpattern; 
-        return result;
+        return (lhost & lmask) == lpattern;
     }
 
 	/*************************************************************************
@@ -542,8 +545,8 @@ public class PacScriptMethods implements ScriptMethods {
 	 * isResolvableEx
 	 * @see com.btr.proxy.selector.pac.ScriptMethods#isResolvableEx(java.lang.String)
 	 ************************************************************************/
-	@Override
-	public boolean isResolvableEx(String host) {
+
+    public boolean isResolvableEx(String host) {
 		return isResolvable(host);
 	}
 
@@ -551,7 +554,7 @@ public class PacScriptMethods implements ScriptMethods {
 	 * isInNetEx
 	 * @see com.btr.proxy.selector.pac.ScriptMethods#isInNetEx(java.lang.String, java.lang.String)
 	 ************************************************************************/
-	@Override
+
 	public boolean isInNetEx(String ipAddress, String ipPrefix) {
 		// TODO rossi 27.06.2011 Auto-generated method stub
 		return false;
@@ -561,7 +564,7 @@ public class PacScriptMethods implements ScriptMethods {
 	 * dnsResolveEx
 	 * @see com.btr.proxy.selector.pac.ScriptMethods#dnsResolveEx(java.lang.String)
 	 ************************************************************************/
-	@Override
+
 	public String dnsResolveEx(String host) {
         StringBuilder result = new StringBuilder();
 		try {
@@ -581,7 +584,7 @@ public class PacScriptMethods implements ScriptMethods {
 	 * myIpAddressEx
 	 * @see com.btr.proxy.selector.pac.ScriptMethods#myIpAddressEx()
 	 ************************************************************************/
-	@Override
+
 	public String myIpAddressEx() {
 		String overrideIP = System.getProperty(OVERRIDE_LOCAL_IP);
 		if (overrideIP != null && overrideIP.trim().length() > 0) {
@@ -594,7 +597,7 @@ public class PacScriptMethods implements ScriptMethods {
 	 * sortIpAddressList
 	 * @see com.btr.proxy.selector.pac.ScriptMethods#sortIpAddressList(java.lang.String)
 	 ************************************************************************/
-	@Override
+
 	public String sortIpAddressList(String ipAddressList) {
 		if (ipAddressList == null || ipAddressList.trim().length() == 0) {
 			return "";
@@ -618,7 +621,7 @@ public class PacScriptMethods implements ScriptMethods {
 	 * getClientVersion
 	 * @see com.btr.proxy.selector.pac.ScriptMethods#getClientVersion()
 	 ************************************************************************/
-	@Override
+
 	public String getClientVersion() {
 		return "1.0";
 	}
