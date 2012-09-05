@@ -5,8 +5,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.Proxy;
+import java.net.ProxySelector;
 import java.net.URISyntaxException;
 import java.net.URL;
 import com.btr.proxy.util.Logger;
@@ -105,34 +108,86 @@ public class UrlPacScriptSource implements PacScriptSource {
 			throw new IOException("Invalid PAC script URL: null");
 		}
 
+		setPacProxySelectorEnabled(false);
+		
+		HttpURLConnection con = null;
+		try {
+			con = setupHTTPConnection(url);
+			if (con.getResponseCode() != 200) {
+				throw new IOException("Server returned: "+con.getResponseCode()+" "+con.getResponseMessage());
+			}
+			// Read expire date.
+			this.expireAtMillis = con.getExpiration();
+
+			BufferedReader r = getReader(con);
+			String result = readAllContent(r);
+			r.close();
+			return result;
+		} finally {
+			setPacProxySelectorEnabled(true);
+			if (con != null) {
+				con.disconnect();
+			}
+		}
+	}
+
+	/*************************************************************************
+	 * Enables/disables the PAC proxy selector while we download to prevent recursion.
+	 * See issue: 26 in the change tracker.
+	 ************************************************************************/
+	
+	private void setPacProxySelectorEnabled(boolean enable) {
+		ProxySelector ps = ProxySelector.getDefault();
+		if (ps instanceof PacProxySelector) {
+			((PacProxySelector)ps).setEnabled(enable);
+		}
+	}
+
+	/*************************************************************************
+	 * Reads the whole content available into a String.
+	 * @param r to read from.
+	 * @return the complete PAC file content.
+	 * @throws IOException
+	 ************************************************************************/
+	
+	private String readAllContent(BufferedReader r) throws IOException {
+		StringBuilder result = new StringBuilder();
+		String line; 
+		while ((line = r.readLine()) != null) {
+			result.append(line).append("\n");
+		}
+		return result.toString();
+	}
+
+	/*************************************************************************
+	 * Build a BufferedReader around the open HTTP connection.
+	 * @param con to read from
+	 * @return the BufferedReader.
+	 * @throws UnsupportedEncodingException
+	 * @throws IOException
+	 ************************************************************************/
+	
+	private BufferedReader getReader(HttpURLConnection con)
+			throws UnsupportedEncodingException, IOException {
+		String charsetName = parseCharsetFromHeader(con.getContentType());
+		BufferedReader r = new BufferedReader(new InputStreamReader(con.getInputStream(), charsetName));
+		return r;
+	}
+
+	/*************************************************************************
+	 * Configure the connection to download from.
+	 * @param url to get the pac file content from
+	 * @return a HTTPUrlConnecion to this url.
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 ************************************************************************/
+	
+	private HttpURLConnection setupHTTPConnection(String url)
+			throws IOException, MalformedURLException {
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection(Proxy.NO_PROXY);
 		con.setInstanceFollowRedirects(true);
 		con.setRequestProperty("accept", "application/x-ns-proxy-autoconfig, */*;q=0.8");
-		
-		if (con.getResponseCode() != 200) {
-			throw new IOException("Server returned: "+con.getResponseCode()+" "+con.getResponseMessage());
-		}
-		
-		// Read expire date.
-		this.expireAtMillis = con.getExpiration();
-
-		String charsetName = parseCharsetFromHeader(con.getContentType());
-		BufferedReader r = new BufferedReader(new InputStreamReader(con.getInputStream(), charsetName));
-		try {
-			StringBuilder result = new StringBuilder();
-			try {
-				String line; 
-				while ((line = r.readLine()) != null) {
-					result.append(line).append("\n");
-				}
-			} finally {
-				r.close();
-				con.disconnect();
-			} 
-			return result.toString();
-		} finally {
-			r.close();
-		}
+		return con;
 	}
 
 	/*************************************************************************

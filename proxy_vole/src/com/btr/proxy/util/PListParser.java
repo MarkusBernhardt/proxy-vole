@@ -133,7 +133,7 @@ public final class PListParser
 		 * iterator
 		 * @see java.lang.Iterable#iterator()
 		 ************************************************************************/
-		@Override
+
 		public Iterator<Entry<String, Object>> iterator() {
 			return this.children.entrySet().iterator();
 		}

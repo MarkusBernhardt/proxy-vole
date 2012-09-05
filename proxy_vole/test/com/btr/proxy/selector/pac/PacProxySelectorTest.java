@@ -3,10 +3,14 @@ package com.btr.proxy.selector.pac;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.Proxy.Type;
+import java.net.ProxySelector;
+import java.net.SocketAddress;
+import java.net.URI;
 import java.util.List;
 
 import org.junit.Test;
@@ -51,6 +55,34 @@ public class PacProxySelectorTest {
 		assertEquals(Proxy.NO_PROXY, result.get(0));
 	}
 	
+	/*************************************************************************
+	 * Test download fix to prevent infinite loop.
+	 * @throws ProxyException on proxy detection error.
+	 * @throws MalformedURLException on URL erros 
+	 ************************************************************************/
+	@Test
+	public void pacDownloadFromURLShouldNotUseProxy() throws ProxyException, MalformedURLException {
+		ProxySelector oldOne = ProxySelector.getDefault();
+		try {
+			ProxySelector.setDefault(new ProxySelector() {
+				@Override
+				public List<Proxy> select(URI uri) {
+					throw new IllegalStateException("Should not download via proxy");
+				}
+				
+				@Override
+				public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+					// Not used
+				}
+			});
+
+			PacProxySelector pacProxySelector = new PacProxySelector(
+					new UrlPacScriptSource("http://www.test.invalid/wpad.pac"));
+			pacProxySelector.select(TestUtil.HTTPS_TEST_URI);
+		} finally {
+			ProxySelector.setDefault(oldOne);
+		}
+	}
 
 	/*************************************************************************
 	 * Test method

@@ -95,11 +95,9 @@ public class ProxyTester extends JFrame {
 	
 	private void installLogger() {
 		Logger.setBackend(new Logger.LogBackEnd() {
-			@Override
 			public void log(Class<?> clazz, LogLevel loglevel, String msg, Object... params) {
 				ProxyTester.this.logArea.append(loglevel+"\t"+MessageFormat.format(msg, params)+"\n");
 			}
-			@Override
 			public boolean isLogginEnabled(LogLevel logLevel) {
 				return true;
 			}

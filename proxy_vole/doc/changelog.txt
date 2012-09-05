@@ -7,6 +7,12 @@ This file contains the change log. The changes are marked with the following sym
 
 -----------------
 Current version
+
+20120905
+* Fixed  issue 26 : Implemented (hopefully) better fix for PAC download recursion bug 
+* Fixed  issue 27 + 22 : JavaProxySearch was used always even if no http.proxyHost property was set.
+
+20120727
 * Fixed  issue 19 : Added check to return null if no KDE settings are available.
 * Fixed  issue 20 : Fix in isInNet method. Resolve host names to IP addresses.
 * Fixed  issue 21 : Improved handling of empty/invalid URIs

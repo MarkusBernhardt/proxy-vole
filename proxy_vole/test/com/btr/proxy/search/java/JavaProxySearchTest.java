@@ -8,7 +8,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.btr.proxy.TestUtil;
@@ -26,8 +28,8 @@ public class JavaProxySearchTest {
 	/*************************************************************************
 	 * Setup before the tests.
 	 ************************************************************************/
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setupClass() {
 		System.setProperty("http.proxyHost", "http_proxy.unit-test.invalid");
 		System.setProperty("http.proxyPort", "8090");
 		System.setProperty("http.nonProxyHosts", "no_proxy.unit-test.invalid");
@@ -38,7 +40,30 @@ public class JavaProxySearchTest {
 		System.setProperty("ftp.proxyPort", "8092");
 		System.setProperty("socksProxyHost", "socks_proxy.unit-test.invalid");
 		System.setProperty("socksProxyPort", "8095");
-		
+	}
+
+	/*************************************************************************
+	 * Setup before the tests.
+	 ************************************************************************/
+	@AfterClass
+	public static void teardownClass() {
+		System.clearProperty("http.proxyHost");
+		System.clearProperty("http.proxyPort");
+		System.clearProperty("http.nonProxyHosts");
+		System.clearProperty("https.proxyHost");
+		System.clearProperty("https.proxyPort");
+		System.clearProperty("ftp.proxyHost");
+		System.clearProperty("ftp.nonProxyHosts");
+		System.clearProperty("ftp.proxyPort");
+		System.clearProperty("socksProxyHost");
+		System.clearProperty("socksProxyPort");
+	}
+	
+	/*************************************************************************
+	 * Setup before every single test 
+	 ************************************************************************/
+	@Before
+	public void setup() {
 		this.selector = new JavaProxySearchStrategy().getProxySelector();
 	}
 	

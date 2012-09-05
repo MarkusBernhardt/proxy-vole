@@ -35,7 +35,9 @@ public class DesktopProxySearchTest {
 	public void emptyURIShouldNotRaiseNPE() throws URISyntaxException, ProxyException {
 		ProxySearch proxySearch = ProxySearch.getDefaultProxySearch();
 		ProxySelector myProxySelector = proxySearch.getProxySelector();
-		myProxySelector.select(new URI(""));
+		if (myProxySelector != null) {
+			myProxySelector.select(new URI(""));
+		}
 	}
 
 

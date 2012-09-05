@@ -35,6 +35,9 @@ import com.btr.proxy.util.Logger.LogLevel;
  * This is based on information found here: <br/>
  * http://download.oracle.com/javase/6/docs/technotes/guides/net/proxies.html
  * </p>
+ * If the "http.proxyHost" property is not set then the no proxy selector is setup
+ * This property is used as marker to signal that the System settings should be used. 
+ *  
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/
 
@@ -57,14 +60,28 @@ public class JavaProxySearchStrategy implements ProxySearchStrategy {
 	public ProxySelector getProxySelector() {
 		ProtocolDispatchSelector ps = new ProtocolDispatchSelector();
 		
+		if (!proxyPropertyPresent()) {
+			return null;
+		}
 		Logger.log(getClass(), LogLevel.TRACE, "Using settings from Java System Properties");
+		
 		
 		setupProxyForProtocol(ps, "http", 80);
 		setupProxyForProtocol(ps, "https", 443);
 		setupProxyForProtocol(ps, "ftp", 80);
 		setupProxyForProtocol(ps, "ftps", 80);
 		setupSocktProxy(ps);
+		
 		return ps;
+	}
+
+	/*************************************************************************
+	 * @return true if the http.proxyHost is available as system property.
+	 ************************************************************************/
+	
+	private boolean proxyPropertyPresent() {
+		return System.getProperty("http.proxyHost") != null 
+				&& System.getProperty("http.proxyHost").trim().length() > 0;
 	}
 
 	/*************************************************************************

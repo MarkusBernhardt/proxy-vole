@@ -28,6 +28,8 @@ public class PacProxySelector extends ProxySelector {
 
 	private PacScriptParser pacScriptParser;
 
+	private volatile boolean enabled = true;
+
 	/*************************************************************************
 	 * Constructor
 	 * @param pacSource the source for the PAC file. 
@@ -36,6 +38,25 @@ public class PacProxySelector extends ProxySelector {
 	public PacProxySelector(PacScriptSource pacSource) {
 		super();
 		selectEngine(pacSource);
+	}
+	
+	/*************************************************************************
+	 * Can be used to enable / disable the proxy selector.
+	 * If disabled it will return DIRECT for all urls.
+	 * @param enable the new status to set.
+	 ************************************************************************/
+	
+	public void setEnabled(boolean enable) {
+		this.enabled = enable;
+	}
+	
+	/*************************************************************************
+	 * Checks if the selector is currently enabled.
+	 * @return true if enabled else false.
+	 ************************************************************************/
+	
+	public boolean isEnabled() {
+		return this.enabled;
 	}
 
 	/*************************************************************************
@@ -77,11 +98,10 @@ public class PacProxySelector extends ProxySelector {
 		if (uri == null) {
 			throw new IllegalArgumentException("URI must not be null.");
 		}
-
+		
 		// Fix for Java 1.6.16 where we get a infinite loop because
 		// URL.connect(Proxy.NO_PROXY) does not work as expected.
-		PacScriptSource scriptSource = this.pacScriptParser.getScriptSource();
-		if (uri.getHost() == null || String.valueOf(scriptSource).contains(uri.getHost())) {
+		if (!this.enabled) {
 			return ProxyUtil.noProxyList();
 		}
 
@@ -152,4 +172,5 @@ public class PacProxySelector extends ProxySelector {
 		SocketAddress adr = InetSocketAddress.createUnresolved(host, port);
 		return new Proxy(type, adr);
 	}
+	
 }
