@@ -9,7 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.Proxy;
-import java.net.ProxySelector;
 import java.net.URISyntaxException;
 import java.net.URL;
 import com.btr.proxy.util.Logger;
@@ -137,10 +136,7 @@ public class UrlPacScriptSource implements PacScriptSource {
 	 ************************************************************************/
 	
 	private void setPacProxySelectorEnabled(boolean enable) {
-		ProxySelector ps = ProxySelector.getDefault();
-		if (ps instanceof PacProxySelector) {
-			((PacProxySelector)ps).setEnabled(enable);
-		}
+		PacProxySelector.setEnabled(enable);
 	}
 
 	/*************************************************************************

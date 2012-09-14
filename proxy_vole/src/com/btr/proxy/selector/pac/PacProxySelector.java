@@ -28,7 +28,7 @@ public class PacProxySelector extends ProxySelector {
 
 	private PacScriptParser pacScriptParser;
 
-	private volatile boolean enabled = true;
+	private static volatile boolean enabled = true;
 
 	/*************************************************************************
 	 * Constructor
@@ -46,8 +46,8 @@ public class PacProxySelector extends ProxySelector {
 	 * @param enable the new status to set.
 	 ************************************************************************/
 	
-	public void setEnabled(boolean enable) {
-		this.enabled = enable;
+	public static void setEnabled(boolean enable) {
+		enabled = enable;
 	}
 	
 	/*************************************************************************
@@ -55,8 +55,8 @@ public class PacProxySelector extends ProxySelector {
 	 * @return true if enabled else false.
 	 ************************************************************************/
 	
-	public boolean isEnabled() {
-		return this.enabled;
+	public static boolean isEnabled() {
+		return enabled;
 	}
 
 	/*************************************************************************
@@ -99,9 +99,9 @@ public class PacProxySelector extends ProxySelector {
 			throw new IllegalArgumentException("URI must not be null.");
 		}
 		
-		// Fix for Java 1.6.16 where we get a infinite loop because
+		// Fix for Java 1.6.16+ where we get a infinite loop because
 		// URL.connect(Proxy.NO_PROXY) does not work as expected.
-		if (!this.enabled) {
+		if (!enabled) {
 			return ProxyUtil.noProxyList();
 		}
 
