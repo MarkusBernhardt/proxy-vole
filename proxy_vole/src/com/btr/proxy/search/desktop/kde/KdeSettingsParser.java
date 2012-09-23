@@ -21,38 +21,51 @@ import com.btr.proxy.util.Logger.LogLevel;
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/
 
-class KdeSettingsParser {
-	
+public class KdeSettingsParser {
+
+    private File settingsFile;
+
 	/*************************************************************************
 	 * Constructor
 	 ************************************************************************/
-	
+
 	public KdeSettingsParser() {
-		super();
+		this(null);
 	}
-	
+
+	/*************************************************************************
+	 * Constructor
+	 ************************************************************************/
+
+	public KdeSettingsParser(File settingsFile) {
+		super();
+        this.settingsFile = settingsFile;
+	}
+
 	/*************************************************************************
 	 * Parse the settings file and extract all network.proxy.* settings from it.
 	 * @return the parsed properties.
 	 * @throws IOException on read error.
 	 ************************************************************************/
-	
+
 	public Properties parseSettings() throws IOException {
 		// Search for existing settings.
-		File settingsFile = findSettingsFile();
-		if (settingsFile == null) {
+        if (this.settingsFile == null) {
+            this.settingsFile = findSettingsFile();
+        }
+		if (this.settingsFile == null) {
 			return null;
 		}
 
 		// Read settings from file.
 		BufferedReader fin = new BufferedReader(
 				new InputStreamReader(
-					new FileInputStream(settingsFile)));
+					new FileInputStream(this.settingsFile)));
 
 		Properties result = new Properties();
 		try {
 			String line = fin.readLine();
-			
+
 			// Find section start.
 			while (line != null && !"[Proxy Settings]".equals(line.trim())) {
 				line = fin.readLine();
@@ -60,7 +73,7 @@ class KdeSettingsParser {
 			if (line == null) {
 				return result;
 			}
-			
+
 			// Read full section
 			line = "";
 			while (line != null && !line.trim().startsWith("[")) {
@@ -71,7 +84,7 @@ class KdeSettingsParser {
 					String value = line.substring(index+1).trim();
 					result.setProperty(key, value);
 				}
-								
+
 				line = fin.readLine();
 			}
 		} finally {
@@ -80,22 +93,40 @@ class KdeSettingsParser {
 
 		return result;
 	}
-	
+
 	/*************************************************************************
-	 * Finds all the KDE network settings file. 
-	 * @return a file or null if does not exist. 
+	 * Finds all the KDE network settings file.
+	 * @return a file or null if does not exist.
 	 ************************************************************************/
-	
+
 	private File findSettingsFile() {
 		File userDir = new File(System.getProperty("user.home"));
-		File settingsFile = new File(userDir, ".kde"+File.separator+"share"+File.separator+"config"+File.separator+"kioslaverc");
-		Logger.log(getClass(), LogLevel.TRACE, "Searching Kde settings in {0}", settingsFile);
-		if (!settingsFile.exists()) {
-			Logger.log(getClass(), LogLevel.DEBUG, "Settings not found");
-			return null;
+		if ("4".equals(System.getenv("KDE_SESSION_VERSION"))) {
+	        this.settingsFile = findSettingsFile(
+	                new File(userDir, ".kde4"+File.separator+"share"+File.separator+"config"+File.separator+"kioslaverc"));
 		}
-		Logger.log(getClass(), LogLevel.TRACE, "Settings found");
-		return settingsFile;
+        if (this.settingsFile == null) {
+            return findSettingsFile(
+                new File(userDir, ".kde"+File.separator+"share"+File.separator+"config"+File.separator+"kioslaverc"));
+        } else {
+            return this.settingsFile;
+        }
 	}
-	
+
+    /*************************************************************************
+     * Internal method to test if the settings file is at the given place.
+     * @param settingsFile the path to test.
+     * @return the file or null if it does not exist.
+     ************************************************************************/
+    
+    private File findSettingsFile(File settingsFile) {
+        Logger.log(getClass(), LogLevel.TRACE, "Searching Kde settings in {0}", settingsFile);
+        if (!settingsFile.exists()) {
+            Logger.log(getClass(), LogLevel.DEBUG, "Settings not found");
+            return null;
+        }
+        Logger.log(getClass(), LogLevel.TRACE, "Settings found");
+        return settingsFile;
+    }
+
 }
