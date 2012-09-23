@@ -7,6 +7,8 @@ This file contains the change log. The changes are marked with the following sym
 
 -----------------
 Current version
+* Fixed  issue 29 : KDE settings file was not found on KDE4. This is solved now.
+* Fixed  issue 25 : Disabled DTD and schema validation in settings parsers.
 
 20120920
 * Improved the fix for issue 26 PAC download recursion bug
