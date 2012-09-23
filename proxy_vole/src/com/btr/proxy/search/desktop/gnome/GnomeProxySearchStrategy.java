@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.ProxySelector;
 import java.util.Properties;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -21,6 +22,7 @@ import com.btr.proxy.selector.misc.ProtocolDispatchSelector;
 import com.btr.proxy.selector.pac.PacProxySelector;
 import com.btr.proxy.selector.pac.UrlPacScriptSource;
 import com.btr.proxy.selector.whitelist.ProxyBypassListSelector;
+import com.btr.proxy.util.EmptyXMLResolver;
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.ProxyException;
 import com.btr.proxy.util.Logger.LogLevel;
@@ -292,7 +294,9 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 		}
 		
 		try {
-			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(settingsFile);
+			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			documentBuilder.setEntityResolver(new EmptyXMLResolver());
+			Document doc = documentBuilder.parse(settingsFile);
 			Element root = doc.getDocumentElement();
 			Node entry = root.getFirstChild();
 			while (entry != null) {

@@ -263,6 +263,7 @@ public final class PListParser
 				throws XmlParseException {
 			try {
 				DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+				documentBuilder.setEntityResolver(new EmptyXMLResolver());
 				Document doc = documentBuilder.parse(input);
 				Element element = doc.getDocumentElement();
 	            return PLIST.parse(element);
