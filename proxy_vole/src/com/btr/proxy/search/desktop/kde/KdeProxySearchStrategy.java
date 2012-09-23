@@ -15,69 +15,78 @@ import com.btr.proxy.selector.pac.UrlPacScriptSource;
 import com.btr.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.btr.proxy.selector.whitelist.UseProxyWhiteListSelector;
 import com.btr.proxy.util.Logger;
+import com.btr.proxy.util.Logger.LogLevel;
 import com.btr.proxy.util.ProxyException;
 import com.btr.proxy.util.ProxyUtil;
-import com.btr.proxy.util.Logger.LogLevel;
 
 /*****************************************************************************
  * Loads the KDE4 proxy settings from the KDE <i>kioslaverc</i> file.
- * This will load properties from the file 
+ * This will load properties from the file
  * <p>
- * <i>.kde/share/config/kioslaverc</i> 
+ * <i>.kde/share/config/kioslaverc</i>
  * </P>
  * starting from the current users home directory.
- * <p> 
- * The following settings are extracted from the section "[Proxy Settings]": 
+ * <p>
+ * The following settings are extracted from the section "[Proxy Settings]":
  * </p>
  * <ul>
- * <li><i>AuthMode</i> 	-> 0 = no auth., 1 = use login.</li>  
- * <li><i>ProxyType</i> -> 0 = direct 1 = use fixed settings, 2 = use PAC, 3 = automatic (WPAD) , 4 = Use environment variables?</li> 
+ * <li><i>AuthMode</i> 	-> 0 = no auth., 1 = use login.</li>
+ * <li><i>ProxyType</i> -> 0 = direct 1 = use fixed settings, 2 = use PAC, 3 = automatic (WPAD) , 4 = Use environment variables?</li>
  * <li><i>Proxy Config</i> Script -> URL to PAC file</li>
- * <li><i>ftpProxy</i> -> Fixed ftp proxy address e.g. http://www.ftp-proxy.com:8080</li> 
+ * <li><i>ftpProxy</i> -> Fixed ftp proxy address e.g. http://www.ftp-proxy.com:8080</li>
  * <li><i>httpProxy</i> -> Fixed http proxy e.g http://www.http-proxy.com:8080</li>
  * <li><i>httpsProxy</i> -> Fixed https proxy e.g http://www.https-proxy.com:8080</li>
  * <li><i>NoProxyFor</i> -> Proxy white list</li>
  * <li><i>ReversedException</i> -> false = use NoProxyFor, true = revert meaning of the NoProxyFor list</li>
  * </ul>
- * 
- * 
+ *
+ *
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/
 
 public class KdeProxySearchStrategy implements ProxySearchStrategy {
-	
-	private KdeSettingsParser settingsParser; 
-	
+
+	private KdeSettingsParser settingsParser;
+
+	/*************************************************************************
+	 * ProxySelector using the given parser.
+	 * @see java.net.ProxySelector#ProxySelector()
+	 ************************************************************************/
+
+	public KdeProxySearchStrategy() {
+		this(new KdeSettingsParser());
+	}
+
 	/*************************************************************************
 	 * ProxySelector
 	 * @see java.net.ProxySelector#ProxySelector()
 	 ************************************************************************/
-	
-	public KdeProxySearchStrategy() {
+
+	public KdeProxySearchStrategy(KdeSettingsParser settingsParser) {
 		super();
-		this.settingsParser = new KdeSettingsParser();
+		this.settingsParser = settingsParser;
 	}
-	
+
 	/*************************************************************************
 	 * Loads the proxy settings and initializes a proxy selector for the firefox
 	 * proxy settings.
 	 * @return a configured ProxySelector, null if none is found.
-	 * @throws ProxyException on file reading error. 
+	 * @throws ProxyException on file reading error.
 	 ************************************************************************/
 
 	public ProxySelector getProxySelector() throws ProxyException {
-		
+
 		Logger.log(getClass(), LogLevel.TRACE, "Detecting Kde proxy settings");
 
 		Properties settings = readSettings();
 		if (settings == null) {
 			return null;
 		}
-		
-		ProxySelector result = null; 
+
+		ProxySelector result = null;
 		int type = Integer.parseInt(settings.getProperty("ProxyType", "-1"));
 		switch (type) {
-			case 0: // Use no proxy 
+			case 0: // Use no proxy
 				Logger.log(getClass(), LogLevel.TRACE, "Kde uses no proxy");
 				result = NoProxySelector.getInstance();
 				break;
@@ -101,7 +110,7 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 			default:
 				break;
 		}
-		
+
 		return result;
 	}
 
@@ -110,7 +119,7 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 	 * @return the parsed settings.
 	 * @throws ProxyException
 	 ************************************************************************/
-	
+
 	private Properties readSettings() throws ProxyException {
 		try {
 			return  this.settingsParser.parseSettings();
@@ -125,7 +134,7 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 	 * @param settings the settings to read from.
 	 * @return the ProxySelector using environment variables.
 	 ************************************************************************/
-	
+
 	private ProxySelector setupEnvVarSelector(Properties settings) {
 		ProxySelector result;
 		result = new EnvProxySearchStrategy(
@@ -138,11 +147,11 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 	}
 
 	/*************************************************************************
-	 * Parse the fixed proxy settings and build an ProxySelector for this a 
+	 * Parse the fixed proxy settings and build an ProxySelector for this a
 	 * chained configuration.
 	 * @param settings the proxy settings to evaluate.
 	 ************************************************************************/
-	
+
 	private ProxySelector setupFixedProxySelector(Properties settings) {
 		String proxyVar = settings.getProperty("httpProxy", null);
 		FixedProxySelector httpPS = ProxyUtil.parseProxySettings(proxyVar);
@@ -153,7 +162,7 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 
 		ProtocolDispatchSelector ps = new ProtocolDispatchSelector();
 		ps.setSelector("http", httpPS);
-		
+
 		proxyVar = settings.getProperty("httpsProxy", null);
 		FixedProxySelector httpsPS = ProxyUtil.parseProxySettings(proxyVar);
 		if (httpsPS != null) {
@@ -167,7 +176,7 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 			Logger.log(getClass(), LogLevel.TRACE, "Kde ftp proxy is {0}", proxyVar);
 			ps.setSelector("ftp", ftpPS);
 		}
-		
+
 		// Wrap in white list filter.
 		String noProxyList = settings.getProperty("NoProxyFor", null);
 		if (noProxyList != null && noProxyList.trim().length() > 0) {
@@ -179,11 +188,11 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 				Logger.log(getClass(), LogLevel.TRACE, "Kde proxy whitelist is {0}", noProxyList);
 				return new ProxyBypassListSelector(noProxyList, ps);
 			}
-		}				
-		
+		}
+
 		return ps;
 	}
-	
+
 
 
 }
