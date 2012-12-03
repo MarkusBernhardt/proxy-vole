@@ -103,6 +103,19 @@ public class NoProxyTest {
 		result = ps.select(new URI("http://192.168.1.100:81/test.data"));
 		assertEquals(delegate.select(TestUtil.HTTP_TEST_URI).get(0), result.get(0));
 	}
+	
+	/*************************************************************************
+	 * Test method for issue 31
+	 * @throws URISyntaxException on invalid URL syntax.
+	 ************************************************************************/
+	@Test
+	public void ipRangeShouldNotMatchHttp() throws URISyntaxException {
+		ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
+		ProxyBypassListSelector ps = new ProxyBypassListSelector("http://192.*", delegate);
+		
+		List<Proxy> result = ps.select(new URI("http://192.168.0.100:81/test.data"));
+		assertEquals(Proxy.NO_PROXY, result.get(0));
+	}
 
 }
 

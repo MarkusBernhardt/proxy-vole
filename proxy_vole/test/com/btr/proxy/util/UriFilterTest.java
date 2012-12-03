@@ -117,6 +117,19 @@ public class UriFilterTest {
 		assertTrue(filter.accept(new URI("http://192.168.0.100:81/test.data")));
 		assertFalse(filter.accept(new URI("http://192.168.1.100:81/test.data")));
 	}
+	
+	/*************************************************************************
+	 * Test method
+	 * @throws URISyntaxException on invalid URL syntax.
+	 ************************************************************************/
+	@Test
+	public void testWithProtocolFilter() throws URISyntaxException {
+		UriFilter filter = new HostnameFilter(Mode.BEGINS_WITH, "http://192.168.0.100");
+		
+		assertTrue(filter.accept(new URI("http://192.168.0.100:81/test.data")));
+		assertFalse(filter.accept(new URI("ftp://192.168.0.100:81/test.data")));
+		assertFalse(filter.accept(new URI("http://192.168.1.100:81/test.data")));
+	}
 
 }
 

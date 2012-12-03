@@ -11,9 +11,12 @@ import com.btr.proxy.util.UriFilter;
 
 public class HostnameFilter implements UriFilter {
 
+	private static final String PROTOCOL_ENDING = "://";
+
 	public enum Mode {BEGINS_WITH, ENDS_WITH, REGEX}
 	
 	private String matchTo;
+	private String protocolFilter;
 	private Mode mode;
 	
 	/*************************************************************************
@@ -26,6 +29,20 @@ public class HostnameFilter implements UriFilter {
 		super();
 		this.mode = mode;
 		this.matchTo = matchTo.toLowerCase();
+		
+		extractProtocolFilter();
+	}
+
+	/*************************************************************************
+	 * Extracts the protocol if one is given to initialize the protocol matcher.
+	 ************************************************************************/
+	
+	private void extractProtocolFilter() {
+		int protocolIndex = this.matchTo.indexOf(PROTOCOL_ENDING);
+		if (protocolIndex != -1) {
+			this.protocolFilter = this.matchTo.substring(0, protocolIndex);
+			this.matchTo = this.matchTo.substring(protocolIndex+PROTOCOL_ENDING.length());
+		}
 	}
 	
 	/*************************************************************************
@@ -38,11 +55,15 @@ public class HostnameFilter implements UriFilter {
 			return false;
 		}
 		
+		if (!isProtocolMatching(uri)) {
+			return false;
+		}
+		
 		String host = uri.getAuthority();
 		
 		// Strip away port.
 		int index = host.indexOf(':');
-		if (index >= 0) {
+		if (index != -1) {
 			host = host.substring(0, index);
 		}
 
@@ -55,6 +76,18 @@ public class HostnameFilter implements UriFilter {
 				return host.toLowerCase().matches(this.matchTo);
 		}
 		return false;
+	}
+
+	/*************************************************************************
+	 * Applies the protocol filter if available to see if we have a match.
+	 * @param uri to test for a correct protocol.
+	 * @return true if passed else false.
+	 ************************************************************************/
+	
+	private boolean isProtocolMatching(URI uri) {
+		return this.protocolFilter == null 
+				|| uri.getScheme() == null 
+				|| uri.getScheme().equalsIgnoreCase(this.protocolFilter);
 	}
 	
 }

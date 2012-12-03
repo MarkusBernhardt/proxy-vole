@@ -6,7 +6,8 @@ This file contains the change log. The changes are marked with the following sym
 * for a modified feature or a bugfix
 
 -----------------
-Current version
+20121203
+* Fixed  issue 31 : Improved the support for "no proxy" definitions.
 * Fixed  issue 29 : KDE settings file was not found on KDE4. This is solved now.
 * Fixed  issue 25 : Disabled DTD and schema validation in settings parsers.
 

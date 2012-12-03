@@ -14,11 +14,22 @@ import com.btr.proxy.util.UriFilter;
  * 
  *  .mynet.com  		- Filters all host names ending with .mynet.com
  *  *.mynet.com  		- Filters all host names ending with .mynet.com
+ *  www.mynet.*  		- Filters all host names starting with www.mynet.
  *  123.12.32.1 		- Filters the IP 123.12.32.1
  *  123.12.32.1/255 	- Filters the IP range   
+ *  http://www.mynet.com - Filters only HTTP protocol not FTP and no HTTPS
  * 
- * Example of a list:   .mynet.com, *.my-other-net.org, 123.55.23.222, 123.55.23.0/24
- *
+ * Example of a list:   
+ * 
+ * .mynet.com, *.my-other-net.org, 123.55.23.222, 123.55.23.0/24
+ * 
+ * Some info about this topic can be found here:
+ * http://kb.mozillazine.org/No_proxy_for
+ * http://technet.microsoft.com/en-us/library/dd361953.aspx
+ * 
+ * Note that this implementation does not cover all variations of all browsers
+ * but should cover the most used formats. 
+ * 
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/
 
@@ -34,25 +45,34 @@ public class DefaultWhiteListParser implements WhiteListParser {
 		
 		String[] token = whiteList.split("[, ]+");
 		for (int i = 0; i < token.length; i++) {
-			token[i] = token[i].trim();
-			if (token[i].contains("/")) {
-				result.add(new IpRangeFilter(token[i]));
+			String tkn = token[i].trim();
+			if (isIP4SubnetFilter(tkn)) {
+				result.add(new IpRangeFilter(tkn));
 				continue;
 			} else 
-			if (token[i].endsWith("*")) {
-				token[i] = token[i].substring(0, token[i].length()-1);
-				result.add(new HostnameFilter(Mode.BEGINS_WITH, token[i]));
+			if (tkn.endsWith("*")) {
+				tkn = tkn.substring(0, tkn.length()-1);
+				result.add(new HostnameFilter(Mode.BEGINS_WITH, tkn));
 				continue;
 			} else 
-			if (token[i].trim().startsWith("*")) {
-				token[i] = token[i].substring(1);
-				result.add(new HostnameFilter(Mode.ENDS_WITH, token[i]));
+			if (tkn.trim().startsWith("*")) {
+				tkn = tkn.substring(1);
+				result.add(new HostnameFilter(Mode.ENDS_WITH, tkn));
 			} else {
-				result.add(new HostnameFilter(Mode.ENDS_WITH, token[i]));
+				result.add(new HostnameFilter(Mode.ENDS_WITH, tkn));
 			}
 		}
 		
 		return result;
+	}
+
+	/*************************************************************************
+	 * @param token
+	 * @return
+	 ************************************************************************/
+	
+	private boolean isIP4SubnetFilter(String token) {
+		return IPv4WithSubnetChecker.isValid(token);
 	}
 
 }
