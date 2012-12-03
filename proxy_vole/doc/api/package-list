@@ -4,6 +4,7 @@ com.btr.proxy.search.browser.ie
 com.btr.proxy.search.desktop
 com.btr.proxy.search.desktop.gnome
 com.btr.proxy.search.desktop.kde
+com.btr.proxy.search.desktop.osx
 com.btr.proxy.search.desktop.win
 com.btr.proxy.search.env
 com.btr.proxy.search.java
