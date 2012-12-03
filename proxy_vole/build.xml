@@ -83,6 +83,46 @@
 		<copy file="misc/stylesheet.css" todir="${doc}/api/" overwrite="true" />
 	</target>
 	
+	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="../libs/ant-googlecode-0.0.3.jar" name="gcupload"/>
+	
+	<target name="upload_binary">
+		<tstamp />
+	    <property file="build.credentials.properties" />
+	    <fail unless="gc.username" message="Missing property 'gc.username' from file 'build.credentials.properties'."/>
+	    <fail unless="gc.password" message="Missing property 'gc.password' from file 'build.credentials.properties'."/>
+
+		<gcupload 
+			username="${gc.username}" 
+			password="${gc.password}"
+	        projectname="proxy-vole" 
+	        filename="${deploy}/proxy-vole_${DSTAMP}_bin.zip" 
+	        targetfilename="proxy-vole_${DSTAMP}_bin.zip"
+	        summary="proxy-vole ${DSTAMP} binary"
+	        labels="Featured, Type-Archive, OpSys-All"
+			verbose = "true"
+		/>
+	</target>
+
+	<target name="upload_sources">
+		<tstamp />
+	    <property file="build.credentials.properties" />
+	    <fail unless="gc.username" message="Missing property 'gc.username' from file 'build.credentials.properties'."/>
+    	<fail unless="gc.password" message="Missing property 'gc.password' from file 'build.credentials.properties'."/>
+
+		<gcupload 
+			username="${gc.username}" 
+			password="${gc.password}"
+	        projectname="proxy-vole" 
+	        filename="${deploy}/proxy-vole_${DSTAMP}_src.zip" 
+	        targetfilename="proxy-vole_${DSTAMP}_src.zip"
+	        summary="proxy-vole ${DSTAMP} sources"
+	        labels="Featured, Type-Source, OpSys-All"
+			verbose = "true"
+		/>
+	</target>
+
+	<target name="upload_all" depends="upload_sources, upload_binary" description="Upload all deployment files to googel code" />
+	
 	<target name="all" depends="build_bin_zip, build_src_zip" description="Build all" />
 
 </project>
