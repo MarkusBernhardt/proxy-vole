@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.util.Calendar;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -103,6 +104,18 @@ public class JavaxPacScriptParserTest {
 	public void testTimeRangeScript() throws ProxyException, MalformedURLException {
 		PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testTimeRange.pac")));
 		p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
+	}
+	
+	/*************************************************************************
+	 * Test method
+	 * @throws ProxyException on proxy detection error.
+	 * @throws MalformedURLException on URL erros 
+	 ************************************************************************/
+	@Test
+	public void methodsShouldReturnJsStrings() throws ProxyException, MalformedURLException {
+		PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testReturnTypes.pac")));
+		String actual = p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
+		Assert.assertEquals("number boolean string", actual);
 	}
 	
 	/*************************************************************************

@@ -65,15 +65,15 @@ public class JavaxPacScriptParser implements PacScriptParser {
 				}
 				toEval.append("arg").append(i);
 			}
-			toEval.append(") {return ").append(SCRIPT_METHODS_OBJECT)
-					.append(".").append(name).append("(");
-			for (int i = 0; i < args; i++) {
-				if (i > 0) {
-					toEval.append(",");
-				}
-				toEval.append("arg").append(i);
+			toEval.append(") {return ");
+			
+			String functionCall = buildFunctionCallCode(name, args);
+			
+			// If return type is java.lang.String convert it to a JS string
+			if (String.class.isAssignableFrom(method.getReturnType())) {
+				functionCall = "String("+functionCall+")";
 			}
-			toEval.append("); }");
+			toEval.append(functionCall).append("; }");
 			try {
 				engine.eval(toEval.toString());
 			} catch (ScriptException e) {
@@ -85,6 +85,27 @@ public class JavaxPacScriptParser implements PacScriptParser {
 		}
 
 		return engine;
+	}
+
+	/*************************************************************************
+	 * Builds a JavaScript code snippet to call a function that we bind.
+	 * @param functionName of the bound function
+	 * @param args of the bound function
+	 * @return the JS code to invoke the method.
+	 ************************************************************************/
+	
+	private String buildFunctionCallCode(String functionName, int args) {
+		StringBuilder functionCall = new StringBuilder();
+		functionCall.append(SCRIPT_METHODS_OBJECT)
+			  .append(".").append(functionName).append("(");
+		for (int i = 0; i < args; i++) {
+			if (i > 0) {
+				functionCall.append(",");
+			}
+			functionCall.append("arg").append(i);
+		}
+		functionCall.append(")");
+		return functionCall.toString();
 	}
 
 	/***************************************************************************
