@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URISyntaxException;
 import java.net.URL;
+
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.Logger.LogLevel;
 
@@ -22,6 +23,11 @@ import com.btr.proxy.util.Logger.LogLevel;
  ****************************************************************************/
 
 public class UrlPacScriptSource implements PacScriptSource {
+	
+	private static final int DEFAULT_CONNECT_TIMEOUT = 15 * 1000; // seconds
+	private static final int DEFAULT_READ_TIMEOUT = 20 * 1000; // seconds
+	public static final String OVERRIDE_CONNECT_TIMEOUT = "com.btr.proxy.url.connectTimeout";
+	public static final String OVERRIDE_READ_TIMEOUT = "com.btr.proxy.url.readTimeout";
 	
 	private final String scriptUrl;
 	private String scriptContent;
@@ -181,9 +187,33 @@ public class UrlPacScriptSource implements PacScriptSource {
 	private HttpURLConnection setupHTTPConnection(String url)
 			throws IOException, MalformedURLException {
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection(Proxy.NO_PROXY);
+		con.setConnectTimeout(getTimeOut(OVERRIDE_CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT));
+        con.setReadTimeout(getTimeOut(OVERRIDE_READ_TIMEOUT, DEFAULT_READ_TIMEOUT));
 		con.setInstanceFollowRedirects(true);
 		con.setRequestProperty("accept", "application/x-ns-proxy-autoconfig, */*;q=0.8");
 		return con;
+	}
+	
+	/*************************************************************************
+	 * Gets the timeout value from a property or uses the given default value if
+	 * the property cannot be parsed.
+	 * @param overrideProperty the property to define the timeout value in milliseconds
+	 * @param defaultValue the default timeout value in milliseconds.
+	 * @return the value to use.
+	 ************************************************************************/
+	
+	protected int getTimeOut(String overrideProperty, int defaultValue) {
+		int timeout = defaultValue; 
+		String prop = System.getProperty(overrideProperty);
+		if (prop != null && prop.trim().length() > 0) {
+			try {
+				timeout = Integer.parseInt(prop.trim());
+			} catch (NumberFormatException e) {
+				Logger.log(getClass(), LogLevel.DEBUG, "Invalid override property : {0}={1}", overrideProperty, prop);
+				// In this case use the default value.
+			}
+		}
+		return timeout;
 	}
 
 	/*************************************************************************
