@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.btr.proxy.util.Logger;
+import com.btr.proxy.util.Logger.LogLevel;
+
 /*****************************************************************************
  * This class provides some helper methods to work with the dll 
  * extracting /loading for windows.
@@ -60,11 +63,21 @@ final class DLLManager {
 	 ************************************************************************/
 	
 	static void cleanupTempFiles() {
-		String tempFolder = System.getProperty("java.io.tmpdir");
-		File fldr = new File(tempFolder);
-		File[] oldFiles = fldr.listFiles(new TempDLLFileFilter());
-		for (File tmp : oldFiles) {
-			tmp.delete();
+		try {
+			String tempFolder = System.getProperty("java.io.tmpdir");
+			if (tempFolder == null || tempFolder.trim().length() == 0) { 
+				return;
+			}
+			File fldr = new File(tempFolder);
+			File[] oldFiles = fldr.listFiles(new TempDLLFileFilter());
+			if (oldFiles == null) {
+				return;
+			}
+			for (File tmp : oldFiles) {
+				tmp.delete();
+			}
+		} catch (Exception e) {
+			Logger.log(DLLManager.class, LogLevel.DEBUG, "Error cleaning up temporary dll files. ", e);
 		}
 	}
 
