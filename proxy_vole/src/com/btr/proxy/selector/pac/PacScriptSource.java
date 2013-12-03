@@ -17,5 +17,15 @@ public interface PacScriptSource {
 	 ************************************************************************/
 	
 	public String getScriptContent() throws IOException;  
+	
+	/*************************************************************************
+	 * Checks if the content of the script is valid and if it is possible
+	 * to use this script source for a PAC selector.
+	 * Note that this might trigger a download of the script content from
+	 * a remote location.
+	 * @return true if everything is fine, else false.
+	 ************************************************************************/
+	
+	public boolean isScriptValid();
 
 }

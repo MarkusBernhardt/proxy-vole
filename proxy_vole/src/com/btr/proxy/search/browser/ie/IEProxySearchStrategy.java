@@ -86,8 +86,7 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 		    if (pacUrl.startsWith("file://") && !pacUrl.startsWith("file:///")) {
 		    	pacUrl = "file:///" + pacUrl.substring(7);
 		    }
-
-		    return new PacProxySelector(new UrlPacScriptSource(pacUrl));
+			return ProxyUtil.buildPacSelectorForUrl(pacUrl);
 		}
 		
 		return null;

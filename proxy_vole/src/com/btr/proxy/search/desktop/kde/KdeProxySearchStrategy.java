@@ -97,7 +97,7 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 			case 2: // PAC Script
 				String pacScriptUrl = settings.getProperty("Proxy Config Script", "");
 				Logger.log(getClass(), LogLevel.TRACE, "Kde uses autodetect script {0}", pacScriptUrl);
-				result = new PacProxySelector(new UrlPacScriptSource(pacScriptUrl));
+				result = ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
 				break;
 			case 3: // WPAD
 				Logger.log(getClass(), LogLevel.TRACE, "Kde uses WPAD to detect the proxy");

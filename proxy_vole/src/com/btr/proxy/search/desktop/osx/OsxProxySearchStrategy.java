@@ -5,18 +5,17 @@ import java.io.IOException;
 import java.net.ProxySelector;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.search.browser.ie.IELocalByPassFilter;
 import com.btr.proxy.search.wpad.WpadProxySearchStrategy;
 import com.btr.proxy.selector.fixed.FixedProxySelector;
 import com.btr.proxy.selector.fixed.FixedSocksSelector;
 import com.btr.proxy.selector.misc.ProtocolDispatchSelector;
-import com.btr.proxy.selector.pac.PacProxySelector;
-import com.btr.proxy.selector.pac.PacScriptSource;
-import com.btr.proxy.selector.pac.UrlPacScriptSource;
 import com.btr.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.PListParser;
+import com.btr.proxy.util.ProxyUtil;
 import com.btr.proxy.util.PListParser.Dict;
 import com.btr.proxy.util.UriFilter;
 import com.btr.proxy.util.PListParser.XmlParseException;
@@ -204,8 +203,7 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 			ProxySelector result) {
 		if (isActive(proxySettings.get("ProxyAutoConfigEnable"))) {
 			String url = (String) proxySettings.get("ProxyAutoConfigURLString");
-			PacScriptSource pacSource = new UrlPacScriptSource(url);
-			result = new PacProxySelector(pacSource);
+			result = ProxyUtil.buildPacSelectorForUrl(url);
 		}
 		return result;
 	}

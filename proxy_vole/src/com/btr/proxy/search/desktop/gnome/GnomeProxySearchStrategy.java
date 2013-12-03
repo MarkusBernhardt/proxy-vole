@@ -19,12 +19,11 @@ import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.selector.direct.NoProxySelector;
 import com.btr.proxy.selector.fixed.FixedProxySelector;
 import com.btr.proxy.selector.misc.ProtocolDispatchSelector;
-import com.btr.proxy.selector.pac.PacProxySelector;
-import com.btr.proxy.selector.pac.UrlPacScriptSource;
 import com.btr.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.btr.proxy.util.EmptyXMLResolver;
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.ProxyException;
+import com.btr.proxy.util.ProxyUtil;
 import com.btr.proxy.util.Logger.LogLevel;
 
 /*****************************************************************************
@@ -106,7 +105,7 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 		if ("auto".equals(type)) {
 			String pacScriptUrl = settings.getProperty("/system/proxy/autoconfig_url", "");
 			Logger.log(getClass(), LogLevel.TRACE, "Gnome uses autodetect script {0}", pacScriptUrl);
-			result = new PacProxySelector(new UrlPacScriptSource(pacScriptUrl));
+			result = ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
 		}
 
 		// Wrap into white-list filter?

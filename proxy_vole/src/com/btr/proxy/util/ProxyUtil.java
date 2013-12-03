@@ -8,6 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.btr.proxy.selector.fixed.FixedProxySelector;
+import com.btr.proxy.selector.pac.PacProxySelector;
+import com.btr.proxy.selector.pac.PacScriptSource;
+import com.btr.proxy.selector.pac.UrlPacScriptSource;
 
 /*****************************************************************************
  * Small helper class for some common utility methods.
@@ -61,6 +64,21 @@ public class ProxyUtil {
 		return noProxyList;
 	}
 	
+	/*************************************************************************
+	 * Build a PAC proxy selector for the given URL.
+	 * @param url to fetch the PAC script from.
+	 * @return a PacProxySelector or null if it is not possible to build a working
+	 * selector.
+	 ************************************************************************/
+	
+	public static PacProxySelector buildPacSelectorForUrl(String url) {
+		PacProxySelector result = null;
+		PacScriptSource pacSource = new UrlPacScriptSource(url);
+		if (pacSource.isScriptValid()) {
+			result = new PacProxySelector(pacSource);
+		}
+		return result;
+	}
 	
 
 }

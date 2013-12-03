@@ -10,11 +10,10 @@ import java.net.UnknownHostException;
 import java.util.Properties;
 
 import com.btr.proxy.search.ProxySearchStrategy;
-import com.btr.proxy.selector.pac.PacProxySelector;
-import com.btr.proxy.selector.pac.UrlPacScriptSource;
 import com.btr.proxy.util.Logger;
-import com.btr.proxy.util.ProxyException;
 import com.btr.proxy.util.Logger.LogLevel;
+import com.btr.proxy.util.ProxyException;
+import com.btr.proxy.util.ProxyUtil;
 
 /*****************************************************************************
  * Uses automatic proxy script search (WPAD) to find an PAC file automatically.
@@ -60,7 +59,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
 				return null;
 			}
 			Logger.log(getClass(), LogLevel.TRACE, "PAC script url found: {0}", pacScriptUrl);
-			return new PacProxySelector(new UrlPacScriptSource(pacScriptUrl));
+			return ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
 		} catch (IOException e) {
 			Logger.log(getClass(), LogLevel.ERROR, "Error during WPAD search.", e);
 			throw new ProxyException(e);
@@ -85,7 +84,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
 			result.setProperty("url", pacScriptUrl);
 			return result;
 		} catch (IOException e) {
-			// Irnore and return empty properties.
+			// Ignore and return empty properties.
 			return new Properties();
 		}
 	}

@@ -11,14 +11,13 @@ import com.btr.proxy.selector.direct.NoProxySelector;
 import com.btr.proxy.selector.fixed.FixedProxySelector;
 import com.btr.proxy.selector.fixed.FixedSocksSelector;
 import com.btr.proxy.selector.misc.ProtocolDispatchSelector;
-import com.btr.proxy.selector.pac.PacProxySelector;
-import com.btr.proxy.selector.pac.UrlPacScriptSource;
 import com.btr.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.btr.proxy.util.Logger;
-import com.btr.proxy.util.PlatformUtil;
-import com.btr.proxy.util.ProxyException;
 import com.btr.proxy.util.Logger.LogLevel;
+import com.btr.proxy.util.PlatformUtil;
 import com.btr.proxy.util.PlatformUtil.Platform;
+import com.btr.proxy.util.ProxyException;
+import com.btr.proxy.util.ProxyUtil;
 
 /*****************************************************************************
  * Loads the Firefox3 proxy settings from the users Firefox3 settings.
@@ -110,7 +109,7 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
 			case 2: // PAC Script
 				String pacScriptUrl = settings.getProperty("network.proxy.autoconfig_url", "");
 				Logger.log(getClass(), LogLevel.TRACE, "Firefox uses script (PAC) {0}", pacScriptUrl);
-				result = new PacProxySelector(new UrlPacScriptSource(pacScriptUrl));
+				result = ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
 				break;
 			case 3: // Backward compatibility to netscape.
 				Logger.log(getClass(), LogLevel.TRACE, "Netscape compability mode -> uses no proxy");

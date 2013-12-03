@@ -214,4 +214,27 @@ public class UrlPacScriptSource implements PacScriptSource {
 		return this.scriptUrl;
 	}
 
+	/*************************************************************************
+	 * isScriptValid
+	 * @see com.btr.proxy.selector.pac.PacScriptSource#isScriptValid()
+	 ************************************************************************/
+	
+	public boolean isScriptValid() {
+		try {
+			String script = getScriptContent();
+			if (script == null || script.trim().length() == 0) {
+				Logger.log(getClass(), LogLevel.DEBUG, "PAC script is empty. Skipping script!");
+				return false;
+			}
+			if (script.indexOf("FindProxyForURL") == -1) {
+				Logger.log(getClass(), LogLevel.DEBUG, "PAC script entry point FindProxyForURL not found. Skipping script!");
+				return false;
+			}
+			return true;
+		} catch (IOException e) {
+			Logger.log(getClass(), LogLevel.DEBUG, "File reading error: {0}", e);
+			return false;
+		}
+	}
+	
 }
