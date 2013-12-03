@@ -30,33 +30,40 @@ public class DesktopProxySearchStrategy implements ProxySearchStrategy {
 	 ************************************************************************/
 	
 	public ProxySelector getProxySelector() throws ProxyException {
+		ProxySearchStrategy strategy = findDesktopSpecificStrategy();
+		return strategy == null? null : strategy.getProxySelector();
+	}
+
+	/*************************************************************************
+	 * Determine the desktop and create a strategy for it.
+	 * @return a desktop specific strategy, null if none was found.
+	 ************************************************************************/
+	
+	private ProxySearchStrategy findDesktopSpecificStrategy() {
 		Platform pf = PlatformUtil.getCurrentPlattform();
 		Desktop dt = PlatformUtil.getCurrentDesktop();
 		
 		Logger.log(getClass(), LogLevel.TRACE, "Detecting system settings.");
 		
+		ProxySearchStrategy strategy = null;
+		
 		if (pf == Platform.WIN) {
 			Logger.log(getClass(), LogLevel.TRACE, "We are running on Windows.");
-			return new WinProxySearchStrategy().getProxySelector();
-		}
-		
+			strategy = new WinProxySearchStrategy();
+		} else
 		if (dt == Desktop.KDE) {
 			Logger.log(getClass(), LogLevel.TRACE, "We are running on KDE.");
-			return new KdeProxySearchStrategy().getProxySelector();
-		}
-
+			strategy = new KdeProxySearchStrategy();
+		} else 
 		if (dt == Desktop.GNOME) {
 			Logger.log(getClass(), LogLevel.TRACE, "We are running on Gnome.");
-			return new GnomeProxySearchStrategy().getProxySelector();
-		}
-
+			strategy = new GnomeProxySearchStrategy();
+		} else
 		if (dt == Desktop.MAC_OS) {
 			Logger.log(getClass(), LogLevel.TRACE, "We are running on Mac OSX.");
-			return new OsxProxySearchStrategy().getProxySelector();
+			strategy = new OsxProxySearchStrategy();
 		}
-
-		
-		return null;
+		return strategy;
 	}
 
 }
