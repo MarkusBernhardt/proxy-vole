@@ -32,9 +32,24 @@ public class OsxProxySearchTest {
 	@Test
 	public void testManualHttp() throws ProxyException, URISyntaxException {
 		System.setProperty(OsxProxySearchStrategy.OVERRIDE_SETTINGS_FILE, "test"+File.separator+"data"+File.separator+"osx"+File.separator+"osx_manual.plist");
+		System.setProperty(OsxProxySearchStrategy.OVERRIDE_ACCEPTED_DEVICES, "en0");
 		ProxySelector ps = new OsxProxySearchStrategy().getProxySelector();
 		List<Proxy> result = ps.select(TestUtil.HTTP_TEST_URI);
 		assertEquals(TestUtil.HTTP_TEST_PROXY, result.get(0));
+	}
+	
+	/*************************************************************************
+	 * Test method
+	 * @throws ProxyException on proxy detection error.
+	 * @throws URISyntaxException on invalid URL syntax.
+	 ************************************************************************/
+	@Test
+	public void wrongIntfaceShouldBeSkipped() throws ProxyException, URISyntaxException {
+		System.setProperty(OsxProxySearchStrategy.OVERRIDE_SETTINGS_FILE, "test"+File.separator+"data"+File.separator+"osx"+File.separator+"osx_manual.plist");
+		System.setProperty(OsxProxySearchStrategy.OVERRIDE_ACCEPTED_DEVICES, "junit");
+		ProxySelector ps = new OsxProxySearchStrategy().getProxySelector();
+		List<Proxy> result = ps.select(TestUtil.HTTP_TEST_URI);
+		assertEquals(Proxy.NO_PROXY, result.get(0));
 	}
 	
 	/*************************************************************************
