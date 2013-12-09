@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 /*****************************************************************************
  * Checks if the given string is a IP4 range subnet definition
- * of the format 192.268.0/24
+ * of the format 192.168.0/24
  * Based on a contribution by Jan Engler  
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/
