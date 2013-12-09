@@ -5,7 +5,16 @@ This file contains the change log. The changes are marked with the following sym
 - for a removed feature
 * for a modified feature or a bugfix
 
------------------
+Current Repository Version
+
+20131209
+* Fixed issue with myIPAddress() returning 127.0.0.1 instead of the real address on linux
+* Fixed  issue 46 : Handle cleanup of temp files more robust
+* Fixed  issue 44 : Selecting bluetooth interface in OS/X 10.8
+* Fixed  issue 39 : Default timeout is used when fetching PAC script, causes 5 minute delay
+* Fixed  issue 38 : Detect invalid PAC scripts early and abort
+* Fixed  issue 36 : methods returned java.lang.String objects instead of JS strings
+
 20121203
 * Fixed  issue 31 : Improved the support for "no proxy" definitions.
 * Fixed  issue 29 : KDE settings file was not found on KDE4. This is solved now.
