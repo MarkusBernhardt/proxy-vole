@@ -1,12 +1,17 @@
 package com.btr.proxy.selector.pac;
 
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +103,6 @@ public class PacScriptMethods implements ScriptMethods {
         } catch (UnknownHostException ex) {
             Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG,
                     "Hostname not resolveable {0}.", host);
-            // Not resolvable
         }
         return false;
     }
@@ -168,7 +172,6 @@ public class PacScriptMethods implements ScriptMethods {
         } catch (UnknownHostException e) {
             Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG,
                     "DNS name not resolvable {0}.", host);
-            // Not resolvable.
         }
         return "";
     }
@@ -181,18 +184,46 @@ public class PacScriptMethods implements ScriptMethods {
      ************************************************************************/
 
     public String myIpAddress() {
-        try {
+        return getLocalAddressOfType(Inet4Address.class);
+    }
+
+	/*************************************************************************
+	 * Get the current IP address of the computer.
+	 * This will return the first address of the first network interface that is 
+	 * a "real" IP address of the given type. 
+	 * @param cl the type of address we are searching for.
+	 * @return the address as string or "" if not found.
+	 ************************************************************************/
+	
+	private String getLocalAddressOfType(Class<? extends InetAddress> cl) {
+		try {
         	String overrideIP = System.getProperty(OVERRIDE_LOCAL_IP);
         	if (overrideIP != null && overrideIP.trim().length() > 0) {
         		return overrideIP.trim(); 
         	}
-            return InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
+        	Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        	while (interfaces.hasMoreElements()){
+        	    NetworkInterface current = interfaces.nextElement();
+        	    if (!current.isUp() || current.isLoopback() || current.isVirtual()) {
+        	    	continue;
+        	    }
+        	    Enumeration<InetAddress> addresses = current.getInetAddresses();
+        	    while (addresses.hasMoreElements()){
+        	        InetAddress adr = addresses.nextElement();
+        	        if (cl.isInstance(adr)) {
+        	        	Logger.log(JavaxPacScriptParser.class, LogLevel.TRACE,
+        	                    "Local address resolved to {0}", adr);
+        	        	return adr.getHostAddress();
+        	        }
+        	    }
+        	}
+            return "";
+        } catch (IOException e) {
             Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG,
                     "Local address not resolvable.");
             return "";
         }
-    }
+	}
 
     /*************************************************************************
      * Returns the number of DNS domain levels (number of dots) in the host
@@ -586,11 +617,7 @@ public class PacScriptMethods implements ScriptMethods {
 	 ************************************************************************/
 
 	public String myIpAddressEx() {
-		String overrideIP = System.getProperty(OVERRIDE_LOCAL_IP);
-		if (overrideIP != null && overrideIP.trim().length() > 0) {
-			return overrideIP.trim();
-		}
-		return dnsResolveEx("localhost");
+		return getLocalAddressOfType(Inet6Address.class);
 	}
 
 	/*************************************************************************

@@ -1,6 +1,6 @@
 package com.btr.proxy.selector.pac;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -117,8 +117,10 @@ public class PacScriptMethodsTest {
 	 ************************************************************************/
 	@Test
 	public void testMyIpAddress() throws UnknownHostException {
-		InetAddress adr = Inet4Address.getLocalHost();
-		assertEquals(adr.getHostAddress(), buildParser().myIpAddress());
+		String myIP = buildParser().myIpAddress();
+		assertNotEquals("127.0.0.1", myIP);
+		assertNotEquals("", myIP);
+		assertNotNull(myIP);
 	}
 	
 	/*************************************************************************
