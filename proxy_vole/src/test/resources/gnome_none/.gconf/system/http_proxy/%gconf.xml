@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<gconf>
+        <entry name="use_same_proxy" mtime="1242844189" type="bool" value="true">
+        </entry>
+        <entry name="ignore_hosts" mtime="1242841133" type="list" ltype="string">
+                <li type="string">
+                        <stringvalue>localhost</stringvalue>
+                </li>
+                <li type="string">
+                        <stringvalue>127.0.0.0/8</stringvalue>
+                </li>
+                <li type="string">
+                        <stringvalue>*.local</stringvalue>
+                </li>
+        </entry>
+        <entry name="host" mtime="1242840330" type="string">
+                <stringvalue>test.proxy.invalid</stringvalue>
+        </entry>
+        <entry name="use_http_proxy" mtime="1242848237" type="bool" value="false">
+        </entry>
+</gconf>

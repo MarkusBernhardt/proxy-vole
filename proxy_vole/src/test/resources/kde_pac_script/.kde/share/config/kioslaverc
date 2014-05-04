@@ -1,0 +1,17 @@
+PersistentProxyConnection=false
+
+[$Version]
+update_info=kioslave.upd:kde2.2/r1,kioslave.upd:kde2.2/r2,kioslave.upd:kde2.2/r3
+
+[Notification Messages]
+WarnOnLeaveSSLMode=false
+
+[Proxy Settings]
+AuthMode=0
+NoProxyFor=
+Proxy Config Script=src/test/resources/pac/test1.pac
+ProxyType=2
+ReversedException=false
+ftpProxy=
+httpProxy=
+httpsProxy=
