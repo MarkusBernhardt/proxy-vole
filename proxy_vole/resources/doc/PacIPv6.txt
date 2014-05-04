@@ -1,0 +1,6 @@
+
+PAC IPV6 in Windows Vista and newer
+http://blogs.msdn.com/b/wndp/archive/2006/07/18/ipv6-wpad-for-winhttp-and-wininet.aspx
+
+And the extension specs at:
+http://blogs.msdn.com/b/wndp/archive/2006/07/13/ipv6-pac-extensions-v0-9.aspx

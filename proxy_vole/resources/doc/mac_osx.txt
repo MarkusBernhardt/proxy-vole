@@ -1,0 +1,7 @@
+Settings are stored in a XML file that can be found at
+
+/Library/Preferences/SystemConfiguration/preferences.plist
+
+The plist file format is specified under 
+
+http://www.apple.com/DTDs/PropertyList-1.0.dtd 

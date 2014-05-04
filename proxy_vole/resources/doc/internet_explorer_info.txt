@@ -1,0 +1,4 @@
+
+The following article gives a good description of IEs "Bypass Proxy Server for local addresses" feature and how it works.
+
+http://www.windowsreference.com/internet-explorer/bypass-proxy-server-for-local-addresses-in-internet-explorer-explained/

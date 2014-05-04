@@ -1,0 +1,1182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+
+
+<!-- base href="http://wp.netscape.com.wstub.archive.org/eng/mozilla/2.0/relnotes/demo/proxy-live.html" -->
+
+   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.5b2 [en] (Win95; U) [Netscape]">
+   <title>Proxy Client Autoconfig File Format</title>
+</head><body text="#000000" vlink="#ff0000" alink="#ff0000" bgcolor="#ffffff" link="#0000ff">
+
+<center><!-- BANNER:s3 --><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/maps/banners/documentation_s3.map"><img ismap="ismap" src="proxy-live-Dateien/documentation_s3.gif" alt="Documentation" usemap="#banner_nav" width="612" border="0" height="50"></a><map name="banner_nav"><area shape="RECT" coords="62,11,91,40" href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/"><area shape="RECT" coords="153,41,221,50" href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/"><area shape="RECT" coords="298,8,374,34" href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/support/index.html"><area shape="RECT" coords="381,15,586,43" href="http://web.archive.org/web/20060424005037/http://help.netscape.com/browse/index.html"><area shape="default" nohref=""></map><!-- BANNER:s3 --></center>
+
+<center>
+<h2>
+Navigator Proxy Auto-Config File Format</h2></center>
+
+<center><i>March 1996</i>
+<p><i>(There are several examples and tips in the end of this document)</i>
+</p><hr size="4"></center>
+
+<br>&nbsp;
+<p><br>
+<br>
+<br>
+<br>
+<br>
+</p><p>The proxy autoconfig file is written in JavaScript. The file must define
+the function:
+</p><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; function FindProxyForURL(url, host)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</pre>
+which will be called by the Navigator in the following way for every URL
+that is retrieved by it:
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ret = FindProxyForURL(url, host);</pre>
+where:
+<dl compact="compact">
+<dt>
+<tt>url</tt></dt>
+
+<dd>
+the full URL being accessed.</dd>
+
+<dt>
+<tt>host</tt></dt>
+
+<dd>
+the hostname extracted from the URL. This is only for convenience, it is
+the exact same string as between <tt>://</tt> and the first <tt>:</tt>
+or <tt>/</tt> after that. The port number is not included in this parameter.
+It can be extracted from the URL when necessary.</dd>
+
+<dt>
+<tt>ret</tt></dt>
+
+<dd>
+(the return value) a string describing the configuration. The format of
+this string is defined below.</dd>
+</dl>
+
+<hr size="4">
+<h2>
+Saving the Auto-Config File<br>
+Setting the MIME Type</h2>
+
+<ol>
+<li>
+You should save the JavaScript function to file with a
+<tt>.pac</tt> filename
+extension; for example:</li>
+
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; proxy.pac</pre>
+<b>Note 1:</b> You should save the JavaScript function <b>by itself</b>,
+not embed it in HTML.
+<p><b>Note 2:</b> The examples in the end of this document are
+<b>complete</b>,
+there is no additional syntax needed to save it into a file and use it
+(of course, the JavaScripts have to be edited to reflect your site's domain
+name and/or subnets).
+</p><li>
+Next, you should configure your server to map the
+<tt>.pac</tt> filename
+extension to the MIME type:</li>
+
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; application/x-ns-proxy-autoconfig</pre>
+If using a Netscape server, edit the <tt>mime.types</tt> file in the <tt>config</tt>
+directory. If using Apache, CERN or NCSA servers, use the <tt>AddType</tt>
+directive.
+<br>&nbsp;</ol>
+
+<hr size="4">
+<h2>
+Return Value Format</h2>
+The JavaScript function returns a single string.
+<p>If the string is null, no proxies should be used.
+</p><p>The string can contain any number of the following building blocks,
+separated by a semicolon:
+</p><dl>
+<dt>
+<tt>DIRECT</tt></dt>
+
+<dd>
+Connections should be made directly, without any proxies.</dd>
+
+<dt>
+<tt>PROXY <i>host:port</i></tt></dt>
+
+<dd>
+The specified proxy should be used.</dd>
+
+<dt>
+<tt>SOCKS <i>host:port</i></tt></dt>
+
+<dd>
+The specified SOCKS server should be used.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+If there are multiple semicolon-separated settings, the left-most setting
+will be used, until the Navigator fails to establish the connection to
+the proxy. In that case the next value will be used, etc.
+<p>The Navigator will automatically retry a previously unresponsive proxy
+after 30 minutes, then after 1 hour from the previous try (always adding
+an extra 30 minutes).
+</p><p>If all proxies are down, and there was no <tt>DIRECT</tt> option specified,
+the Navigator will ask if proxies should be temporarily ignored, and direct
+connections attempted. The Navigator will ask if proxies should be retried
+after 20 minutes has passed (then the next time 40 minutes from the previous
+question, always adding 20 minutes).
+</p><h4>
+Examples:</h4>
+
+<dl>
+<dt>
+<tt>PROXY w3proxy.netscape.com:8080; PROXY mozilla.netscape.com:8081</tt></dt>
+
+<dd>
+Primary proxy is <tt>w3proxy:8080</tt>; if that goes down start using <tt>mozilla:8081</tt>
+until the primary proxy comes up again.</dd>
+
+<dt>
+<tt>PROXY w3proxy.netscape.com:8080; PROXY mozilla.netscape.com:8081; DIRECT</tt></dt>
+
+<dd>
+Same as above, but if both proxies go down, automatically start making
+direct connections. (In the first example above, Netscape will ask user
+confirmation about making direct connections; in this third case, there
+is no user intervention.)</dd>
+
+<dt>
+<tt>PROXY w3proxy.netscape.com:8080; SOCKS socks:1080</tt></dt>
+
+<dd>
+Use SOCKS if the primary proxy goes down.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+
+<hr size="4">
+<h2>
+Predefined Functions and Environment for the JavaScript Function</h2>
+
+<ul>
+<li>
+Hostname based conditions:</li>
+
+<ul>
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#isPlainHostName">isPlainHostName()</a></tt></li>
+
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#dnsDomainIs">dnsDomainIs()</a></tt></li>
+
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#localHostOrDomainIs">localHostOrDomainIs()</a></tt></li>
+
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#isResolvable">isResolvable()</a></tt></li>
+
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#isInNet">isInNet()</a></tt></li>
+</ul>
+
+<li>
+Related utility functions:</li>
+
+<ul>
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#dnsResolve">dnsResolve()</a></tt></li>
+
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#myIpAddress">myIpAddress()</a></tt></li>
+
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#dnsDomainLevels">dnsDomainLevels()</a></tt></li>
+</ul>
+
+<li>
+URL/hostname based conditions:</li>
+
+<ul>
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#shExpMatch">shExpMatch()</a></tt></li>
+</ul>
+
+<li>
+Time based conditions:</li>
+
+<ul>
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#weekdayRange">weekdayRange()</a></tt></li>
+
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#dateRange">dateRange()</a></tt></li>
+
+<li>
+<tt><a href="http://web.archive.org/web/20060424005037/http://wp.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html#timeRange">timeRange()</a></tt></li>
+</ul>
+
+<li>
+There is one associative array already defined (because a JavaScript currently
+cannot define them on its own):</li>
+
+<ul>
+<li>
+<tt>ProxyConfig.bindings</tt></li>
+</ul>
+</ul>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="isPlainHostName"></a><tt>isPlainHostName(host)</tt></h3>
+
+<dl compact="compact">
+<dt>
+<tt>host</tt></dt>
+
+<dd>
+the hostname from the URL (excluding port number).</dd>
+</dl>
+True iff there is no domain name in the hostname (no dots).
+<h4>
+Examples:</h4>
+
+<dl>
+<dt>
+<tt>isPlainHostName("www")</tt></dt>
+
+<dd>
+is true.</dd>
+
+<dt>
+<tt>isPlainHostName("www.netscape.com")</tt></dt>
+
+<dd>
+is false.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="dnsDomainIs"></a><tt>dnsDomainIs(host, domain)</tt></h3>
+
+<dl compact="compact">
+<dt>
+<tt>host</tt></dt>
+
+<dd>
+is the hostname from the URL.</dd>
+
+<dt>
+<tt>domain</tt></dt>
+
+<dd>
+is the domain name to test the hostname against.</dd>
+</dl>
+Returns true iff the domain of hostname matches.
+<h4>
+Examples:</h4>
+
+<dl>
+<dt>
+<tt>dnsDomainIs("www.netscape.com", ".netscape.com")</tt></dt>
+
+<dd>
+is true.</dd>
+
+<dt>
+<tt>dnsDomainIs("www", ".netscape.com")</tt></dt>
+
+<dd>
+is false.</dd>
+
+<dt>
+<tt>dnsDomainIs("www.mcom.com", ".netscape.com")</tt></dt>
+
+<dd>
+is false.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="localHostOrDomainIs"></a><tt>localHostOrDomainIs(host, hostdom)</tt></h3>
+
+<dl compact="compact">
+<dt>
+<tt>host</tt></dt>
+
+<dd>
+the hostname from the URL.</dd>
+
+<dt>
+<tt>hostdom</tt></dt>
+
+<dd>
+fully qualified hostname to match against.</dd>
+</dl>
+Is true if the hostname matches exactly the specified hostname, or if there
+is no domain name part in the hostname, but the unqualified hostname matches.
+<h4>
+Examples:</h4>
+
+<dl>
+<dt>
+<tt>localHostOrDomainIs("www.netscape.com", "www.netscape.com")</tt></dt>
+
+<dd>
+is true (exact match).</dd>
+
+<dt>
+<tt>localHostOrDomainIs("www", "www.netscape.com")</tt></dt>
+
+<dd>
+is true (hostname match, domain not specified).</dd>
+
+<dt>
+<tt>localHostOrDomainIs("www.mcom.com", "www.netscape.com")</tt></dt>
+
+<dd>
+is false (domain name mismatch).</dd>
+
+<dt>
+<tt>localHostOrDomainIs("home.netscape.com", "www.netscape.com")</tt></dt>
+
+<dd>
+is false (hostname mismatch).</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="isResolvable"></a><tt>isResolvable(host)</tt></h3>
+
+<dl compact="compact">
+<dt>
+<tt>host</tt></dt>
+
+<dd>
+is the hostname from the URL.</dd>
+</dl>
+Tries to resolve the hostname. Returns true if succeeds.
+<h4>
+Examples:</h4>
+
+<dl>
+<dt>
+<tt>isResolvable("www.netscape.com")</tt></dt>
+
+<dd>
+is true (unless DNS fails to resolve it due to a firewall or some other
+reason).</dd>
+
+<dt>
+<tt>isResolvable("bogus.domain.foobar")</tt></dt>
+
+<dd>
+is false.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="isInNet"></a><tt>isInNet(host, pattern, mask)</tt></h3>
+
+<dl compact="compact">
+<dt>
+<tt>host</tt></dt>
+
+<dd>
+a DNS hostname, or IP address. If a hostname is passed, it will be resoved
+into an IP address by this function.</dd>
+
+<dt>
+<tt>pattern</tt></dt>
+
+<dd>
+an IP address pattern in the dot-separated format</dd>
+
+<dt>
+<tt>mask</tt></dt>
+
+<dd>
+mask for the IP address pattern informing which parts of the IP address
+should be matched against. 0 means ignore, 255 means match.</dd>
+</dl>
+True iff the IP address of the host matches the specified IP address pattern.
+<p>Pattern and mask specification is done the same way as for SOCKS configuration.
+</p><h4>
+Examples:</h4>
+
+<dl>
+<dt>
+<tt>isInNet(host, "198.95.249.79", "255.255.255.255")</tt></dt>
+
+<dd>
+is true iff the IP address of host matches exactly 198.95.249.79.</dd>
+
+<dt>
+<tt>isInNet(host, "198.95.0.0", "255.255.0.0")</tt></dt>
+
+<dd>
+is true iff the IP address of the host matches 198.95.*.*.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="dnsResolve"></a><tt>dnsResolve(host)</tt></h3>
+
+<dl compact="compact">
+<dt>
+<tt>host</tt></dt>
+
+<dd>
+hostname to resolve</dd>
+</dl>
+Resolves the given DNS hostname into an IP address, and returns it in the
+dot separated format as a string.
+<h4>
+Example:</h4>
+
+<dl>
+<dt>
+<tt>dnsResolve("home.netscape.com")</tt></dt>
+
+<dd>
+returns the string <tt>"198.95.249.79"</tt>.</dd>
+</dl>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="myIpAddress"></a><tt>myIpAddress()</tt></h3>
+Returns the IP address of the host that the Navigator is running on, as
+a string in the dot-separated integer format.
+<h4>
+Example:</h4>
+
+<dl>
+<dt>
+<tt>myIpAddress()</tt></dt>
+
+<dd>
+would return the string <tt>"198.95.249.79"</tt> if you were running the
+Navigator on that host.</dd>
+</dl>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="dnsDomainLevels"></a><tt>dnsDomainLevels(host)</tt></h3>
+
+<dl compact="compact">
+<dt>
+<tt>host</tt></dt>
+
+<dd>
+is the hostname from the URL.</dd>
+</dl>
+Returns the number (integer) of DNS domain levels (number of dots) in the
+hostname.
+<h4>
+Examples:</h4>
+
+<dl>
+<dt>
+<tt>dnsDomainLevels("www")</tt></dt>
+
+<dd>
+returns 0.</dd>
+
+<dt>
+<tt>dnsDomainLevels("www.netscape.com")</tt></dt>
+
+<dd>
+returns 2.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="shExpMatch"></a><tt>shExpMatch(str, shexp)</tt></h3>
+
+<dl compact="compact">
+<dt>
+<tt>str</tt></dt>
+
+<dd>
+is any string to compare (e.g. the URL, or the hostname).</dd>
+
+<dt>
+<tt>shexp</tt></dt>
+
+<dd>
+is a shell expression to compare against.</dd>
+</dl>
+Returns true if the string matches the specified shell expression.
+<p><b>Actually, currently the patterns are <i>shell expressions</i>, not
+regular expressions.</b>
+</p><h4>
+Examples:</h4>
+
+<dl>
+<dt>
+<tt>shExpMatch("http://home.netscape.com/people/ari/index.html", "*/ari/*")</tt></dt>
+
+<dd>
+is true.</dd>
+
+<dt>
+<tt>shExpMatch("http://home.netscape.com/people/montulli/index.html", "*/ari/*")</tt></dt>
+
+<dd>
+is false.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="weekdayRange"></a><tt>weekdayRange(wd1, wd2, gmt)</tt></h3>
+
+<dl compact="compact">
+<dt>
+<tt>wd1</tt></dt>
+
+<dd>
+and</dd>
+
+<dt>
+<tt>wd2</tt></dt>
+
+<dd>
+are one of the weekday strings:</dd>
+
+<pre>&nbsp;&nbsp;&nbsp; SUN MON TUE WED THU FRI SAT</pre>
+
+<dt>
+<tt>gmt</tt></dt>
+
+<dd>
+is either the string: <tt>GMT</tt> or is left out.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+Only the first parameter is mandatory. Either the second, the third, or
+both may be left out.
+<p>If only one parameter is present, the function yeilds a true value on
+the weekday that the parameter represents. If the string
+<tt>"GMT"</tt>
+is specified as a second parameter, times are taken to be in GMT, otherwise
+in local timezone.
+</p><p>If both <tt>wd1</tt> and <tt>wd1</tt> are defined, the condition is
+true if the current weekday is in between those two weekdays. Bounds are
+inclusive. If the <tt>"GMT"</tt> parameter is specified, times are taken
+to be in GMT, otherwise the local timezone is used.
+</p><h4>
+Examples:</h4>
+
+<dl>
+<dt>
+<tt>weekdayRange("MON", "FRI")</tt></dt>
+
+<dd>
+true Monday trhough Friday (local timezone).</dd>
+
+<dt>
+<tt>weekdayRange("MON", "FRI", "GMT")</tt></dt>
+
+<dd>
+same as above, but GMT timezone.</dd>
+
+<dt>
+<tt>weekdayRange("SAT")</tt></dt>
+
+<dd>
+true on Saturdays local time.</dd>
+
+<dt>
+<tt>weekdayRange("SAT", "GMT")</tt></dt>
+
+<dd>
+true on Saturdays GMT time.</dd>
+
+<dt>
+<tt>weekdayRange("FRI", "MON")</tt></dt>
+
+<dd>
+true Friday through Monday (note, order does matter!).</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="dateRange"></a><tt>dateRange(day)<br>
+dateRange(day1, day2)<br>
+dateRange(mon)<br>
+dateRange(month1, month2)<br>
+dateRange(year)<br>
+dateRange(year1, year2)<br>
+dateRange(day1, month1, day2, month2)<br>
+dateRange(month1, year1, month2, year2)<br>
+dateRange(day1, month1, year1, day2, month2, year2)<br>
+dateRange(day1, month1, year1, day2, month2, year2, gmt)</tt></h3>
+
+<dl compact="compact">
+<dt>
+<tt>day</tt></dt>
+
+<dd>
+is the day of month between 1 and 31 (as an integer).</dd>
+
+<dt>
+<tt>month</tt></dt>
+
+<dd>
+is one of the month strings:</dd>
+
+<pre>&nbsp;&nbsp;&nbsp; JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC</pre>
+
+<dt>
+<tt>year</tt></dt>
+
+<dd>
+is the full year number, for example 1995 (but <b>not</b> 95). Integer.</dd>
+
+<dt>
+<tt>gmt</tt></dt>
+
+<dd>
+is either the string <tt>"GMT"</tt>, which makes time comparison occur
+in GMT timezone; if left unspecified, times are taken to be in the local
+timezone.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+</p><p>Even though the above examples don't show, the <tt>"GMT"</tt> parameter
+can be specified in any of the 9 different call profiles, always as the
+last parameter.
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+If only a single value is specified (from each category: day, month, year),
+the function returns a true value only on days that match that specification.
+If both values are specified, the result is true between those times, including
+bounds.
+<h4>
+Examples:</h4>
+
+<dl>
+<dt>
+<tt>dateRange(1)</tt></dt>
+
+<dd>
+true on the first day of each month, local timezone.</dd>
+
+<dt>
+<tt>dateRange(1, "GMT")</tt></dt>
+
+<dd>
+true on the first day of each month, GMT timezone.</dd>
+
+<dt>
+<tt>dateRange(1, 15)</tt></dt>
+
+<dd>
+true on the first half of each month.</dd>
+
+<dt>
+<tt>dateRange(24, "DEC")</tt></dt>
+
+<dd>
+true on 24th of December each year.</dd>
+
+<dt>
+<tt>dateRange(24, "DEC", 1995)</tt></dt>
+
+<dd>
+true on 24th of December, 1995.</dd>
+
+<dt>
+<tt>dateRange("JAN", "MAR")</tt></dt>
+
+<dd>
+true on the first quarter of the year.</dd>
+
+<dt>
+<tt>dateRange(1, "JUN", 15, "AUG")</tt></dt>
+
+<dd>
+true from June 1st until August 15th, each year (including June 1st and
+August 15th).</dd>
+
+<dt>
+<tt>dateRange(1, "JUN", 15, 1995, "AUG", 1995)</tt></dt>
+
+<dd>
+true from June 1st, 1995, until August 15th, same year.</dd>
+
+<dt>
+<tt>dateRange("OCT", 1995, "MAR", 1996)</tt></dt>
+
+<dd>
+true from October 1995 until March 1996 (including the entire month of
+October 1995 and March 1996).</dd>
+
+<dt>
+<tt>dateRange(1995)</tt></dt>
+
+<dd>
+true during the entire year 1995.</dd>
+
+<dt>
+<tt>dateRange(1995, 1997)</tt></dt>
+
+<dd>
+true from beginning of year 1995 until the end of year 1997.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+<!-- ---------------------------------------------------------- -->
+<hr size="4">
+<h3>
+<a name="timeRange"></a><tt>timeRange(hour)<br>
+timeRange(hour1, hour2)<br>
+timeRange(hour1, min1, hour2, min2)<br>
+timeRange(hour1, min1, sec1, hour2, min2, sec2)<br>
+timeRange(hour1, min1, sec1, hour2, min2, sec2, gmt)</tt></h3>
+
+<dl compact="compact">
+<dt>
+<tt>hour</tt></dt>
+
+<dd>
+is the hour from 0 to 23. (0 is midnight, 23 is 11 pm.)</dd>
+
+<dt>
+<tt>min</tt></dt>
+
+<dd>
+minutes from 0 to 59.</dd>
+
+<dt>
+<tt>sec</tt></dt>
+
+<dd>
+seconds from 0 to 59.</dd>
+
+<dt>
+<tt>gmt</tt></dt>
+
+<dd>
+either the string <tt>"GMT"</tt> for GMT timezone, or not specified, for
+local timezone. Again, even though the above list doesn't show it, this
+parameter may be present in each of the different parameter profiles, always
+as the last parameter.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+True during (or between) the specified time(s).
+<h4>
+Examples:</h4>
+
+<dl>
+<dt>
+<tt>timerange(12)</tt></dt>
+
+<dd>
+true from noon to 1pm.</dd>
+
+<dt>
+<tt>timerange(12, 13)</tt></dt>
+
+<dd>
+same as above.</dd>
+
+<dt>
+<tt>timerange(12, "GMT")</tt></dt>
+
+<dd>
+true from noon to 1pm, in GMT timezone.</dd>
+
+<dt>
+<tt>timerange(9, 17)</tt></dt>
+
+<dd>
+true from 9am to 5pm.</dd>
+
+<dt>
+<tt>timerange(8, 30, 17, 00)</tt></dt>
+
+<dd>
+true from 8:30am to 5:00pm.</dd>
+
+<dt>
+<tt>timerange(0, 0, 0, 0, 0, 30)</tt></dt>
+
+<dd>
+true between midnight and 30 seconds past midnight.</dd>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></dl>
+
+<hr size="4">
+<h2>
+Example #1:
+<font size="+0">Use proxy for everything except local hosts</font></h2>
+This would work in Netscape's environment. All hosts which aren't fully
+qualified, or the ones that are in local domain, will be connected to directly.
+Everything else will go through
+<tt>w3proxy:8080</tt>. If the proxy goes
+down, connections become automatically direct.
+<pre>&nbsp;&nbsp;&nbsp; function FindProxyForURL(url, host)
+&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (isPlainHostName(host) ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dnsDomainIs(host, ".netscape.com"))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "DIRECT";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY w3proxy.netscape.com:8080; DIRECT";
+&nbsp;&nbsp;&nbsp; }</pre>
+<b>Note:</b> This is the simplest and most efficient autoconfig file for
+cases where there's only one proxy.
+<p>
+</p><hr size="4">
+<h2>
+Example #1b:
+<font size="+0">As above, but use proxy for local servers which
+are outside the firewall</font></h2>
+If there are hosts (such as the main Web server) that belong to the local
+domain but are outside the firewall, and are only reachable through the
+proxy server, those exceptions can be handled using the
+<tt>localHostOrDomainIs()</tt>
+function:
+<pre>&nbsp;&nbsp;&nbsp; function FindProxyForURL(url, host)
+&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ((isPlainHostName(host) ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dnsDomainIs(host, ".netscape.com")) &amp;&amp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !localHostOrDomainIs(host, "www.netscape.com") &amp;&amp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !localHostOrDoaminIs(host, "merchant.netscape.com"))
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "DIRECT";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY w3proxy.netscape.com:8080; DIRECT";
+&nbsp;&nbsp;&nbsp; }</pre>
+The above will use the proxy for everything else except local hosts in
+the <tt>netscape.com</tt> domain, with the further exception that hosts
+<tt>www.netscape.com</tt>
+and
+<tt>merchant.netscape.com</tt> will go through the proxy.
+<p><b>Note</b> the order of the above exceptions for efficiency: localHostOrDomainIs()
+functions only get executed for URLs that are in local domain, not for
+every URL. Be careful to note the parentheses around the <i>or</i> expression
+before the <i>and</i> expression to achieve the abovementioned efficient
+behaviour.
+</p><p>
+</p><hr size="4">
+<h2>
+Example #2:
+<font size="+0">Use proxy only if cannot resolve host</font></h2>
+This example would work in an environment where internal DNS is set up
+so that it can only resolve internal host names, and the goal is to use
+a proxy only for hosts which aren't resolvable:
+<pre>&nbsp;&nbsp;&nbsp; function FindProxyForURL(url, host)
+&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (isResolvable(host))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "DIRECT";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY proxy.mydomain.com:8080";
+&nbsp;&nbsp;&nbsp; }</pre>
+The above requires consulting the DNS every time; it can be grouped smartly
+with other rules so that DNS is consulted only if other rules do not yield
+a result:
+<pre>&nbsp;&nbsp;&nbsp; function FindProxyForURL(url, host)
+&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (isPlainHostName(host) ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dnsDomainIs(host, ".mydomain.com") ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; isResolvable(host))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "DIRECT";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY proxy.mydomain.com:8080";
+&nbsp;&nbsp;&nbsp; }</pre>
+
+<hr size="4">
+<h2>
+Example #3:
+<font size="+0">Subnet based decisions</font></h2>
+In this example all the hosts in a given subnet are connected to directly,
+others through the proxy.
+<pre>&nbsp;&nbsp;&nbsp; function FindProxyForURL(url, host)
+&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (isInNet(host, "198.95.0.0", "255.255.0.0"))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "DIRECT";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY proxy.mydomain.com:8080";
+&nbsp;&nbsp;&nbsp; }</pre>
+Again, use of DNS in the above can be minimized by adding redundant rules
+in the beginning:
+<pre>&nbsp;&nbsp;&nbsp; function FindProxyForURL(url, host)
+&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (isPlainHostName(host) ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dnsDomainIs(host, ".mydomain.com") ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; isInNet(host, "198.95.0.0", "255.255.0.0"))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "DIRECT";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY proxy.mydomain.com:8080";
+&nbsp;&nbsp;&nbsp; }</pre>
+
+<hr size="4">
+<h2>
+Example #4:
+<font size="+0">Load balancing/routing based on URL patterns</font></h2>
+This example is more sophisticated. There are four (4) proxy servers; one
+of them is a hot stand-by for all of the other ones, so if any of the remaining
+three goes down, the fourth one will take over.
+<p>Furthermore, the three remaining proxy servers share the load based
+on URL patterns, which makes their caching more effective (there is only
+one copy of any document on the three servers -- as opposed to one copy
+on each of them). The load is distributed like this:
+<table border="2" cellpadding="8">
+<tbody><tr>
+<th>Proxy</th>
+
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td align="center">#1</td>
+
+<td align="center"><tt>.com</tt> domain</td>
+</tr>
+
+<tr>
+<td align="center">#2</td>
+
+<td align="center"><tt>.edu</tt> domain</td>
+</tr>
+
+<tr>
+<td align="center">#3</td>
+
+<td align="center">all other domains</td>
+</tr>
+
+<tr>
+<td align="center">#4</td>
+
+<td align="center">hot stand-by</td>
+</tr>
+</tbody></table>
+
+</p><p>All local accesses are desired to be direct. All proxy servers run on
+the port 8080 (they wouldn't need to). Note how strings can be concatenated
+by the <tt>+</tt> operator in JavaScript.
+</p><pre>&nbsp;&nbsp;&nbsp; function FindProxyForURL(url, host)
+&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (isPlainHostName(host) || dnsDomainIs(host, ".mydomain.com"))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "DIRECT";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else if (shExpMatch(host, "*.com"))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY proxy1.mydomain.com:8080; " +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "PROXY proxy4.mydomain.com:8080";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else if (shExpMatch(host, "*.edu"))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY proxy2.mydomain.com:8080; " +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "PROXY proxy4.mydomain.com:8080";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY proxy3.mydomain.com:8080; " +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "PROXY proxy4.mydomain.com:8080";
+&nbsp;&nbsp;&nbsp; }</pre>
+
+<hr size="4">
+<h2>
+Example #5:
+<font size="+0">Setting a proxy for a specific protocol</font></h2>
+Most of the standard JavaScript functionality is available for use in the
+<tt>FindProxyForURL()</tt>
+function. As an example, to set different proxies based on the protocol,
+the <tt>substring()</tt> function can be used:
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; function FindProxyForURL(url, host)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (url.substring(0, 5) == "http:") {
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY http-proxy.mydomain.com:8080";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else if (url.substring(0, 4) == "ftp:") {
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY ftp-proxy.mydomain.com:8080";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else if (url.substring(0, 7) == "gopher:") {
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY gopher-proxy.mydomain.com:8080";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else if (url.substring(0, 6) == "https:" ||
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; url.substring(0, 6) == "snews:") {
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY security-proxy.mydomain.com:8080";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else {
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "DIRECT";
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</pre>
+<b>Note:</b> The same can be accomplished using the
+<tt>shExpMatch()</tt>
+function described earlier; for example:
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (shExpMatch(url, "http:*")) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return "PROXY http-proxy.mydomain.com:8080;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...</pre>
+
+<hr size="4">
+<h2>
+Tips</h2>
+
+<ul>
+<li>
+The autoconfig file can be output by a CGI script. This is useful e.g.
+when making the autoconfig file act differently based on the client IP
+address (the <tt>REMOTE_ADDR</tt> environment variable in CGI).</li>
+
+<li>
+Use of <tt>isInNet()</tt>, <tt>isResolvable()</tt> and
+<tt>dnsResolve()</tt>
+functions should be carefully considered, as they require DNS server to
+be consulted (whereas all other autoconfig related functions are mere string
+matching functions). If a proxy is used, the proxy will perform its own
+DNS lookup which would double the impact on the DNS server. Most of the
+time these functions are not necessary to achieve the desired result.</li>
+
+<br>&nbsp;
+<p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</p></ul>
+
+<hr size="4"><i>March 1996</i>
+<center>
+<p><!-- footer -->
+<table width="600" border="0" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<td width="600" height="8"><hr size="1" noshade="noshade"></td></tr>
+<tr><td valign="top" align="left"><font size="-2" face="sans-serif, Arial, Helvetica"><a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/help.html" target="_top">Help</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/site_map.html" target="_top">Site&nbsp;Map</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/howtoget.html" target="_top">How&nbsp;to&nbsp;Get&nbsp;Netscape&nbsp;Products</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/ad.html" target="_top">Advertise&nbsp;With&nbsp;Us</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/addsite.html" target="_top">Add Site</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/custom_browser.html" target="_top">Custom Browser Program</a></font></td></tr>
+<tr>
+<td colspan="1" width="600" height="8"></td>
+</tr>
+
+<tr>
+<td valign="top" align="left">
+<!-- Channels -->
+<font size="-2" face="sans-serif, Arial, Helvetica"><a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/autos.html" target="_top">Autos</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/business.html" target="_top">Business</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/computers_internet.html" target="_top">Computing&nbsp;&amp;&nbsp;Internet</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/entertainment.html" target="_top">Entertainment</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/kids_family.html" target="_top">Family</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/games.html" target="_top">Games</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/health.html" target="_top">Health</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/lifestyles.html" target="_top">Lifestyles</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/local.html" target="_top">Local</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/netscape.html" target="_top">Netscape</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/open_directory.html">Netscape&nbsp;Open&nbsp;Directory</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/news.html" target="_top">News</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/personalize_finance.html" target="_top">Personal&nbsp;Finance</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/real_estate.html" target="_top">Real Estate</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/education.html" target="_top">Research&nbsp;&amp;&nbsp;Learn</a>&nbsp;&nbsp;&nbsp;|&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/shopping.html" target="_top">Shopping</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/smallbiz.html" target="_top">Small Business</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/sports.html" target="_top">Sports</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/misc/nav_redir/channels/travel.html" target="_top">Travel</a></font></td></tr> 
+</tbody></table>
+
+<table width="600" border="0" cellpadding="0" cellspacing="0">
+<tbody><tr><td colspan="1" width="600" height="8"></td></tr>
+<tr>
+<td colspan="5" valign="top" width="600" align="left">
+<font size="-2" face="sans-serif, Arial, Helvetica">
+© 1999 Netscape, All Rights Reserved. <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/legal_notices/index.html">Legal &amp; Privacy Notices</a><br>This site powered by <a href="http://web.archive.org/web/20060424005037/http://home.netscape.com/comprod/server_central/index.html" target="_top">Netscape SuiteSpot servers</a>.</font></td>
+</tr>
+</tbody></table>
+<!-- end footer -->
+</p></center>
+
+<br>&nbsp;
+<p><br>
+<br>
+<script language="Javascript">
+<!--
+
+// FILE ARCHIVED ON 20060424005037 AND RETRIEVED FROM THE
+// INTERNET ARCHIVE ON 20090507200437.
+// JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+// ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+// SECTION 108(a)(3)).
+
+   var sWayBackCGI = "http://web.archive.org/web/20060424005037/";
+
+   function xResolveUrl(url) {
+      var image = new Image();
+      image.src = url;
+      return image.src;
+   }
+   function xLateUrl(aCollection, sProp) {
+      var i = 0;
+      for(i = 0; i < aCollection.length; i++) {
+         var url = aCollection[i][sProp];         if (typeof(url) == "string") { 
+          if (url.indexOf("mailto:") == -1 &&
+             url.indexOf("javascript:") == -1
+             && url.length > 0) {
+            if(url.indexOf("http") != 0) {
+                url = xResolveUrl(url);
+            }
+            url = url.replace('.wstub.archive.org','');
+            aCollection[i][sProp] = sWayBackCGI + url;
+         }
+         }
+      }
+   }
+
+   xLateUrl(document.getElementsByTagName("IMG"),"src");
+   xLateUrl(document.getElementsByTagName("A"),"href");
+   xLateUrl(document.getElementsByTagName("AREA"),"href");
+   xLateUrl(document.getElementsByTagName("OBJECT"),"codebase");
+   xLateUrl(document.getElementsByTagName("OBJECT"),"data");
+   xLateUrl(document.getElementsByTagName("APPLET"),"codebase");
+   xLateUrl(document.getElementsByTagName("APPLET"),"archive");
+   xLateUrl(document.getElementsByTagName("EMBED"),"src");
+   xLateUrl(document.getElementsByTagName("BODY"),"background");
+   xLateUrl(document.getElementsByTagName("TD"),"background");
+   xLateUrl(document.getElementsByTagName("INPUT"),"src");
+   var forms = document.getElementsByTagName("FORM");
+   if (forms) {
+       var j = 0;
+       for (j = 0; j < forms.length; j++) {
+              f = forms[j];
+              if (typeof(f.action)  == "string") {
+                 if(typeof(f.method)  == "string") {
+                     if(typeof(f.method) != "post") {
+                        f.action = sWayBackCGI + f.action;
+                     }
+                  }
+              }
+        }
+    }
+
+
+//-->
+</script>
+
+</p></body></html>
