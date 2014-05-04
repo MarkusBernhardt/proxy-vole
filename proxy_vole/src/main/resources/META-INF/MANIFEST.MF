@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Created-By: Bernd Rosstauscher
+Built-By: Bernd Rosstauscher
+Implementation-Vendor: Bernd Rosstauscher
+Implementation-Title: Proxy-Vole
+Main-Class: com.btr.proxy.search.ProxySearch
+Class-Path: js.jar
