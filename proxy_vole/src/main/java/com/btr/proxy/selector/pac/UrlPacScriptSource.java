@@ -52,8 +52,11 @@ public class UrlPacScriptSource implements PacScriptSource {
 	public synchronized String getScriptContent() throws IOException {
 		if (this.scriptContent == null || 
 				(this.expireAtMillis > 0 
-						&& this.expireAtMillis > System.currentTimeMillis())) {
+						&& this.expireAtMillis < System.currentTimeMillis())) {
 			try {
+				// Reset it again with next download we should get a new expire info
+				this.expireAtMillis = 0;   
+				
 				if (this.scriptUrl.startsWith("file:/") || this.scriptUrl.indexOf(":/") == -1) {
 					this.scriptContent = readPacFileContent(this.scriptUrl);
 				} else {
