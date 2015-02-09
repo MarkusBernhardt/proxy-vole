@@ -79,6 +79,17 @@ public class DefaultWhiteListParserTest {
 		assertFalse(filter.accept(new URI("http://10.0.0.1")));
 	}
 	
+	/*************************************************************************
+	 * Test method
+	 * @throws URISyntaxException on error 
+	 ************************************************************************/
+	@Test
+	public void shouldHandleLocalBypass() throws URISyntaxException {
+		List<UriFilter> l = this.parser.parseWhiteList("<local>");
+		UriFilter filter = l.get(0);
+		assertTrue(filter.accept(new URI("http://localhost")));
+	}
+	
 	
 //	
 //	
