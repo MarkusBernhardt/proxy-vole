@@ -21,6 +21,8 @@ import com.btr.proxy.util.Logger.LogLevel;
 
 final class DLLManager {
 
+	private static final int MILLIS_PER_DAY = 86400000;
+
 	private static final class TempDLLFileFilter implements FileFilter {
 		public boolean accept(File pathname) {
 			String name = pathname.getName();
@@ -74,7 +76,9 @@ final class DLLManager {
 				return;
 			}
 			for (File tmp : oldFiles) {
-				tmp.delete();
+				if ((System.currentTimeMillis() - tmp.lastModified()) > MILLIS_PER_DAY) {
+					tmp.delete();
+				}
 			}
 		} catch (Exception e) {
 			Logger.log(DLLManager.class, LogLevel.DEBUG, "Error cleaning up temporary dll files. ", e);
