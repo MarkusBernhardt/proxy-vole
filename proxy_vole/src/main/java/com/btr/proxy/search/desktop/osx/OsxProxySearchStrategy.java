@@ -138,8 +138,10 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 		result = installPacProxyIfAvailable(proxySettings, result);
 		result = autodetectProxyIfAvailable(proxySettings, result);
 
-		result = installExceptionList(proxySettings, result);
-		result = installSimpleHostFilter(proxySettings, result);
+		if (result != null) {
+			result = installExceptionList(proxySettings, result);
+			result = installSimpleHostFilter(proxySettings, result);
+		}
 		return result;
 	}
 
