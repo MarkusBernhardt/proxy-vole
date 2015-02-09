@@ -6,7 +6,9 @@ This file contains the change log. The changes are marked with the following sym
 * for a modified feature or a bugfix
 
 Current Repository Version
-Preparing migration to Maven
+* Preparing migration to Maven
+* Fixed  issue 51: 	UnsatisfiedLinkError if dll was cleaned up by another instance that is closed.
+* Fixed  issue 55 : improved shExpMatch method
 
 20131209
 * Fixed issue with myIPAddress() returning 127.0.0.1 instead of the real address on linux
