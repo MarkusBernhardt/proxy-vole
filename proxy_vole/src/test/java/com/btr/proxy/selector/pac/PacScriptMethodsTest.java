@@ -130,6 +130,10 @@ public class PacScriptMethodsTest {
 	public void testShExpMatch() {
 		assertEquals(true, buildParser().shExpMatch("host1.unit-test.invalid", "host1.unit-test.*"));
 		assertEquals(true, buildParser().shExpMatch("host1.unit-test.invalid", "*.unit-test.invalid"));
+		assertEquals(true, buildParser().shExpMatch("host1.unit-test.invalid", "*.unit*.invalid"));
+		
+		assertEquals(false, buildParser().shExpMatch("202.310.65.6", "10.*"));
+		assertEquals(false, buildParser().shExpMatch("202.310.65.6", "*.65"));
 	}	
 	
 	/*************************************************************************

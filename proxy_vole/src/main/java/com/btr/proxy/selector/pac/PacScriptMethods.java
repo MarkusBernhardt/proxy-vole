@@ -260,15 +260,25 @@ public class PacScriptMethods implements ScriptMethods {
         int startPos = 0;
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            // 07.05.2009 Incorrect? first token can be startsWith and last one
-            // can be endsWith
             int temp = str.indexOf(token, startPos);
+
+            // Must start with first token
+            if (startPos == 0 && !shexp.startsWith("*") && temp != 0) {
+            	return false;
+            }
+            // Last one ends with last token
+            if (!tokenizer.hasMoreTokens() && !shexp.endsWith("*") && !str.endsWith(token)) {
+            	return false;
+            }
+            
             if (temp == -1) {
                 return false;
             } else {
                 startPos = temp + token.length();
             }
         }
+        
+        
         return true;
     }
 
