@@ -11,6 +11,7 @@ Current Repository Version
 * Fixed  issue 51 :	UnsatisfiedLinkError if dll was cleaned up by another instance that is closed.
 * Fixed  issue 50 : Mixed white list with "local bypass" enabled
 * Fixed  issue 48 : Expiry date for redownload of pac script content was broken.
+* Fixed  issue 47 : If no PAC selector is available ignore the whitelist settings (OSX only).
 
 20131209
 * Fixed issue with myIPAddress() returning 127.0.0.1 instead of the real address on linux
