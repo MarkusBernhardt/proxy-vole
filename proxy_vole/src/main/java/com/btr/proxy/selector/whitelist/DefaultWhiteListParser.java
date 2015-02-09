@@ -3,6 +3,7 @@ package com.btr.proxy.selector.whitelist;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.btr.proxy.search.browser.ie.IELocalByPassFilter;
 import com.btr.proxy.selector.whitelist.HostnameFilter.Mode;
 import com.btr.proxy.util.UriFilter;
 
@@ -58,6 +59,9 @@ public class DefaultWhiteListParser implements WhiteListParser {
 			if (tkn.trim().startsWith("*")) {
 				tkn = tkn.substring(1);
 				result.add(new HostnameFilter(Mode.ENDS_WITH, tkn));
+			} else
+			if (tkn.trim().equals("<local>")) {
+				result.add(new IELocalByPassFilter());
 			} else {
 				result.add(new HostnameFilter(Mode.ENDS_WITH, tkn));
 			}
