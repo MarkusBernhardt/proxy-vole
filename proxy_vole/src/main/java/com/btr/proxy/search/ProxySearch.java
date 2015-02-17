@@ -9,6 +9,7 @@ import java.util.List;
 import com.btr.proxy.search.browser.firefox.FirefoxProxySearchStrategy;
 import com.btr.proxy.search.browser.ie.IEProxySearchStrategy;
 import com.btr.proxy.search.desktop.DesktopProxySearchStrategy;
+import com.btr.proxy.search.desktop.gnome.GnomeDConfProxySearchStrategy;
 import com.btr.proxy.search.desktop.gnome.GnomeProxySearchStrategy;
 import com.btr.proxy.search.desktop.kde.KdeProxySearchStrategy;
 import com.btr.proxy.search.desktop.win.WinProxySearchStrategy;
@@ -139,6 +140,7 @@ public class ProxySearch implements ProxySearchStrategy {
 			this.strategies.add(new KdeProxySearchStrategy());	
 			break;
 		case GNOME:
+			this.strategies.add(new GnomeDConfProxySearchStrategy());	
 			this.strategies.add(new GnomeProxySearchStrategy());	
 			break;
 		case JAVA:
