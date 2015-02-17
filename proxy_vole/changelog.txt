@@ -7,6 +7,7 @@ This file contains the change log. The changes are marked with the following sym
 
 Current Repository Version
 * Preparing migration to Maven
++ We now support on Linux Gnome the dconf settings format
 * Fixed  issue 55 : Improved shExpMatch method
 * Fixed  issue 51 :	UnsatisfiedLinkError if dll was cleaned up by another instance that is closed.
 * Fixed  issue 50 : Mixed white list with "local bypass" enabled
