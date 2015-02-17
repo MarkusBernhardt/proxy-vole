@@ -16,7 +16,6 @@ import com.btr.proxy.util.ProxyUtil;
 import com.btr.proxy.util.Logger.LogLevel;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.concurrent.TimeUnit;
 
 /*****************************************************************************
  * Loads the Gnome proxy settings from the Gnome GConf settings.
@@ -273,7 +272,7 @@ public class GnomeDConfProxySearchStrategy implements ProxySearchStrategy {
             settings.setProperty(entry, value);
         }
       try {
-        p.waitFor(5, TimeUnit.SECONDS);
+        p.waitFor();
       } catch (InterruptedException ex) {
         Logger.log(getClass(), LogLevel.ERROR, ex.getMessage());
       }
