@@ -118,8 +118,8 @@ public class PacScriptMethodsTest {
 	@Test
 	public void testMyIpAddress() throws UnknownHostException {
 		String myIP = buildParser().myIpAddress();
-		assertNotEquals("127.0.0.1", myIP);
-		assertNotEquals("", myIP);
+		assertFalse("127.0.0.1".equals(myIP));
+		assertFalse("".equals(myIP));
 		assertNotNull(myIP);
 	}
 	
