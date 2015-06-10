@@ -123,6 +123,18 @@ public class UriFilterTest {
 	 * @throws URISyntaxException on invalid URL syntax.
 	 ************************************************************************/
 	@Test
+	public void testIp6RangeFilter() throws URISyntaxException {
+		UriFilter filter = new IpRangeFilter("2001:4860:0:2001::/24");
+		
+		assertTrue(filter.accept(new URI("http://[2001:4860:0:2001::68]:81/test.data")));
+		assertFalse(filter.accept(new URI("http://[3001:4860:0:2001::68]:81/test.data")));
+	}
+	
+	/*************************************************************************
+	 * Test method
+	 * @throws URISyntaxException on invalid URL syntax.
+	 ************************************************************************/
+	@Test
 	public void testWithProtocolFilter() throws URISyntaxException {
 		UriFilter filter = new HostnameFilter(Mode.BEGINS_WITH, "http://192.168.0.100");
 		

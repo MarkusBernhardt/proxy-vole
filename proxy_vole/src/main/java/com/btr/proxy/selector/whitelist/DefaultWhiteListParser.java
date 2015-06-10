@@ -47,7 +47,7 @@ public class DefaultWhiteListParser implements WhiteListParser {
 		String[] token = whiteList.split("[, ]+");
 		for (int i = 0; i < token.length; i++) {
 			String tkn = token[i].trim();
-			if (isIP4SubnetFilter(tkn)) {
+			if (isIP4SubnetFilter(tkn) || isIP6SubnetFilter(tkn)) {
 				result.add(new IpRangeFilter(tkn));
 				continue;
 			} else 
@@ -69,6 +69,16 @@ public class DefaultWhiteListParser implements WhiteListParser {
 		
 		return result;
 	}
+	
+	/*************************************************************************
+	 * Checks if the given token is an IP6 subnet filter.
+	 * @param token to analyze.
+	 * @return true if it is a valid IP6 subnet filter else false.
+	 ************************************************************************/
+
+	private boolean isIP6SubnetFilter(String token) {
+		return IPWithSubnetChecker.isValidIP6Range(token);
+	}
 
 	/*************************************************************************
 	 * Checks if the given token is an IP4 subnet filter.
@@ -77,7 +87,7 @@ public class DefaultWhiteListParser implements WhiteListParser {
 	 ************************************************************************/
 	
 	private boolean isIP4SubnetFilter(String token) {
-		return IPv4WithSubnetChecker.isValid(token);
+		return IPWithSubnetChecker.isValidIP4Range(token);
 	}
 
 }

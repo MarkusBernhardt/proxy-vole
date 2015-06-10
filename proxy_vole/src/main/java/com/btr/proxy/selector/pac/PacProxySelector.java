@@ -64,6 +64,8 @@ public class PacProxySelector extends ProxySelector {
 	 * @param pacSource to use as input.
 	 ************************************************************************/
 	
+    // TODO 30.03.2015 bros Test with Java 8 Nashorn script engine 
+
 	private void selectEngine(PacScriptSource pacSource) {
 		try {
 			if (this.JAVAX_PARSER) {
@@ -164,7 +166,8 @@ public class PacProxySelector extends ProxySelector {
 
 		// Split port from host
 		int indexOfPort = host.indexOf(':');
-		if (indexOfPort != -1) {
+		int index2 = host.lastIndexOf(']');
+		if (indexOfPort != -1 && index2 < indexOfPort) {
 			port = Integer.parseInt(host.substring(indexOfPort+1).trim());
 			host = host.substring(0, indexOfPort).trim();
 		}

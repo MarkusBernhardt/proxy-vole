@@ -88,7 +88,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
 			return new Properties();
 		}
 	}
-
+	
 	/*************************************************************************
 	 * Uses DNS to find the script URL.
 	 * Attention: this detection method is known to have some severe security issues. 
@@ -97,7 +97,11 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
 	
 	private String detectScriptUrlPerDNS() throws IOException {
 		String result = null;
+		
 		String fqdn = InetAddress.getLocalHost().getCanonicalHostName();
+		if (fqdn.equalsIgnoreCase("localhost") || fqdn.length() == 0 || Character.isDigit(fqdn.charAt(0))) {
+			return result;
+		}
 
 		Logger.log(getClass(), LogLevel.TRACE, "Searching per DNS guessing.");
 

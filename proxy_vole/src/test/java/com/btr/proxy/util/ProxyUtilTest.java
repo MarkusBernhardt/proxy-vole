@@ -72,6 +72,28 @@ public class ProxyUtilTest {
 		List<Proxy> psList = rs.select(TestUtil.HTTP_TEST_URI);
 		assertEquals("HTTP @ 192.123.123.1:8080", psList.get(0).toString());
 	}
+	
+	/*************************************************************************
+	 * Test parsing method.
+	 ************************************************************************/
+	
+	@Test
+	public void testParseIPv6WithoutProtocol() {
+		FixedProxySelector rs = ProxyUtil.parseProxySettings("[2001:4860:0:2001::68]:8080");
+		List<Proxy> psList = rs.select(TestUtil.HTTP_TEST_URI);
+		assertEquals("HTTP @ 2001:4860:0:2001::68:8080", psList.get(0).toString());
+	}
+
+	/*************************************************************************
+	 * Test parsing method.
+	 ************************************************************************/
+	
+	@Test
+	public void testParseIPv6WithProtocol() {
+		FixedProxySelector rs = ProxyUtil.parseProxySettings("http://[2001:4860:0:2001::68]:8080/");
+		List<Proxy> psList = rs.select(TestUtil.HTTP_TEST_URI);
+		assertEquals("HTTP @ 2001:4860:0:2001::68:8080", psList.get(0).toString());
+	}
 
 
 }

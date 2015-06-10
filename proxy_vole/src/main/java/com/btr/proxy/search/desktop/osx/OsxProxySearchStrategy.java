@@ -85,6 +85,8 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
            }
            
            Dict networkSet = (Dict) settings.getAtPath(String.valueOf(currentSet));
+
+           // TODO 30.03.2015 bros Test for IP6 compatibility
            List<?> serviceOrder = (List<?>) networkSet.getAtPath("/Network/Global/IPv4/ServiceOrder");
            if (serviceOrder == null || serviceOrder.size() == 0) {
               throw new ProxyException("ServiceOrder not defined");

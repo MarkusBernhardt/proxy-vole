@@ -84,6 +84,56 @@ public class PacScriptMethodsTest {
 		assertEquals(true, buildParser().isInNet("10.13.75.47", "10.13.72.0", "255.255.252.0"));
 	}
 	
+	
+	/*************************************************************************
+	 * Test method
+	 ************************************************************************/
+	@Test
+	public void testIsInNetExForIP4() {
+		// isInNetEx(host, "198.95.249.79/32");
+		// true if the IP address of host matches exactly 198.95.249.79
+		assertEquals(true, buildParser().isInNetEx("198.95.249.79", "198.95.249.79/32"));
+		
+		assertEquals(false, buildParser().isInNetEx("198.95.249.80", "198.95.249.79/32"));
+
+		//	isInNetEx(host, "198.95.0.0/16");
+		//	true if the IP address of the host matches 198.95.*.*
+		assertEquals(true, buildParser().isInNetEx("198.95.249.79", "198.95.0.0/16"));
+		assertEquals(true, buildParser().isInNetEx("198.95.249.80", "198.95.0.0/16"));
+		
+		assertEquals(false, buildParser().isInNetEx("198.96.249.80", "198.95.0.0/16"));
+	}
+	
+	/*************************************************************************
+	 * Test method
+	 ************************************************************************/
+	@Test
+	public void testIsInNetExForIP6() {
+		//	isInNetEx(host, "3ffe:8311:ffff/48");
+		//	true if the IP address of the host matches 3ffe:8311:fff:*:*:*:*:*
+		assertEquals(true, buildParser().isInNetEx("3ffe:8311:ffff::", "3ffe:8311:ffff::/48"));
+		assertEquals(true, buildParser().isInNetEx("3ffe:8311:ffff:1111:0:0:0:0", "3ffe:8311:ffff::/48"));
+		
+		assertEquals(false, buildParser().isInNetEx("3ffe:8312:ffff:1111:0:0:0:0", "3ffe:8311:ffff::/48"));
+	}
+	
+
+	/*************************************************************************
+	 * Test Method
+	 * sortIpAddressList(2001:4898:28:3:201:2ff:feea:fc14; 
+                  157.59.139.22; 
+                  fe80::5efe:157.59.139.22");
+	returns "fe80::5efe:157.59.139.22;2001:4898:28:3:201:2ff:feea:fc14;157.59.139.22" 
+	A list of sorted IP addresses. If there both IPv6 and IPv4 IP addresses are passed as input to this function, then the sorted IPv6 addresses are followed by sorted IPv4 addresses
+
+	 ************************************************************************/
+	@Test
+	public void testSortIpAddressList() {
+		assertEquals("fe80::5efe:157.59.139.22;2001:4898:28:3:201:2ff:feea:fc14;157.59.139.22", 
+				buildParser().sortIpAddressList("2001:4898:28:3:201:2ff:feea:fc14; 157.59.139.22; fe80::5efe:157.59.139.22")
+				);
+		 	}
+	
 	/*************************************************************************
 	 * Test method
 	 ************************************************************************/

@@ -67,7 +67,7 @@ public class ProxyTester extends JFrame {
 
 		p.add(new JLabel("URL:"));
 		this.urlField = new JTextField(30); 
-		this.urlField.setText("http://code.google.com/p/proxy-vole/");
+		this.urlField.setText("http://www.google.com/");
 		p.add(this.urlField);
 		
 		this.testButton = new JButton("Test");

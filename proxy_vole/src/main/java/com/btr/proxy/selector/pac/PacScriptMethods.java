@@ -1,15 +1,16 @@
 package com.btr.proxy.selector.pac;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+import java.util.TreeMap;
 
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.Logger.LogLevel;
@@ -28,6 +30,8 @@ import com.btr.proxy.util.Logger.LogLevel;
  ***************************************************************************
  */
 public class PacScriptMethods implements ScriptMethods {
+	
+	// TODO 30.03.2015 bros Test for IP6 compatibility
 
     public static final String OVERRIDE_LOCAL_IP = "com.btr.proxy.pac.overrideLocalIP";
 
@@ -168,7 +172,8 @@ public class PacScriptMethods implements ScriptMethods {
 
     public String dnsResolve(String host) {
         try {
-            return InetAddress.getByName(host).getHostAddress();
+            InetAddress ina = InetAddress.getByName(host);
+			return ina.getHostAddress();
         } catch (UnknownHostException e) {
             Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG,
                     "DNS name not resolvable {0}.", host);
@@ -591,14 +596,46 @@ public class PacScriptMethods implements ScriptMethods {
 		return isResolvable(host);
 	}
 
+	//constants 
+	 private static final BigInteger HIGH_32_INT = new BigInteger(new byte[]{-1,-1,-1,-1});  
+	 private static final BigInteger HIGH_128_INT = new BigInteger(new byte[]{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1});  
+    
 	/*************************************************************************
 	 * isInNetEx
+	 * Implementation from http://fhanik.blogspot.ch/2013/11/ip-magic-check-if-ipv6-address-is.html
 	 * @see com.btr.proxy.selector.pac.ScriptMethods#isInNetEx(java.lang.String, java.lang.String)
 	 ************************************************************************/
 
-	public boolean isInNetEx(String ipAddress, String ipPrefix) {
-		// TODO rossi 27.06.2011 Auto-generated method stub
-		return false;
+	public boolean isInNetEx(String ipOrHost, String cidr) {
+		if (ipOrHost == null || ipOrHost.length() == 0 || cidr == null
+				|| cidr.length() == 0) {
+			return false;
+		}
+
+		try {
+			// Split CIDR, usually written like 2000::/64"
+			String[] cidrParts = cidr.split("/");
+			if (cidrParts.length != 2) {
+				return false;
+			}
+			String cidrRange = cidrParts[0];
+			int cidrBits = Integer.parseInt(cidrParts[1]);
+
+			byte[] addressBytes = InetAddress.getByName(ipOrHost).getAddress();
+			BigInteger ip = new BigInteger(addressBytes);
+			BigInteger mask = addressBytes.length == 4 
+					? HIGH_32_INT.shiftLeft(32 - cidrBits) 
+					: HIGH_128_INT.shiftLeft(128 - cidrBits);
+
+			byte[] rangeBytes = InetAddress.getByName(cidrRange).getAddress();
+			BigInteger range = new BigInteger(rangeBytes);
+			BigInteger lowIP = range.and(mask);
+			BigInteger highIP = lowIP.add(mask.not());
+
+			return lowIP.compareTo(ip) <= 0 && highIP.compareTo(ip) >= 0;
+		} catch (UnknownHostException e) {
+			return false;
+		}
 	}
 
 	/*************************************************************************
@@ -639,19 +676,35 @@ public class PacScriptMethods implements ScriptMethods {
 		if (ipAddressList == null || ipAddressList.trim().length() == 0) {
 			return "";
 		}
-		String[] ipAddressToken = ipAddressList.split(";");
-		List<InetAddress> parsedAddresses = new ArrayList<InetAddress>();
-		for (String ip : ipAddressToken) {
-			try {
-				parsedAddresses.add(InetAddress.getByName(ip));
-			} catch (UnknownHostException e) {
-				// TODO rossi 01.11.2011 Auto-generated catch block
-				e.printStackTrace();
+		try {
+			String[] ipAddressToken = ipAddressList.split(";");
+			TreeMap<byte[], String> sorting = new TreeMap<byte[], String>(
+				new Comparator<byte[]>() {
+				public int compare(byte[] b1, byte[] b2) {
+					if (b1.length != b2.length) {
+						return b2.length-b1.length;
+					}
+					return new BigInteger(b1).compareTo(new BigInteger(b2));
+				}
+			});
+			
+			for (String ip : ipAddressToken) {
+				String cleanIP = ip.trim();
+				sorting.put(InetAddress.getByName(cleanIP).getAddress(), cleanIP);
 			}
+			
+			StringBuilder result = new StringBuilder();
+			for (String ip : sorting.values()) {
+				if (result.length() > 0) {
+					result.append(";");
+				}
+				result.append(ip);
+			}
+			return result.toString();
+		} catch (Exception e) {
+            Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "Cannot sort invalid IP list: {0}.", ipAddressList);
+			return "";
 		}
-		Collections.sort(parsedAddresses, null);
-		// TODO rossi 27.06.2011 Implement me.
-		return ipAddressList;
 	}
 
 	/*************************************************************************

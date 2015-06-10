@@ -1,12 +1,11 @@
 package com.btr.proxy.util;
 
+import java.net.MalformedURLException;
 import java.net.Proxy;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.btr.proxy.selector.fixed.FixedProxySelector;
 import com.btr.proxy.selector.pac.PacProxySelector;
 import com.btr.proxy.selector.pac.PacScriptSource;
@@ -23,8 +22,7 @@ public class ProxyUtil {
 	public static final int DEFAULT_PROXY_PORT = 80;
 	
 	private static List<Proxy> noProxyList;
-    private static Pattern pattern = Pattern.compile("\\w*?:?/*([^:/]+):?(\\d*)/?");
-	
+
 	/*************************************************************************
 	 * Parse host and port out of a proxy variable.
 	 * @param proxyVar the proxy string. example: http://192.168.10.9:8080/
@@ -35,18 +33,24 @@ public class ProxyUtil {
 		if (proxyVar == null || proxyVar.trim().length() == 0) {
 			return null;
 		}
-		Matcher matcher = pattern.matcher(proxyVar);
-		if (matcher.matches()) {
-		    String host = matcher.group(1);
-		    int port;
-		    if (!"".equals(matcher.group(2))) {
-		        port = Integer.parseInt(matcher.group(2));
-		    } else {
-		        port = DEFAULT_PROXY_PORT;
-		    }
-            return new FixedProxySelector(host.trim(), port);
-		} else {
-		    return null;
+		
+		try {
+			// Protocol missing then assume http and provide it 
+			if (proxyVar.indexOf(":/") == -1) {
+				proxyVar = "http://" + proxyVar;
+			}
+			
+			URL url = new URL(proxyVar);
+			String host = cleanIPv6(url.getHost());
+			
+			int port = url.getPort();
+			if (port == -1) {
+				port = DEFAULT_PROXY_PORT;
+			}
+			return new FixedProxySelector(host.trim(), port);
+		} catch (MalformedURLException e) {
+			Logger.log(ProxyUtil.class, Logger.LogLevel.WARNING, "Cannot parse Proxy Settings {0}", proxyVar);
+			return null;
 		}
 	}
 	
@@ -78,6 +82,28 @@ public class ProxyUtil {
 			result = new PacProxySelector(pacSource);
 		}
 		return result;
+	}
+	
+	/*************************************************************************
+	 * This method can be used to cleanup an IPv6 address.
+	 * It will remove the surrounding square brackets if found.
+	 * e.g. [2001:4860:0:2001::68] will be returned as 2001:4860:0:2001::68
+	 * @param hostOrIP to cleanup
+	 * @return the raw host or IP without any IPv6 brackets.
+	 ************************************************************************/
+	
+	public static String cleanIPv6(String hostOrIP) {
+		if (hostOrIP == null)  {
+			return null;
+		} 
+		hostOrIP = hostOrIP.trim();
+		if (hostOrIP.startsWith("[")) {
+			hostOrIP = hostOrIP.substring(1);
+		}
+		if (hostOrIP.endsWith("]")) {
+			hostOrIP = hostOrIP.substring(0, hostOrIP.length()-1);
+		}
+		return hostOrIP;
 	}
 	
 

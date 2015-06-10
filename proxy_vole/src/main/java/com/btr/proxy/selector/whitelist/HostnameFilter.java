@@ -61,9 +61,10 @@ public class HostnameFilter implements UriFilter {
 		
 		String host = uri.getAuthority();
 		
-		// Strip away port.
+		// Strip away port take special care for IP6.
 		int index = host.indexOf(':');
-		if (index != -1) {
+		int index2 = host.lastIndexOf(']');
+		if (index != -1 && index2 < index) {
 			host = host.substring(0, index);
 		}
 

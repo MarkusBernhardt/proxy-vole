@@ -18,6 +18,8 @@ import com.btr.proxy.util.Logger.LogLevel;
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/
 
+// TODO 02.06.2015 bros Format has changed in newer versions of firefox.
+
 class WinFirefoxProfileSource implements FirefoxProfileSource {
 
 	/*************************************************************************
