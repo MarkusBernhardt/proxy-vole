@@ -1,7 +1,7 @@
 Change Log:
 This file contains the change log. The changes are marked with the following symbology.
 
-* _ _for a new feature_ _
+* _for a new feature_
 * ~~for a removed feature~~
 * for a modified feature or a bugfix
 
