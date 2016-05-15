@@ -9,12 +9,12 @@
     </parent>
 
     <groupId>com.github.markusbernhardt</groupId>
-    <artifactId>autoproxy</artifactId>
+    <artifactId>proxy-vole</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>autoproxy</name>
-    <description>Autoproxy is a Java library to auto detect the platform network proxy settings.</description>
-    <url>https://github.com/MarkusBernhardt/autoproxy</url>
+    <name>Proxy Vole</name>
+    <description>Proxy Vole is a Java library to auto detect the platform network proxy settings.</description>
+    <url>https://github.com/MarkusBernhardt/proxy-vole</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,9 +24,9 @@
     </properties>
 
     <scm>
-        <url>https://github.com/MarkusBernhardt/autoproxy</url>
-        <connection>scm:git://github.com/MarkusBernhardt/autoproxy.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/MarkusBernhardt/autoproxy.git</developerConnection>
+        <url>https://github.com/MarkusBernhardt/proxy-vole</url>
+        <connection>scm:git://github.com/MarkusBernhardt/proxy-vole.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/MarkusBernhardt/proxy-vole.git</developerConnection>
     </scm>
 
     <licenses>
