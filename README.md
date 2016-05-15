@@ -21,13 +21,48 @@ The library provides some proxy setting search strategies to read the proxy sett
 ###Using the default strategy to find the settings
 ```Java
 // Use the static factory method getDefaultProxySearch to create a proxy search instance 
-// configured with default proxy search strategies for the current environment.
+// configured with the default proxy search strategies for the current environment.
 ProxySearch proxySearch = ProxySearch.getDefaultProxySearch();
 
 // Invoke the proxy search. This will create a ProxySelector with the detected proxy settings.
 ProxySelector proxySelector = proxySearch.getProxySelector();
 
 // Install this ProxySelector as default ProxySelector for all connections.
+ProxySelector.setDefault(proxySelector);
+```
+
+###Modifying the search strategy
+```Java
+// Create a not configured proxy search instance and configure cusomized proxy search strategies.
+ProxySearch proxySearch = new ProxySearch();
+if (PlatformUtil.getCurrentPlattform() == Platform.WIN) {
+    proxySearch.addStrategy(Strategy.IE);
+    proxySearch.addStrategy(Strategy.FIREFOX);
+    proxySearch.addStrategy(Strategy.JAVA);
+} else if (PlatformUtil.getCurrentPlattform() == Platform.LINUX) {
+    proxySearch.addStrategy(Strategy.GNOME);
+    proxySearch.addStrategy(Strategy.KDE);
+    proxySearch.addStrategy(Strategy.FIREFOX);
+} else {
+    proxySearch.addStrategy(Strategy.OS_DEFAULT);
+}
+
+ProxySelector proxySelector = proxySearch.getProxySelector();
+ProxySelector.setDefault(proxySelector);
+```
+
+###Improving PAC performance
+When your system uses a proxy automation script (PAC) Javascript is used to determine the actual proxy. 
+If your program needs to access a lot of HTTP URLs, then this might become a performance bottleneck.
+To speed things up a little bit, you can activate a cache that will store already processed URLs.
+When a cached URL is accessed the Javascript execution will be skipped and the cached proxy is used.
+```Java
+ProxySearch proxySearch = ProxySearch.getDefaultProxySearch();
+
+// Cache 32 URLs for up to 5 minutes.
+proxySearch.setPacCacheSettings(32, 1000*60*5); 
+
+ProxySelector proxySelector = proxySearch.getProxySelector();
 ProxySelector.setDefault(proxySelector);
 ```
 
