@@ -1,14 +1,14 @@
 autoproxy WIP alpha
 =========
 
-Autoproxy is a Java library to auto detect the platform network proxy settings. Note this library is a fork of
-[proxy-vole](https://code.google.com/p/proxy-vole/) by Bernd Rosstauscher hosted at Google Code.
+Autoproxy is a Java library to auto detect the platform network proxy settings. 
+*Note this library is a fork of [proxy-vole](https://code.google.com/p/proxy-vole/) by Bernd Rosstauscher hosted at Google Code.*
 
 Introduction
 ------------
 
 The library provides some proxy setting search strategies to read the proxy settings from the system config 
-(Windows, KDE, Gnome, OSX), browser config (Firefox, IE), or environment variables and provides you an ready to use proxy selector.
+(Windows, KDE, Gnome, OSX), browser config (Firefox, IE) or environment variables and provides you an ready to use proxy selector.
 
 Why a fork?
 -----------
