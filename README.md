@@ -1,4 +1,4 @@
-autoproxy
+autoproxy WIP alpha
 =========
 
 Autoproxy is a Java library to auto detect the platform network proxy settings. Note this library is a fork of
