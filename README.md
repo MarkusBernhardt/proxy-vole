@@ -21,12 +21,12 @@ The library provides some proxy setting search strategies to read the proxy sett
 
 ###Using the default strategy to find the settings
 
-'''Java
+```Java
 ProxySearch proxySearch = ProxySearch.getDefaultProxySearch();
 ProxySelector myProxySelector = proxySearch.getProxySelector();
                 
 ProxySelector.setDefault(myProxySelector);
-'''
+```
 
 ##Motivation
 
