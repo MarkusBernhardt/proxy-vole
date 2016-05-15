@@ -157,8 +157,7 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
             Properties settings = this.settingsParser.parseSettings(this.profileScanner);
             return settings;
         } catch (IOException e) {
-            Logger.log(getClass(), LogLevel.ERROR, "Error parsing settings", e);
-            throw new ProxyException(e);
+            throw new ProxyException("No Firefox installation found");
         }
     }
 
