@@ -25,39 +25,40 @@ import com.btr.proxy.util.Logger.LogLevel;
 
 /***************************************************************************
  * Implementation of PAC JavaScript functions.
- *  
+ * 
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ***************************************************************************
  */
 public class PacScriptMethods implements ScriptMethods {
-	
-	// TODO 30.03.2015 bros Test for IP6 compatibility
+
+    // TODO 30.03.2015 bros Test for IP6 compatibility
 
     public static final String OVERRIDE_LOCAL_IP = "com.btr.proxy.pac.overrideLocalIP";
 
-	private final static String GMT = "GMT";
-    
-    private final static List<String> DAYS = Collections.unmodifiableList(
-            Arrays.asList("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")); 
+    private final static String GMT = "GMT";
+
+    private final static List<String> DAYS = Collections
+            .unmodifiableList(Arrays.asList("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"));
 
     private final static List<String> MONTH = Collections.unmodifiableList(
             Arrays.asList("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"));
 
-    private Calendar currentTime; 
-    
+    private Calendar currentTime;
+
     /*************************************************************************
      * Constructor
      ************************************************************************/
-    
+
     public PacScriptMethods() {
-    	super();
+        super();
     }
 
     /*************************************************************************
      * isPlainHostName
+     * 
      * @see com.btr.proxy.selector.pac.ScriptMethods#isPlainHostName(java.lang.String)
      ************************************************************************/
-    
+
     public boolean isPlainHostName(String host) {
         return host.indexOf(".") < 0;
     }
@@ -105,8 +106,7 @@ public class PacScriptMethods implements ScriptMethods {
             InetAddress.getByName(host).getHostAddress();
             return true;
         } catch (UnknownHostException ex) {
-            Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG,
-                    "Hostname not resolveable {0}.", host);
+            Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "Hostname not resolveable {0}.", host);
         }
         return false;
     }
@@ -132,35 +132,37 @@ public class PacScriptMethods implements ScriptMethods {
      ************************************************************************/
 
     public boolean isInNet(String host, String pattern, String mask) {
-    	host = dnsResolve(host);
-    	if (host == null || host.length() == 0) {
-    		return false;
-    	}
+        host = dnsResolve(host);
+        if (host == null || host.length() == 0) {
+            return false;
+        }
         long lhost = parseIpAddressToLong(host);
         long lpattern = parseIpAddressToLong(pattern);
         long lmask = parseIpAddressToLong(mask);
         return (lhost & lmask) == lpattern;
     }
 
-	/*************************************************************************
-	 * Convert a string representation of a IP to a long.
-	 * @param address to convert.
-	 * @return the address as long.
-	 ************************************************************************/
-	
-	private long parseIpAddressToLong(String address) {
-		long result = 0;
-		String[] parts = address.split("\\.");
-		long shift = 24;	    
-		for (String part : parts) {
-			long lpart = Long.parseLong(part);
-	       
-			result |= (lpart << shift);
-			shift -= 8;
-		}
-       return result;
-	 }
-	 
+    /*************************************************************************
+     * Convert a string representation of a IP to a long.
+     * 
+     * @param address
+     *            to convert.
+     * @return the address as long.
+     ************************************************************************/
+
+    private long parseIpAddressToLong(String address) {
+        long result = 0;
+        String[] parts = address.split("\\.");
+        long shift = 24;
+        for (String part : parts) {
+            long lpart = Long.parseLong(part);
+
+            result |= (lpart << shift);
+            shift -= 8;
+        }
+        return result;
+    }
+
     /*************************************************************************
      * Resolves the given DNS host name into an IP address, and returns it in
      * the dot separated format as a string.
@@ -173,10 +175,9 @@ public class PacScriptMethods implements ScriptMethods {
     public String dnsResolve(String host) {
         try {
             InetAddress ina = InetAddress.getByName(host);
-			return ina.getHostAddress();
+            return ina.getHostAddress();
         } catch (UnknownHostException e) {
-            Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG,
-                    "DNS name not resolvable {0}.", host);
+            Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "DNS name not resolvable {0}.", host);
         }
         return "";
     }
@@ -192,43 +193,43 @@ public class PacScriptMethods implements ScriptMethods {
         return getLocalAddressOfType(Inet4Address.class);
     }
 
-	/*************************************************************************
-	 * Get the current IP address of the computer.
-	 * This will return the first address of the first network interface that is 
-	 * a "real" IP address of the given type. 
-	 * @param cl the type of address we are searching for.
-	 * @return the address as string or "" if not found.
-	 ************************************************************************/
-	
-	private String getLocalAddressOfType(Class<? extends InetAddress> cl) {
-		try {
-        	String overrideIP = System.getProperty(OVERRIDE_LOCAL_IP);
-        	if (overrideIP != null && overrideIP.trim().length() > 0) {
-        		return overrideIP.trim(); 
-        	}
-        	Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-        	while (interfaces.hasMoreElements()){
-        	    NetworkInterface current = interfaces.nextElement();
-        	    if (!current.isUp() || current.isLoopback() || current.isVirtual()) {
-        	    	continue;
-        	    }
-        	    Enumeration<InetAddress> addresses = current.getInetAddresses();
-        	    while (addresses.hasMoreElements()){
-        	        InetAddress adr = addresses.nextElement();
-        	        if (cl.isInstance(adr)) {
-        	        	Logger.log(JavaxPacScriptParser.class, LogLevel.TRACE,
-        	                    "Local address resolved to {0}", adr);
-        	        	return adr.getHostAddress();
-        	        }
-        	    }
-        	}
+    /*************************************************************************
+     * Get the current IP address of the computer. This will return the first
+     * address of the first network interface that is a "real" IP address of the
+     * given type.
+     * 
+     * @param cl
+     *            the type of address we are searching for.
+     * @return the address as string or "" if not found.
+     ************************************************************************/
+
+    private String getLocalAddressOfType(Class<? extends InetAddress> cl) {
+        try {
+            String overrideIP = System.getProperty(OVERRIDE_LOCAL_IP);
+            if (overrideIP != null && overrideIP.trim().length() > 0) {
+                return overrideIP.trim();
+            }
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface current = interfaces.nextElement();
+                if (!current.isUp() || current.isLoopback() || current.isVirtual()) {
+                    continue;
+                }
+                Enumeration<InetAddress> addresses = current.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress adr = addresses.nextElement();
+                    if (cl.isInstance(adr)) {
+                        Logger.log(JavaxPacScriptParser.class, LogLevel.TRACE, "Local address resolved to {0}", adr);
+                        return adr.getHostAddress();
+                    }
+                }
+            }
             return "";
         } catch (IOException e) {
-            Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG,
-                    "Local address not resolvable.");
+            Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "Local address not resolvable.");
             return "";
         }
-	}
+    }
 
     /*************************************************************************
      * Returns the number of DNS domain levels (number of dots) in the host
@@ -269,21 +270,20 @@ public class PacScriptMethods implements ScriptMethods {
 
             // Must start with first token
             if (startPos == 0 && !shexp.startsWith("*") && temp != 0) {
-            	return false;
+                return false;
             }
             // Last one ends with last token
             if (!tokenizer.hasMoreTokens() && !shexp.endsWith("*") && !str.endsWith(token)) {
-            	return false;
+                return false;
             }
-            
+
             if (temp == -1) {
                 return false;
             } else {
                 startPos = temp + token.length();
             }
         }
-        
-        
+
         return true;
     }
 
@@ -352,8 +352,7 @@ public class PacScriptMethods implements ScriptMethods {
         if (this.currentTime != null) { // Only used for unit tests
             return (Calendar) this.currentTime.clone();
         }
-        return Calendar.getInstance(useGmt ? TimeZone.getTimeZone(GMT)
-                : TimeZone.getDefault());
+        return Calendar.getInstance(useGmt ? TimeZone.getTimeZone(GMT) : TimeZone.getDefault());
     }
 
     /*************************************************************************
@@ -384,8 +383,8 @@ public class PacScriptMethods implements ScriptMethods {
      * @return true if the current date matches the given range.
      ************************************************************************/
 
-    public boolean dateRange(Object day1, Object month1, Object year1,
-            Object day2, Object month2, Object year2, Object gmt) {
+    public boolean dateRange(Object day1, Object month1, Object year1, Object day2, Object month2, Object year2,
+            Object gmt) {
 
         // Guess the parameter meanings.
         Map<String, Integer> params = new HashMap<String, Integer>();
@@ -522,12 +521,10 @@ public class PacScriptMethods implements ScriptMethods {
      * @return true if the current time matches the given range.
      ************************************************************************/
 
-    public boolean timeRange(Object hour1, Object min1, Object sec1,
-            Object hour2, Object min2, Object sec2, Object gmt) {
-        boolean useGmt = GMT.equalsIgnoreCase(String.valueOf(min1))
-                || GMT.equalsIgnoreCase(String.valueOf(sec1))
-                || GMT.equalsIgnoreCase(String.valueOf(min2))
-                || GMT.equalsIgnoreCase(String.valueOf(gmt));
+    public boolean timeRange(Object hour1, Object min1, Object sec1, Object hour2, Object min2, Object sec2,
+            Object gmt) {
+        boolean useGmt = GMT.equalsIgnoreCase(String.valueOf(min1)) || GMT.equalsIgnoreCase(String.valueOf(sec1))
+                || GMT.equalsIgnoreCase(String.valueOf(min2)) || GMT.equalsIgnoreCase(String.valueOf(gmt));
 
         Calendar cal = getCurrentTime(useGmt);
         cal.set(Calendar.MILLISECOND, 0);
@@ -584,136 +581,140 @@ public class PacScriptMethods implements ScriptMethods {
 
         return current.compareTo(from) >= 0 && current.compareTo(to) <= 0;
     }
-    
+
     // Microsoft PAC extensions for IPv6 support.
 
-	/*************************************************************************
-	 * isResolvableEx
-	 * @see com.btr.proxy.selector.pac.ScriptMethods#isResolvableEx(java.lang.String)
-	 ************************************************************************/
+    /*************************************************************************
+     * isResolvableEx
+     * 
+     * @see com.btr.proxy.selector.pac.ScriptMethods#isResolvableEx(java.lang.String)
+     ************************************************************************/
 
     public boolean isResolvableEx(String host) {
-		return isResolvable(host);
-	}
+        return isResolvable(host);
+    }
 
-	//constants 
-	 private static final BigInteger HIGH_32_INT = new BigInteger(new byte[]{-1,-1,-1,-1});  
-	 private static final BigInteger HIGH_128_INT = new BigInteger(new byte[]{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1});  
-    
-	/*************************************************************************
-	 * isInNetEx
-	 * Implementation from http://fhanik.blogspot.ch/2013/11/ip-magic-check-if-ipv6-address-is.html
-	 * @see com.btr.proxy.selector.pac.ScriptMethods#isInNetEx(java.lang.String, java.lang.String)
-	 ************************************************************************/
+    // constants
+    private static final BigInteger HIGH_32_INT = new BigInteger(new byte[] { -1, -1, -1, -1 });
+    private static final BigInteger HIGH_128_INT = new BigInteger(
+            new byte[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 });
 
-	public boolean isInNetEx(String ipOrHost, String cidr) {
-		if (ipOrHost == null || ipOrHost.length() == 0 || cidr == null
-				|| cidr.length() == 0) {
-			return false;
-		}
+    /*************************************************************************
+     * isInNetEx Implementation from
+     * http://fhanik.blogspot.ch/2013/11/ip-magic-check-if-ipv6-address-is.html
+     * 
+     * @see com.btr.proxy.selector.pac.ScriptMethods#isInNetEx(java.lang.String,
+     *      java.lang.String)
+     ************************************************************************/
 
-		try {
-			// Split CIDR, usually written like 2000::/64"
-			String[] cidrParts = cidr.split("/");
-			if (cidrParts.length != 2) {
-				return false;
-			}
-			String cidrRange = cidrParts[0];
-			int cidrBits = Integer.parseInt(cidrParts[1]);
+    public boolean isInNetEx(String ipOrHost, String cidr) {
+        if (ipOrHost == null || ipOrHost.length() == 0 || cidr == null || cidr.length() == 0) {
+            return false;
+        }
 
-			byte[] addressBytes = InetAddress.getByName(ipOrHost).getAddress();
-			BigInteger ip = new BigInteger(addressBytes);
-			BigInteger mask = addressBytes.length == 4 
-					? HIGH_32_INT.shiftLeft(32 - cidrBits) 
-					: HIGH_128_INT.shiftLeft(128 - cidrBits);
+        try {
+            // Split CIDR, usually written like 2000::/64"
+            String[] cidrParts = cidr.split("/");
+            if (cidrParts.length != 2) {
+                return false;
+            }
+            String cidrRange = cidrParts[0];
+            int cidrBits = Integer.parseInt(cidrParts[1]);
 
-			byte[] rangeBytes = InetAddress.getByName(cidrRange).getAddress();
-			BigInteger range = new BigInteger(rangeBytes);
-			BigInteger lowIP = range.and(mask);
-			BigInteger highIP = lowIP.add(mask.not());
+            byte[] addressBytes = InetAddress.getByName(ipOrHost).getAddress();
+            BigInteger ip = new BigInteger(addressBytes);
+            BigInteger mask = addressBytes.length == 4 ? HIGH_32_INT.shiftLeft(32 - cidrBits)
+                    : HIGH_128_INT.shiftLeft(128 - cidrBits);
 
-			return lowIP.compareTo(ip) <= 0 && highIP.compareTo(ip) >= 0;
-		} catch (UnknownHostException e) {
-			return false;
-		}
-	}
+            byte[] rangeBytes = InetAddress.getByName(cidrRange).getAddress();
+            BigInteger range = new BigInteger(rangeBytes);
+            BigInteger lowIP = range.and(mask);
+            BigInteger highIP = lowIP.add(mask.not());
 
-	/*************************************************************************
-	 * dnsResolveEx
-	 * @see com.btr.proxy.selector.pac.ScriptMethods#dnsResolveEx(java.lang.String)
-	 ************************************************************************/
+            return lowIP.compareTo(ip) <= 0 && highIP.compareTo(ip) >= 0;
+        } catch (UnknownHostException e) {
+            return false;
+        }
+    }
 
-	public String dnsResolveEx(String host) {
+    /*************************************************************************
+     * dnsResolveEx
+     * 
+     * @see com.btr.proxy.selector.pac.ScriptMethods#dnsResolveEx(java.lang.String)
+     ************************************************************************/
+
+    public String dnsResolveEx(String host) {
         StringBuilder result = new StringBuilder();
-		try {
+        try {
             InetAddress[] list = InetAddress.getAllByName(host);
             for (InetAddress inetAddress : list) {
-            	result.append(inetAddress.getHostAddress());
-            	result.append("; ");
-			}
+                result.append(inetAddress.getHostAddress());
+                result.append("; ");
+            }
         } catch (UnknownHostException e) {
-            Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG,
-                    "DNS name not resolvable {0}.", host);
+            Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "DNS name not resolvable {0}.", host);
         }
         return result.toString();
     }
 
-	/*************************************************************************
-	 * myIpAddressEx
-	 * @see com.btr.proxy.selector.pac.ScriptMethods#myIpAddressEx()
-	 ************************************************************************/
+    /*************************************************************************
+     * myIpAddressEx
+     * 
+     * @see com.btr.proxy.selector.pac.ScriptMethods#myIpAddressEx()
+     ************************************************************************/
 
-	public String myIpAddressEx() {
-		return getLocalAddressOfType(Inet6Address.class);
-	}
+    public String myIpAddressEx() {
+        return getLocalAddressOfType(Inet6Address.class);
+    }
 
-	/*************************************************************************
-	 * sortIpAddressList
-	 * @see com.btr.proxy.selector.pac.ScriptMethods#sortIpAddressList(java.lang.String)
-	 ************************************************************************/
+    /*************************************************************************
+     * sortIpAddressList
+     * 
+     * @see com.btr.proxy.selector.pac.ScriptMethods#sortIpAddressList(java.lang.String)
+     ************************************************************************/
 
-	public String sortIpAddressList(String ipAddressList) {
-		if (ipAddressList == null || ipAddressList.trim().length() == 0) {
-			return "";
-		}
-		try {
-			String[] ipAddressToken = ipAddressList.split(";");
-			TreeMap<byte[], String> sorting = new TreeMap<byte[], String>(
-				new Comparator<byte[]>() {
-				public int compare(byte[] b1, byte[] b2) {
-					if (b1.length != b2.length) {
-						return b2.length-b1.length;
-					}
-					return new BigInteger(b1).compareTo(new BigInteger(b2));
-				}
-			});
-			
-			for (String ip : ipAddressToken) {
-				String cleanIP = ip.trim();
-				sorting.put(InetAddress.getByName(cleanIP).getAddress(), cleanIP);
-			}
-			
-			StringBuilder result = new StringBuilder();
-			for (String ip : sorting.values()) {
-				if (result.length() > 0) {
-					result.append(";");
-				}
-				result.append(ip);
-			}
-			return result.toString();
-		} catch (Exception e) {
+    public String sortIpAddressList(String ipAddressList) {
+        if (ipAddressList == null || ipAddressList.trim().length() == 0) {
+            return "";
+        }
+        try {
+            String[] ipAddressToken = ipAddressList.split(";");
+            TreeMap<byte[], String> sorting = new TreeMap<byte[], String>(new Comparator<byte[]>() {
+                public int compare(byte[] b1, byte[] b2) {
+                    if (b1.length != b2.length) {
+                        return b2.length - b1.length;
+                    }
+                    return new BigInteger(b1).compareTo(new BigInteger(b2));
+                }
+            });
+
+            for (String ip : ipAddressToken) {
+                String cleanIP = ip.trim();
+                sorting.put(InetAddress.getByName(cleanIP).getAddress(), cleanIP);
+            }
+
+            StringBuilder result = new StringBuilder();
+            for (String ip : sorting.values()) {
+                if (result.length() > 0) {
+                    result.append(";");
+                }
+                result.append(ip);
+            }
+            return result.toString();
+        } catch (Exception e) {
             Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "Cannot sort invalid IP list: {0}.", ipAddressList);
-			return "";
-		}
-	}
+            return "";
+        }
+    }
 
-	/*************************************************************************
-	 * getClientVersion
-	 * @see com.btr.proxy.selector.pac.ScriptMethods#getClientVersion()
-	 ************************************************************************/
+    /*************************************************************************
+     * getClientVersion
+     * 
+     * @see com.btr.proxy.selector.pac.ScriptMethods#getClientVersion()
+     ************************************************************************/
 
-	public String getClientVersion() {
-		return "1.0";
-	}
+    public String getClientVersion() {
+        return "1.0";
+    }
 
 }

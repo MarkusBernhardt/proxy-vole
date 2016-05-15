@@ -12,11 +12,12 @@ import com.btr.proxy.util.ProxyException;
 
 public interface ProxySearchStrategy {
 
-	/*************************************************************************
-	 * Gets the a ProxySelector found by applying the search strategy.
-	 * @return a ProxySelector, null if none is found.
-	 ************************************************************************/
-	
-	public ProxySelector getProxySelector() throws ProxyException;
-	
+    /*************************************************************************
+     * Gets the a ProxySelector found by applying the search strategy.
+     * 
+     * @return a ProxySelector, null if none is found.
+     ************************************************************************/
+
+    public ProxySelector getProxySelector() throws ProxyException;
+
 }

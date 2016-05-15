@@ -8,43 +8,49 @@ package com.btr.proxy.util;
 
 public class ProxyException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/*************************************************************************
-	 * Constructor
-	 ************************************************************************/
-	
-	public ProxyException() {
-		super();
-	}
+    /*************************************************************************
+     * Constructor
+     ************************************************************************/
 
-	/*************************************************************************
-	 * Constructor
-	 * @param message the error message
-	 * @param cause the causing exception for chaining exceptions.
-	 ************************************************************************/
-	
-	public ProxyException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public ProxyException() {
+        super();
+    }
 
-	/*************************************************************************
-	 * Constructor
-	 * @param message the error message
-	 ************************************************************************/
-	
-	public ProxyException(String message) {
-		super(message);
-	}
+    /*************************************************************************
+     * Constructor
+     * 
+     * @param message
+     *            the error message
+     * @param cause
+     *            the causing exception for chaining exceptions.
+     ************************************************************************/
 
-	/*************************************************************************
-	 * Constructor
-	 * @param cause the causing exception for chaining exceptions.
-	 ************************************************************************/
-	
-	public ProxyException(Throwable cause) {
-		super(cause);
-	}
-	
+    public ProxyException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    /*************************************************************************
+     * Constructor
+     * 
+     * @param message
+     *            the error message
+     ************************************************************************/
+
+    public ProxyException(String message) {
+        super(message);
+    }
+
+    /*************************************************************************
+     * Constructor
+     * 
+     * @param cause
+     *            the causing exception for chaining exceptions.
+     ************************************************************************/
+
+    public ProxyException(Throwable cause) {
+        super(cause);
+    }
 
 }

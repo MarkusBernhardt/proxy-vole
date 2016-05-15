@@ -3,7 +3,7 @@ This file contains the change log. The changes are marked with the following sym
 
 ##Unreleased
 * Fork on github
-* Made it deployable to Maven Central for me 
+* Made it deployable to Maven Central for me (Maven coordinates, package names) 
 
 ##Last version off proxy-vole at Google Code repository 
 * Preparing migration to Maven
