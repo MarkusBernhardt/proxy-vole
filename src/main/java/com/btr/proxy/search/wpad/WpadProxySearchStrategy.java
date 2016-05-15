@@ -9,9 +9,9 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
-import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.Logger.LogLevel;
+import com.github.markusbernhardt.autoproxy.ProxySearchStrategy;
 import com.btr.proxy.util.ProxyException;
 import com.btr.proxy.util.ProxyUtil;
 

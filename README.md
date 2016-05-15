@@ -58,7 +58,7 @@ When a cached URL is accessed the Javascript execution will be skipped and the c
 // configured with the default proxy search strategies for the current environment.
 ProxySearch proxySearch = ProxySearch.getDefaultProxySearch();
 
-// Cache 32 URLs for up to 5 minutes.
+// Cache 20 URLs for up to 10 minutes. This is the default.
 proxySearch.setPacCacheSettings(32, 1000*60*5); 
 ```
 
@@ -77,6 +77,23 @@ Authenticator.setDefault(new Authenticator() {
         }
     }               
 });
+```
+
+###Logging
+
+Autoproxy does not use Log4J, LogBack or SLF4J to make the library as light weight as possible with no external dependencies.
+If you need to know what is going on inside of the library you may want to install a logger.
+```Java
+// Register MyLogger instance 
+Logger.setBackend(new MyLogger());
+```
+
+###Testing PAC
+Testing the PAC parser can be problematic, because the myIPAddress() method returns different results on different machines.
+Therefore the system property com.github.markusbernhardt.autoproxy.pac.overrideLocalIP can be set for unit tests.
+It's value will always be used as myIPAddress in all PAC scripts.
+```Java
+System.setProperty(PacScriptMethods.OVERRIDE_LOCAL_IP, "123.123.123.123");
 ```
 
 ##Motivation

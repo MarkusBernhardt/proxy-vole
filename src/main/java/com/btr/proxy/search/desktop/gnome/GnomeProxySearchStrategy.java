@@ -15,7 +15,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.selector.direct.NoProxySelector;
 import com.btr.proxy.selector.fixed.FixedProxySelector;
 import com.btr.proxy.selector.misc.ProtocolDispatchSelector;
@@ -26,6 +25,7 @@ import com.btr.proxy.util.PlatformUtil;
 import com.btr.proxy.util.ProxyException;
 import com.btr.proxy.util.ProxyUtil;
 import com.btr.proxy.util.Logger.LogLevel;
+import com.github.markusbernhardt.autoproxy.ProxySearchStrategy;
 
 /*****************************************************************************
  * Loads the Gnome proxy settings from the Gnome GConf settings.

@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 
-import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.search.browser.ie.IELocalByPassFilter;
 import com.btr.proxy.search.wpad.WpadProxySearchStrategy;
 import com.btr.proxy.selector.direct.NoProxySelector;
@@ -23,6 +22,7 @@ import com.btr.proxy.util.Logger.LogLevel;
 import com.btr.proxy.util.PListParser;
 import com.btr.proxy.util.PListParser.Dict;
 import com.btr.proxy.util.PListParser.XmlParseException;
+import com.github.markusbernhardt.autoproxy.ProxySearchStrategy;
 import com.btr.proxy.util.ProxyException;
 import com.btr.proxy.util.ProxyUtil;
 import com.btr.proxy.util.UriFilter;

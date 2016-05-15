@@ -1,4 +1,4 @@
-package com.btr.proxy.search;
+package com.github.markusbernhardt.autoproxy;
 
 import java.net.ProxySelector;
 

@@ -2,9 +2,9 @@ package com.btr.proxy.search.desktop.win;
 
 import java.net.ProxySelector;
 
-import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.search.browser.ie.IEProxySearchStrategy;
 import com.btr.proxy.util.ProxyException;
+import com.github.markusbernhardt.autoproxy.ProxySearchStrategy;
 
 /*****************************************************************************
  * Extracts the proxy settings from the windows registry. This will read the
@@ -26,7 +26,7 @@ public class WinProxySearchStrategy implements ProxySearchStrategy {
     /*************************************************************************
      * getProxySelector
      * 
-     * @see com.btr.proxy.search.ProxySearchStrategy#getProxySelector()
+     * @see com.github.markusbernhardt.autoproxy.ProxySearchStrategy#getProxySelector()
      ************************************************************************/
 
     public ProxySelector getProxySelector() throws ProxyException {

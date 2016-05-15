@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ProxySelector;
 import java.util.Properties;
 
-import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.selector.direct.NoProxySelector;
 import com.btr.proxy.selector.fixed.FixedProxySelector;
 import com.btr.proxy.selector.misc.ProtocolDispatchSelector;
@@ -13,6 +12,8 @@ import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.ProxyException;
 import com.btr.proxy.util.ProxyUtil;
 import com.btr.proxy.util.Logger.LogLevel;
+import com.github.markusbernhardt.autoproxy.ProxySearchStrategy;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 

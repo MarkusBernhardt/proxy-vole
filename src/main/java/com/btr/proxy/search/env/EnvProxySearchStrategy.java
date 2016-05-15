@@ -3,12 +3,12 @@ package com.btr.proxy.search.env;
 import java.net.ProxySelector;
 import java.util.Properties;
 
-import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.selector.misc.ProtocolDispatchSelector;
 import com.btr.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.ProxyUtil;
 import com.btr.proxy.util.Logger.LogLevel;
+import com.github.markusbernhardt.autoproxy.ProxySearchStrategy;
 
 /*****************************************************************************
  * Reads some environment variables and extracts the proxy settings from them.

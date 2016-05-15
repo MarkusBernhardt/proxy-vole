@@ -2,7 +2,6 @@ package com.btr.proxy.search.desktop;
 
 import java.net.ProxySelector;
 
-import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.search.desktop.gnome.GnomeProxySearchStrategy;
 import com.btr.proxy.search.desktop.kde.KdeProxySearchStrategy;
 import com.btr.proxy.search.desktop.osx.OsxProxySearchStrategy;
@@ -13,6 +12,7 @@ import com.btr.proxy.util.ProxyException;
 import com.btr.proxy.util.Logger.LogLevel;
 import com.btr.proxy.util.PlatformUtil.Desktop;
 import com.btr.proxy.util.PlatformUtil.Platform;
+import com.github.markusbernhardt.autoproxy.ProxySearchStrategy;
 
 /*****************************************************************************
  * This search provider will try to find out on which desktop platform we are

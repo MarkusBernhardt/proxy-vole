@@ -2,13 +2,13 @@ package com.btr.proxy.search.java;
 
 import java.net.ProxySelector;
 
-import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.selector.fixed.FixedProxySelector;
 import com.btr.proxy.selector.fixed.FixedSocksSelector;
 import com.btr.proxy.selector.misc.ProtocolDispatchSelector;
 import com.btr.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.Logger.LogLevel;
+import com.github.markusbernhardt.autoproxy.ProxySearchStrategy;
 
 /*****************************************************************************
  * Reads some java system properties and extracts the proxy settings from them.

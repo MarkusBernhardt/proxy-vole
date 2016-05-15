@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ProxySelector;
 import java.util.Properties;
 
-import com.btr.proxy.search.ProxySearchStrategy;
 import com.btr.proxy.search.env.EnvProxySearchStrategy;
 import com.btr.proxy.search.wpad.WpadProxySearchStrategy;
 import com.btr.proxy.selector.direct.NoProxySelector;
@@ -16,6 +15,7 @@ import com.btr.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.btr.proxy.selector.whitelist.UseProxyWhiteListSelector;
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.Logger.LogLevel;
+import com.github.markusbernhardt.autoproxy.ProxySearchStrategy;
 import com.btr.proxy.util.ProxyException;
 import com.btr.proxy.util.ProxyUtil;
 

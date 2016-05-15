@@ -20,10 +20,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import com.btr.proxy.search.ProxySearch;
-import com.btr.proxy.search.ProxySearch.Strategy;
+
 import com.btr.proxy.util.Logger;
 import com.btr.proxy.util.Logger.LogLevel;
+import com.github.markusbernhardt.autoproxy.ProxySearch;
+import com.github.markusbernhardt.autoproxy.ProxySearch.Strategy;
 
 /*****************************************************************************
  * Small test application that allows you to select a proxy search strategy and
