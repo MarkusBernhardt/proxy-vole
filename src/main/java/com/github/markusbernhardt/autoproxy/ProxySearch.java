@@ -6,23 +6,23 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.btr.proxy.search.browser.firefox.FirefoxProxySearchStrategy;
-import com.btr.proxy.search.browser.ie.IEProxySearchStrategy;
-import com.btr.proxy.search.desktop.DesktopProxySearchStrategy;
-import com.btr.proxy.search.desktop.gnome.GnomeDConfProxySearchStrategy;
-import com.btr.proxy.search.desktop.gnome.GnomeProxySearchStrategy;
-import com.btr.proxy.search.desktop.kde.KdeProxySearchStrategy;
-import com.btr.proxy.search.desktop.win.WinProxySearchStrategy;
-import com.btr.proxy.search.env.EnvProxySearchStrategy;
-import com.btr.proxy.search.java.JavaProxySearchStrategy;
-import com.btr.proxy.selector.misc.BufferedProxySelector;
-import com.btr.proxy.selector.misc.ProxyListFallbackSelector;
-import com.btr.proxy.selector.pac.PacProxySelector;
-import com.btr.proxy.util.Logger;
-import com.btr.proxy.util.Logger.LogBackEnd;
-import com.btr.proxy.util.Logger.LogLevel;
-import com.btr.proxy.util.PlatformUtil;
-import com.btr.proxy.util.ProxyException;
+import com.github.markusbernhardt.autoproxy.search.browser.firefox.FirefoxProxySearchStrategy;
+import com.github.markusbernhardt.autoproxy.search.browser.ie.IEProxySearchStrategy;
+import com.github.markusbernhardt.autoproxy.search.desktop.DesktopProxySearchStrategy;
+import com.github.markusbernhardt.autoproxy.search.desktop.gnome.GnomeDConfProxySearchStrategy;
+import com.github.markusbernhardt.autoproxy.search.desktop.gnome.GnomeProxySearchStrategy;
+import com.github.markusbernhardt.autoproxy.search.desktop.kde.KdeProxySearchStrategy;
+import com.github.markusbernhardt.autoproxy.search.desktop.win.WinProxySearchStrategy;
+import com.github.markusbernhardt.autoproxy.search.env.EnvProxySearchStrategy;
+import com.github.markusbernhardt.autoproxy.search.java.JavaProxySearchStrategy;
+import com.github.markusbernhardt.autoproxy.selector.misc.BufferedProxySelector;
+import com.github.markusbernhardt.autoproxy.selector.misc.ProxyListFallbackSelector;
+import com.github.markusbernhardt.autoproxy.selector.pac.PacProxySelector;
+import com.github.markusbernhardt.autoproxy.util.Logger;
+import com.github.markusbernhardt.autoproxy.util.PlatformUtil;
+import com.github.markusbernhardt.autoproxy.util.ProxyException;
+import com.github.markusbernhardt.autoproxy.util.Logger.LogBackEnd;
+import com.github.markusbernhardt.autoproxy.util.Logger.LogLevel;
 
 /*****************************************************************************
  * Main class to setup and initialize the proxy detection system.<br/>

@@ -2,7 +2,7 @@ package com.github.markusbernhardt.autoproxy;
 
 import java.net.ProxySelector;
 
-import com.btr.proxy.util.ProxyException;
+import com.github.markusbernhardt.autoproxy.util.ProxyException;
 
 /*****************************************************************************
  * Interface for a proxy search strategy.

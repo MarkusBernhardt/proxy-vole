@@ -3,7 +3,9 @@ This file contains the change log. The changes are marked with the following sym
 
 ##Unreleased
 * Fork on github
-* Made it deployable to Maven Central for me (Maven coordinates, package names) 
+* Made it deployable to Maven Central for me (Maven coordinates, package names)
+* Added OsxFirefoxProfileSource
+* Removed the Rhino Javascript parser needed for Java 5 
 
 ##Last version off proxy-vole at Google Code repository 
 * Preparing migration to Maven
