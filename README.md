@@ -33,7 +33,7 @@ ProxySelector.setDefault(proxySelector);
 
 ###Modifying the search strategy
 ```Java
-// Create a not configured proxy search instance and configure cusomized proxy search strategies.
+// Create a not configured proxy search instance and configure customized proxy search strategies.
 ProxySearch proxySearch = new ProxySearch();
 if (PlatformUtil.getCurrentPlattform() == Platform.WIN) {
     proxySearch.addStrategy(Strategy.IE);
@@ -46,9 +46,6 @@ if (PlatformUtil.getCurrentPlattform() == Platform.WIN) {
 } else {
     proxySearch.addStrategy(Strategy.OS_DEFAULT);
 }
-
-ProxySelector proxySelector = proxySearch.getProxySelector();
-ProxySelector.setDefault(proxySelector);
 ```
 
 ###Improving PAC performance
@@ -57,13 +54,29 @@ If your program needs to access a lot of HTTP URLs, then this might become a per
 To speed things up a little bit, you can activate a cache that will store already processed URLs.
 When a cached URL is accessed the Javascript execution will be skipped and the cached proxy is used.
 ```Java
+// Use the static factory method getDefaultProxySearch to create a proxy search instance 
+// configured with the default proxy search strategies for the current environment.
 ProxySearch proxySearch = ProxySearch.getDefaultProxySearch();
 
 // Cache 32 URLs for up to 5 minutes.
 proxySearch.setPacCacheSettings(32, 1000*60*5); 
+```
 
-ProxySelector proxySelector = proxySearch.getProxySelector();
-ProxySelector.setDefault(proxySelector);
+###How to handle proxy authentication
+Some proxy servers request a login from the user before they will allow any connections. Autoproxy 
+has no support to handle this automatically. This needs to be done manually, because there is no way to read 
+the login and password. These settings are stored encrypted. You need to install an authenticator in your Java
+program manually and e.g. ask the user in a dialog to enter the username and password.
+```Java
+Authenticator.setDefault(new Authenticator() {
+    protected PasswordAuthentication getPasswordAuthentication() {
+        if (getRequestorType() == RequestorType.PROXY) {
+            return new PasswordAuthentication("proxy-user", "proxy-password".toCharArray());
+        } else { 
+            return super.getPasswordAuthentication();
+        }
+    }               
+});
 ```
 
 ##Motivation
