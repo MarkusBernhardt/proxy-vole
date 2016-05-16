@@ -50,7 +50,7 @@ class FirefoxSettingParser {
         if (profilesIniFile.exists()) {
             Ini profilesIni = new Ini(profilesIniFile);
             for (Entry<String, Section> entry : profilesIni.entrySet()) {
-                if ("1".equals(entry.getValue().get("Default"))) {
+                if ("default".equals(entry.getValue().get("Name"))) {
                     if ("1".equals(entry.getValue().get("IsRelative"))) {
                         profileFolder = new File(profilesIniFile.getParentFile().getAbsolutePath(),
                                 entry.getValue().get("Path"));
