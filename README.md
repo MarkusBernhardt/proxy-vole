@@ -1,6 +1,6 @@
-#autoproxy WIP alpha
+#proxy-vole WIP alpha
 
-Autoproxy is a Java library to auto detect the platform network proxy settings.  
+Proxy Vole is a Java library to auto detect the platform network proxy settings.  
 **Note this library is a fork of [proxy-vole](https://code.google.com/p/proxy-vole/) by Bernd Rosstauscher hosted at Google Code.**
 
 ##Introduction
@@ -14,7 +14,6 @@ The library provides some proxy setting search strategies to read the proxy sett
 * proxy-vole is not available on any public Maven repository. Need to change the Maven coordinates and Java package names 
   to be able to push it to Maven Central on my own.
 * I don't like the Windows DLL and usage of JNI. Will replace both by JNA. Hopefully ...
-* I don't like the name ;-)
 
 ##Usage
 
@@ -63,7 +62,7 @@ proxySearch.setPacCacheSettings(32, 1000*60*5);
 ```
 
 ###How to handle proxy authentication
-Some proxy servers request a login from the user before they will allow any connections. Autoproxy 
+Some proxy servers request a login from the user before they will allow any connections. Proxy Vole 
 has no support to handle this automatically. This needs to be done manually, because there is no way to read 
 the login and password. These settings are stored encrypted. You need to install an authenticator in your Java
 program manually and e.g. ask the user in a dialog to enter the username and password.
@@ -81,7 +80,7 @@ Authenticator.setDefault(new Authenticator() {
 
 ###Logging
 
-Autoproxy does not use Log4J, LogBack or SLF4J to make the library as light weight as possible with no external dependencies.
+Proxy Vole does not use Log4J, LogBack or SLF4J to make the library as light weight as possible with no external dependencies.
 If you need to know what is going on inside of the library you may want to install a logger.
 ```Java
 // Register MyLogger instance 
@@ -90,7 +89,7 @@ Logger.setBackend(new MyLogger());
 
 ###Testing PAC
 Testing the PAC parser can be problematic, because the myIPAddress() method returns different results on different machines.
-Therefore the system property com.github.markusbernhardt.autoproxy.pac.overrideLocalIP can be set for unit tests.
+Therefore the system property com.github.markusbernhardt.proxy.pac.overrideLocalIP can be set for unit tests.
 It's value will always be used as myIPAddress in all PAC scripts.
 ```Java
 System.setProperty(PacScriptMethods.OVERRIDE_LOCAL_IP, "123.123.123.123");
@@ -111,8 +110,8 @@ At runtime you can use the `ProxySelector` API to configure the proxy settings. 
 detect the system proxy settings automatically, but this one is poorly documented and unreliable in its behaviour.
 
 ##The Solution
-Use the autoproxy library to provide network connectivity out of the box for your Java application. It provides strategies 
-for auto detecting the current proxy settings. There are many configurable strategies to choose from. At the moment autoproxy 
+Use the Proxy Vole library to provide network connectivity out of the box for your Java application. It provides strategies 
+for auto detecting the current proxy settings. There are many configurable strategies to choose from. At the moment Proxy Vole 
 supports the following proxy detection strategies.
 
 * Read platform settings (Supports: Windows, KDE, Gnome, OSX)
