@@ -100,6 +100,7 @@ public class EnvProxySearchStrategy implements ProxySearchStrategy {
      * @return a configured ProxySelector, null if none is found.
      ************************************************************************/
 
+    @Override
     public ProxySelector getProxySelector() {
 
         Logger.log(getClass(), LogLevel.TRACE, "Inspecting environment variables.");
@@ -132,6 +133,17 @@ public class EnvProxySearchStrategy implements ProxySearchStrategy {
         }
 
         return result;
+    }
+
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     *  
+     * @return
+     ************************************************************************/
+
+    @Override
+    public String getName() {
+        return "env";
     }
 
 }

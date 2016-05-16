@@ -58,6 +58,7 @@ public class JavaProxySearchStrategy implements ProxySearchStrategy {
      * @return a configured ProxySelector, null if none is found.
      ************************************************************************/
 
+    @Override
     public ProxySelector getProxySelector() {
         ProtocolDispatchSelector ps = new ProtocolDispatchSelector();
 
@@ -73,6 +74,17 @@ public class JavaProxySearchStrategy implements ProxySearchStrategy {
         setupSocktProxy(ps);
 
         return ps;
+    }
+
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     *  
+     * @return
+     ************************************************************************/
+
+    @Override
+    public String getName() {
+        return "java";
     }
 
     /*************************************************************************

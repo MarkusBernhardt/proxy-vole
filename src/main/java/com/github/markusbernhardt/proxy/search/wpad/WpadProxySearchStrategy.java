@@ -54,6 +54,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
      *             on error.
      ************************************************************************/
 
+    @Override
     public ProxySelector getProxySelector() throws ProxyException {
         try {
             Logger.log(getClass(), LogLevel.TRACE, "Using WPAD to find a proxy");
@@ -71,6 +72,17 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
             Logger.log(getClass(), LogLevel.ERROR, "Error during WPAD search.", e);
             throw new ProxyException(e);
         }
+    }
+
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     *  
+     * @return
+     ************************************************************************/
+
+    @Override
+    public String getName() {
+        return "wpad";
     }
 
     /*************************************************************************

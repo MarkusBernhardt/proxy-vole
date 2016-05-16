@@ -13,11 +13,11 @@ import com.github.markusbernhardt.proxy.selector.fixed.FixedSocksSelector;
 import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.github.markusbernhardt.proxy.util.Logger;
+import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.PlatformUtil;
+import com.github.markusbernhardt.proxy.util.PlatformUtil.Platform;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 import com.github.markusbernhardt.proxy.util.ProxyUtil;
-import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
-import com.github.markusbernhardt.proxy.util.PlatformUtil.Platform;
 
 /*****************************************************************************
  * Loads the Firefox3 proxy settings from the users Firefox3 settings. This will
@@ -97,6 +97,7 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
      *             on file reading error.
      ************************************************************************/
 
+    @Override
     public ProxySelector getProxySelector() throws ProxyException {
         Logger.log(getClass(), LogLevel.TRACE, "Detecting Firefox settings.");
 
@@ -142,6 +143,17 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
         }
 
         return result;
+    }
+
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     * 
+     * @return
+     ************************************************************************/
+
+    @Override
+    public String getName() {
+        return "firefox";
     }
 
     /*************************************************************************

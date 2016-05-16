@@ -9,16 +9,15 @@ import java.util.Properties;
 
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.desktop.win.Win32IESettings;
-import com.github.markusbernhardt.proxy.search.desktop.win.Win32ProxyUtils;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
 import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
 import com.github.markusbernhardt.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.github.markusbernhardt.proxy.util.Logger;
+import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 import com.github.markusbernhardt.proxy.util.ProxyUtil;
 import com.github.markusbernhardt.proxy.util.UriFilter;
-import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
 /*****************************************************************************
  * Extracts the proxy settings for Microsoft Internet Explorer. The settings are
@@ -35,6 +34,7 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
      * @see com.github.markusbernhardt.proxy.ProxySearchStrategy#getProxySelector()
      ************************************************************************/
 
+    @Override
     public ProxySelector getProxySelector() throws ProxyException {
 
         Logger.log(getClass(), LogLevel.TRACE, "Detecting IE proxy settings");
@@ -46,6 +46,17 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
             result = createFixedProxySelector(ieSettings);
         }
         return result;
+    }
+
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     * 
+     * @return
+     ************************************************************************/
+
+    @Override
+    public String getName() {
+        return "ie";
     }
 
     /*************************************************************************

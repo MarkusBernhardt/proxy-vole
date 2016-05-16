@@ -19,10 +19,10 @@ import com.github.markusbernhardt.proxy.selector.misc.BufferedProxySelector;
 import com.github.markusbernhardt.proxy.selector.misc.ProxyListFallbackSelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
 import com.github.markusbernhardt.proxy.util.Logger;
-import com.github.markusbernhardt.proxy.util.PlatformUtil;
-import com.github.markusbernhardt.proxy.util.ProxyException;
 import com.github.markusbernhardt.proxy.util.Logger.LogBackEnd;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
+import com.github.markusbernhardt.proxy.util.PlatformUtil;
+import com.github.markusbernhardt.proxy.util.ProxyException;
 
 /*****************************************************************************
  * Main class to setup and initialize the proxy detection system.<br/>
@@ -199,6 +199,7 @@ public class ProxySearch implements ProxySearchStrategy {
      *         configuration.
      ************************************************************************/
 
+    @Override
     public ProxySelector getProxySelector() {
         Logger.log(getClass(), LogLevel.TRACE, "Executing search strategies to find proxy selector");
         for (ProxySearchStrategy strat : this.strategies) {
@@ -206,7 +207,12 @@ public class ProxySearch implements ProxySearchStrategy {
                 ProxySelector selector = strat.getProxySelector();
                 if (selector != null) {
                     selector = installBufferingAndFallbackBehaviour(selector);
+                    Logger.log(getClass(), LogLevel.INFO, "Proxy found for " + strat.getName());
+
                     return selector;
+                } else {
+                    Logger.log(getClass(), LogLevel.INFO,
+                            "No proxy found for " + strat.getName() + ". Trying next one.");
                 }
             } catch (ProxyException e) {
                 Logger.log(getClass(), LogLevel.DEBUG, "Strategy {0} failed trying next one.", e);
@@ -215,6 +221,17 @@ public class ProxySearch implements ProxySearchStrategy {
         }
 
         return null;
+    }
+
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     * 
+     * @return
+     ************************************************************************/
+
+    @Override
+    public String getName() {
+        return "default";
     }
 
     /*************************************************************************

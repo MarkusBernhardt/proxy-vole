@@ -31,9 +31,21 @@ public class DesktopProxySearchStrategy implements ProxySearchStrategy {
      *             on error.
      ************************************************************************/
 
+    @Override
     public ProxySelector getProxySelector() throws ProxyException {
         ProxySearchStrategy strategy = findDesktopSpecificStrategy();
         return strategy == null ? null : strategy.getProxySelector();
+    }
+
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     *  
+     * @return
+     ************************************************************************/
+
+    @Override
+    public String getName() {
+        return "desktop";
     }
 
     /*************************************************************************

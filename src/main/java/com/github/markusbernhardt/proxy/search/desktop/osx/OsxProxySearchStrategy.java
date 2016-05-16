@@ -19,13 +19,13 @@ import com.github.markusbernhardt.proxy.selector.fixed.FixedSocksSelector;
 import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.github.markusbernhardt.proxy.util.Logger;
+import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.PListParser;
+import com.github.markusbernhardt.proxy.util.PListParser.Dict;
+import com.github.markusbernhardt.proxy.util.PListParser.XmlParseException;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 import com.github.markusbernhardt.proxy.util.ProxyUtil;
 import com.github.markusbernhardt.proxy.util.UriFilter;
-import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
-import com.github.markusbernhardt.proxy.util.PListParser.Dict;
-import com.github.markusbernhardt.proxy.util.PListParser.XmlParseException;
 
 /*****************************************************************************
  * Loads the OSX system proxy settings from the settings file.
@@ -80,6 +80,7 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
      *             on file reading error.
      ************************************************************************/
 
+    @Override
     public ProxySelector getProxySelector() throws ProxyException {
 
         Logger.log(getClass(), LogLevel.TRACE, "Detecting OSX proxy settings");
@@ -128,6 +129,17 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
         } catch (IOException e) {
             throw new ProxyException(e);
         }
+    }
+
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     * 
+     * @return
+     ************************************************************************/
+
+    @Override
+    public String getName() {
+        return "osx";
     }
 
     /*************************************************************************

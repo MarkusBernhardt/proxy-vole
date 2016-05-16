@@ -29,6 +29,7 @@ public class WinProxySearchStrategy implements ProxySearchStrategy {
      * @see com.github.markusbernhardt.proxy.ProxySearchStrategy#getProxySelector()
      ************************************************************************/
 
+    @Override
     public ProxySelector getProxySelector() throws ProxyException {
         // TODO Rossi 08.05.2009 Implement this by using Win API calls.
         // new Win32ProxyUtils().winHttpGetDefaultProxyConfiguration()
@@ -36,6 +37,17 @@ public class WinProxySearchStrategy implements ProxySearchStrategy {
         // because the registry settings are most of the time not set.
         // Some Windows server installations may use it though.
         return new IEProxySearchStrategy().getProxySelector();
+    }
+
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     *  
+     * @return
+     ************************************************************************/
+
+    @Override
+    public String getName() {
+        return "windows";
     }
 
     /*************************************************************************

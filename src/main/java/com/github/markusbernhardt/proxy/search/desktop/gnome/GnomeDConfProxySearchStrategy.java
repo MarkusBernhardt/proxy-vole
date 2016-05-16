@@ -84,6 +84,7 @@ public class GnomeDConfProxySearchStrategy implements ProxySearchStrategy {
      *             on file reading error.
      ************************************************************************/
 
+    @Override
     public ProxySelector getProxySelector() throws ProxyException {
 
         Logger.log(getClass(), LogLevel.TRACE, "Detecting Gnome proxy settings");
@@ -123,6 +124,17 @@ public class GnomeDConfProxySearchStrategy implements ProxySearchStrategy {
         }
 
         return result;
+    }
+
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     *  
+     * @return
+     ************************************************************************/
+
+    @Override
+    public String getName() {
+        return "gnome";
     }
 
     /*************************************************************************

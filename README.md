@@ -1,7 +1,7 @@
 #proxy-vole WIP alpha
 
 Proxy Vole is a Java library to auto detect the platform network proxy settings.  
-**Note this library is a fork of [proxy-vole](https://code.google.com/p/proxy-vole/) by Bernd Rosstauscher hosted at Google Code.**
+**Note: This library is a fork of [proxy-vole](https://code.google.com/p/proxy-vole/) by Bernd Rosstauscher hosted at Google Code.**
 
 ##Introduction
 The library provides some proxy setting search strategies to read the proxy settings from the system config 

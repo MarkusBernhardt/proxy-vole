@@ -20,4 +20,11 @@ public interface ProxySearchStrategy {
 
     public ProxySelector getProxySelector() throws ProxyException;
 
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     *  
+     * @return
+     ************************************************************************/
+    
+    public String getName();
 }
