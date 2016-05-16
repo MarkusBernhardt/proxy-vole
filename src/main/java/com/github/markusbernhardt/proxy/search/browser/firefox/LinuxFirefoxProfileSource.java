@@ -19,6 +19,7 @@ class LinuxFirefoxProfileSource implements FirefoxProfileSource {
      * Get profiles.ini for the Linux Firefox profile
      ************************************************************************/
 
+    @Override
     public File getProfilesIni() {
         File userDir = new File(PlatformUtil.getUserHomeDir());
         return new File(userDir, ".mozilla" + File.separator + "firefox" + File.separator + "profiles.ini");

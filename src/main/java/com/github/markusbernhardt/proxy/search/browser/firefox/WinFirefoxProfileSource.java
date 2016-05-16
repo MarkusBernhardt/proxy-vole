@@ -3,9 +3,8 @@ package com.github.markusbernhardt.proxy.search.browser.firefox;
 import java.io.File;
 import java.io.IOException;
 
-import com.github.markusbernhardt.proxy.search.desktop.win.Win32ProxyUtils;
-import com.github.markusbernhardt.proxy.util.Logger;
-import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
+import com.sun.jna.platform.win32.Shell32Util;
+import com.sun.jna.platform.win32.ShlObj;
 
 /*****************************************************************************
  * Finds the Firefox profile on Windows platforms. On Windows the profiles are
@@ -37,7 +36,7 @@ class WinFirefoxProfileSource implements FirefoxProfileSource {
      ************************************************************************/
 
     private String getAppFolder() {
-        return new Win32ProxyUtils().readUserHomedir();
+        return Shell32Util.getFolderPath(ShlObj.CSIDL_APPDATA);
     }
 
     /*************************************************************************
@@ -47,10 +46,10 @@ class WinFirefoxProfileSource implements FirefoxProfileSource {
      *             on error.
      ************************************************************************/
 
+    @Override
     public File getProfilesIni() throws IOException {
-
         File appDataDir = new File(getAppFolder());
-        File cfgDir = new File(appDataDir, "Mozilla" + File.separator + "Firefox" + File.separator + "profiles.ini");
+        return new File(appDataDir, "Mozilla" + File.separator + "Firefox" + File.separator + "profiles.ini");
     }
 
 }
