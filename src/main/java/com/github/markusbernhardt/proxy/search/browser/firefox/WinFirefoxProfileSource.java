@@ -41,36 +41,16 @@ class WinFirefoxProfileSource implements FirefoxProfileSource {
     }
 
     /*************************************************************************
-     * Get profile folder for the Windows Firefox profile
+     * Get profiles.ini for the Windows Firefox profile
      * 
      * @throws IOException
      *             on error.
      ************************************************************************/
 
-    public File getProfileFolder() throws IOException {
+    public File getProfilesIni() throws IOException {
 
         File appDataDir = new File(getAppFolder());
-        File cfgDir = new File(appDataDir, "Mozilla" + File.separator + "Firefox" + File.separator + "Profiles");
-
-        if (!cfgDir.exists()) {
-            Logger.log(getClass(), LogLevel.DEBUG, "Firefox windows settings folder not found.");
-            return null;
-        }
-        File[] profiles = cfgDir.listFiles();
-        if (profiles == null || profiles.length == 0) {
-            Logger.log(getClass(), LogLevel.DEBUG, "Firefox windows settings folder not found.");
-            return null;
-        }
-        for (File p : profiles) {
-            if (p.getName().endsWith(".default")) {
-                Logger.log(getClass(), LogLevel.TRACE, "Firefox windows settings folder is {0}.", p);
-                return p;
-            }
-        }
-
-        // Fall back -> take the first one found.
-        Logger.log(getClass(), LogLevel.TRACE, "Firefox windows settings folder is {0}.", profiles[0]);
-        return profiles[0];
+        File cfgDir = new File(appDataDir, "Mozilla" + File.separator + "Firefox" + File.separator + "profiles.ini");
     }
 
 }

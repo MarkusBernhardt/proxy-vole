@@ -12,14 +12,13 @@ import java.io.IOException;
 interface FirefoxProfileSource {
 
     /*************************************************************************
-     * Gets a profile folder found on the current system. If multiple profile
-     * folders are available the "default" profile is chosen.
+     * Gets the profiles.ini file found on the current system.
      * 
-     * @return a profile folder.
+     * @return the config folder.
      * @throws IOException
      *             on error.
      ************************************************************************/
 
-    public File getProfileFolder() throws IOException;
+    public File getProfilesIni() throws IOException;
 
 }

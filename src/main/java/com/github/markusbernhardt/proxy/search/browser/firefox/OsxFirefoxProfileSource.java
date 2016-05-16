@@ -2,9 +2,7 @@ package com.github.markusbernhardt.proxy.search.browser.firefox;
 
 import java.io.File;
 
-import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.PlatformUtil;
-import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
 /*****************************************************************************
  * Searches for Firefox profile on an OSX system. This will scan the
@@ -20,32 +18,13 @@ import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 class OsxFirefoxProfileSource implements FirefoxProfileSource {
 
     /*************************************************************************
-     * Get profile folder for the Linux Firefox profile
+     * Get profiles.ini for the Linux Firefox profile
      ************************************************************************/
 
-    public File getProfileFolder() {
+    public File getProfilesIni() {
         File userDir = new File(PlatformUtil.getUserHomeDir());
-        File cfgDir = new File(userDir, "Library" + File.separator + "Application Support" + File.separator + "Firefox"
-                + File.separator + "Firefox" + File.separator);
-        if (!cfgDir.exists()) {
-            Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder not found!");
-            return null;
-        }
-        File[] profiles = cfgDir.listFiles();
-        if (profiles == null || profiles.length == 0) {
-            Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder not found!");
-            return null;
-        }
-        for (File p : profiles) {
-            if (p.getName().endsWith(".default")) {
-                Logger.log(getClass(), LogLevel.TRACE, "Firefox settings folder is {0}", p);
-                return p;
-            }
-        }
-
-        // Fall back -> take the first one found.
-        Logger.log(getClass(), LogLevel.TRACE, "Firefox settings folder is {0}", profiles[0]);
-        return profiles[0];
+        return new File(userDir, "Library" + File.separator + "Application Support" + File.separator + "Firefox"
+                + File.separator + "profiles.ini");
     }
 
 }

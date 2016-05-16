@@ -5,7 +5,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map.Entry;
 import java.util.Properties;
+
+import org.ini4j.Ini;
+import org.ini4j.Profile.Section;
+
+import com.github.markusbernhardt.proxy.util.Logger;
+import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
 /*****************************************************************************
  * Parser for the Firefox settings file. Will extract all relevant proxy
@@ -36,7 +43,27 @@ class FirefoxSettingParser {
 
     public Properties parseSettings(FirefoxProfileSource source) throws IOException {
         // Search settings folder
-        File profileFolder = source.getProfileFolder();
+        File profileFolder = null;
+
+        // Read profiles.ini
+        File profilesIniFile = source.getProfilesIni();
+        if (profilesIniFile.exists()) {
+            Ini profilesIni = new Ini(profilesIniFile);
+            for (Entry<String, Section> entry : profilesIni.entrySet()) {
+                if ("1".equals(entry.getValue().get("Default"))) {
+                    if ("1".equals(entry.getValue().get("IsRelative"))) {
+                        profileFolder = new File(profilesIniFile.getParentFile().getAbsolutePath(),
+                                entry.getValue().get("Path"));
+                    }
+                }
+            }
+        }
+        if (profileFolder != null) {
+            Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder is {0}", profileFolder);
+        }
+        else {
+            Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder not found!");
+        }
 
         // Read settings from file
         File settingsFile = new File(profileFolder, "prefs.js");
