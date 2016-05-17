@@ -97,6 +97,6 @@ public interface WinHttp extends StdCallLibrary {
      *            connection (for example, LAN, dial-up, or VPN connection).
      * @return {@code true} if successful; otherwise, {@code false}.
      */
-    boolean WinHttpGetIEProxyConfigForCurrentUser(WinHttpCurrentUserIeProxyConfig pProxyConfig);
+    boolean WinHttpGetIEProxyConfigForCurrentUser(WinHttpCurrentUserIEProxyConfig pProxyConfig);
 
 }

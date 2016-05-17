@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Properties;
 
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
-import com.github.markusbernhardt.proxy.search.desktop.win.Win32IESettings;
+import com.github.markusbernhardt.proxy.jna.win.WinHttp;
+import com.github.markusbernhardt.proxy.jna.win.WinHttpCurrentUserIEProxyConfig;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
 import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
@@ -18,6 +19,8 @@ import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 import com.github.markusbernhardt.proxy.util.ProxyUtil;
 import com.github.markusbernhardt.proxy.util.UriFilter;
+import com.sun.jna.platform.win32.WTypes.LPWSTR;
+import com.sun.jna.platform.win32.WinDef.DWORD;
 
 /*****************************************************************************
  * Extracts the proxy settings for Microsoft Internet Explorer. The settings are
@@ -39,11 +42,11 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 
         Logger.log(getClass(), LogLevel.TRACE, "Detecting IE proxy settings");
 
-        Win32IESettings ieSettings = readSettings();
+        IEProxyConfig ieProxyConfig = readIEProxyConfig();
 
-        ProxySelector result = createPacSelector(ieSettings);
+        ProxySelector result = createPacSelector(ieProxyConfig);
         if (result == null) {
-            result = createFixedProxySelector(ieSettings);
+            result = createFixedProxySelector(ieProxyConfig);
         }
         return result;
     }
@@ -56,7 +59,7 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 
     @Override
     public String getName() {
-        return "ie";
+        return "IE";
     }
 
     /*************************************************************************
@@ -65,9 +68,21 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
      * @return WinIESettings containing all proxy settings.
      ************************************************************************/
 
-    public Win32IESettings readSettings() {
-        Win32IESettings ieSettings = new Win32ProxyUtils().winHttpGetIEProxyConfigForCurrentUser();
-        return ieSettings;
+    public IEProxyConfig readIEProxyConfig() {
+
+        // Retrieve the IE proxy configuration.
+        WinHttpCurrentUserIEProxyConfig winHttpCurrentUserIeProxyConfig = new WinHttpCurrentUserIEProxyConfig();
+        boolean result = WinHttp.INSTANCE.WinHttpGetIEProxyConfigForCurrentUser(winHttpCurrentUserIeProxyConfig);
+        if (!result) {
+            return null;
+        }
+
+        // Create IEProxyConfig instance
+        return new IEProxyConfig(winHttpCurrentUserIeProxyConfig.fAutoDetect,
+                winHttpCurrentUserIeProxyConfig.lpszAutoConfigUrl.getValue(),
+                winHttpCurrentUserIeProxyConfig.lpszProxy.getValue(),
+                winHttpCurrentUserIeProxyConfig.lpszProxyBypass.getValue());
+
     }
 
     /*************************************************************************
@@ -78,17 +93,22 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
      * @return a PacProxySelector the selector or null.
      ************************************************************************/
 
-    private PacProxySelector createPacSelector(Win32IESettings ieSettings) {
+    private PacProxySelector createPacSelector(IEProxyConfig ieProxyConfig) {
         String pacUrl = null;
 
-        if (ieSettings.isAutoDetect()) {
+        if (ieProxyConfig.isAutoDetect()) {
             Logger.log(getClass(), LogLevel.TRACE, "Autodetecting script URL.");
             // This will take some time.
-            pacUrl = new Win32ProxyUtils().winHttpDetectAutoProxyConfigUrl(
-                    Win32ProxyUtils.WINHTTP_AUTO_DETECT_TYPE_DHCP + Win32ProxyUtils.WINHTTP_AUTO_DETECT_TYPE_DNS_A);
+            DWORD dwAutoDetectFlags = new DWORD(
+                    WinHttp.WINHTTP_AUTO_DETECT_TYPE_DHCP | WinHttp.WINHTTP_AUTO_DETECT_TYPE_DNS_A);
+            LPWSTR ppwszAutoConfigUrl = new LPWSTR();
+            boolean result = WinHttp.INSTANCE.WinHttpDetectAutoProxyConfigUrl(dwAutoDetectFlags, ppwszAutoConfigUrl);
+            if (result) {
+                pacUrl = ppwszAutoConfigUrl.getValue();
+            }
         }
         if (pacUrl == null) {
-            pacUrl = ieSettings.getAutoConfigUrl();
+            pacUrl = ieProxyConfig.getAutoConfigUrl();
         }
         if (pacUrl != null && pacUrl.trim().length() > 0) {
             Logger.log(getClass(), LogLevel.TRACE, "IE uses script: " + pacUrl);
@@ -115,9 +135,9 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
      *             on error.
      ************************************************************************/
 
-    private ProxySelector createFixedProxySelector(Win32IESettings ieSettings) throws ProxyException {
-        String proxyString = ieSettings.getProxy();
-        String bypassList = ieSettings.getProxyBypass();
+    private ProxySelector createFixedProxySelector(IEProxyConfig ieProxyConfig) throws ProxyException {
+        String proxyString = ieProxyConfig.getProxy();
+        String bypassList = ieProxyConfig.getProxyBypass();
         if (proxyString == null) {
             return null;
         }

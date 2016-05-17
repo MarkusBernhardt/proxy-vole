@@ -1,4 +1,4 @@
-package com.github.markusbernhardt.proxy.search.desktop.win;
+package com.github.markusbernhardt.proxy.search.browser.ie;
 
 /*****************************************************************************
  * Proxy settings container used for the native methods. Will contain the
@@ -7,7 +7,7 @@ package com.github.markusbernhardt.proxy.search.desktop.win;
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/
 
-public class Win32IESettings {
+public class IEProxyConfig {
 
     private boolean autoDetect;
     private String autoConfigUrl;
@@ -27,7 +27,7 @@ public class Win32IESettings {
      *            the proxy bypass address list.
      ************************************************************************/
 
-    public Win32IESettings(boolean autoDetect, String autoConfigUrl, String proxy, String proxyBypass) {
+    public IEProxyConfig(boolean autoDetect, String autoConfigUrl, String proxy, String proxyBypass) {
         super();
         this.autoDetect = autoDetect;
         this.autoConfigUrl = autoConfigUrl;

@@ -13,7 +13,7 @@ import com.sun.jna.platform.win32.WTypes;
  * 
  * @author Markus Bernhardt, Copyright 2016
  */
-public class WinHttpCurrentUserIeProxyConfig extends Structure {
+public class WinHttpCurrentUserIEProxyConfig extends Structure {
 
     /**
      * If TRUE, indicates that the Internet Explorer proxy configuration for the
@@ -44,7 +44,7 @@ public class WinHttpCurrentUserIeProxyConfig extends Structure {
     /**
      * Create WinHttpCurrentUserIeProxyConfig structure.
      */
-    public WinHttpCurrentUserIeProxyConfig() {
+    public WinHttpCurrentUserIEProxyConfig() {
         super();
     }
 
@@ -55,7 +55,7 @@ public class WinHttpCurrentUserIeProxyConfig extends Structure {
      * @param pointer
      *            pointer to pre-allocated memory
      */
-    public WinHttpCurrentUserIeProxyConfig(Pointer pointer) {
+    public WinHttpCurrentUserIEProxyConfig(Pointer pointer) {
         super(pointer);
         read();
     }
