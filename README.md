@@ -13,7 +13,7 @@ The library provides some proxy setting search strategies to read the proxy sett
 * proxy-vole seems to be dead even longer. Last commit over a year ago.
 * proxy-vole is not available on any public Maven repository. Need to change the Maven coordinates and Java package names 
   to be able to push it to Maven Central on my own.
-* I don't like the Windows DLL and usage of JNI. Will replace both by JNA. Hopefully ...
+* I don't like the Windows DLL and usage of JNI. Replaced both by JNA.
 
 ##Usage
 
