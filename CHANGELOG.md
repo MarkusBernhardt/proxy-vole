@@ -2,6 +2,11 @@
 This file contains the change log. The changes are marked with the following symbology.
 
 ##Unreleased
+
+##1.0.1
+* Fix NullPointerException in IEProxySearchStrategy.
+
+##1.0.0
 * Fork on github
 * Made it deployable to Maven Central for me (Maven coordinates, package names)
 * Added OsxFirefoxProfileSource
