@@ -34,33 +34,33 @@ import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
  * <i>.gconf</i> folder found in the user's home directory:
  * </p>
  * <ul>
- * <li><i>/system/http_proxy/use_http_proxy</i> -> bool used only by gnome-vfs
+ * <li><i>/system/http_proxy/use_http_proxy</i> -&gt; bool used only by gnome-vfs
  * </li>
- * <li><i>/system/http_proxy/host</i> -> string "my-proxy.example.com" without
+ * <li><i>/system/http_proxy/host</i> -&gt; string "my-proxy.example.com" without
  * "http://"</li>
- * <li><i>/system/http_proxy/port</i> -> int</li>
- * <li><i>/system/http_proxy/use_authentication</i> -> bool</li>
- * <li><i>/system/http_proxy/authentication_user</i> -> string</li>
- * <li><i>/system/http_proxy/authentication_password</i> -> string</li>
- * <li><i>/system/http_proxy/ignore_hosts</i> -> list-of-string</li>
- * <li><i>/system/proxy/mode</i> -> string THIS IS THE CANONICAL KEY; SEE BELOW
+ * <li><i>/system/http_proxy/port</i> -&gt; int</li>
+ * <li><i>/system/http_proxy/use_authentication</i> -&gt; bool</li>
+ * <li><i>/system/http_proxy/authentication_user</i> -&gt; string</li>
+ * <li><i>/system/http_proxy/authentication_password</i> -&gt; string</li>
+ * <li><i>/system/http_proxy/ignore_hosts</i> -&gt; list-of-string</li>
+ * <li><i>/system/proxy/mode</i> -&gt; string THIS IS THE CANONICAL KEY; SEE BELOW
  * </li>
- * <li><i>/system/proxy/secure_host</i> -> string "proxy-for-https.example.com"
+ * <li><i>/system/proxy/secure_host</i> -&gt; string "proxy-for-https.example.com"
  * </li>
- * <li><i>/system/proxy/secure_port</i> -> int</li>
- * <li><i>/system/proxy/ftp_host</i> -> string "proxy-for-ftp.example.com"</li>
- * <li><i>/system/proxy/ftp_port</i> -> int</li>
- * <li><i>/system/proxy/socks_host</i> -> string "proxy-for-socks.example.com"
+ * <li><i>/system/proxy/secure_port</i> -&gt; int</li>
+ * <li><i>/system/proxy/ftp_host</i> -&gt; string "proxy-for-ftp.example.com"</li>
+ * <li><i>/system/proxy/ftp_port</i> -&gt; int</li>
+ * <li><i>/system/proxy/socks_host</i> -&gt; string "proxy-for-socks.example.com"
  * </li>
- * <li><i>/system/proxy/socks_port</i> -> int</li>
- * <li><i>/system/proxy/autoconfig_url</i> -> string
+ * <li><i>/system/proxy/socks_port</i> -&gt; int</li>
+ * <li><i>/system/proxy/autoconfig_url</i> -&gt; string
  * "http://proxy-autoconfig.example.com"</li>
  * </ul>
- * <i>/system/proxy/mode</i> can be either:<br/>
- * "none" -> No proxy is used<br/>
- * "manual" -> The user's configuration values are used
- * (/system/http_proxy/{host,port,etc.})<br/>
- * "auto" -> The "/system/proxy/autoconfig_url" key is used <br/>
+ * <i>/system/proxy/mode</i> can be either:<br>
+ * "none" -&gt; No proxy is used<br>
+ * "manual" -&gt; The user's configuration values are used
+ * (/system/http_proxy/{host,port,etc.})<br>
+ * "auto" -&gt; The "/system/proxy/autoconfig_url" key is used <br>
  * <p>
  * GNOME Proxy_configuration settings are explained
  * <a href="http://en.opensuse.org/GNOME/Proxy_configuration">here</a> in detail
@@ -134,7 +134,7 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
     /*************************************************************************
      * Gets the printable name of the search strategy.
      *  
-     * @return
+     * @return the printable name of the search strategy
      ************************************************************************/
 
     @Override

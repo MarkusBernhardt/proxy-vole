@@ -21,9 +21,9 @@ import com.github.markusbernhardt.proxy.util.ProxyException;
  * 
  * If the env tests fail you need to set the followingenvironment variables:
  * <p>
- * HTTP_PROXY = http://http_proxy.unit-test.invalid:8090 <br/>
- * HTTPS_PROXY = http://https_proxy.unit-test.invalid:8091 <br/>
- * FTP_PROXY = http://ftp_proxy.unit-test.invalid:8092 <br/>
+ * HTTP_PROXY = http://http_proxy.unit-test.invalid:8090 <br>
+ * HTTPS_PROXY = http://https_proxy.unit-test.invalid:8091 <br>
+ * FTP_PROXY = http://ftp_proxy.unit-test.invalid:8092 <br>
  * </p>
  * 
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009

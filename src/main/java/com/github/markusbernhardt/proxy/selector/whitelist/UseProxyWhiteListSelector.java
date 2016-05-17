@@ -27,6 +27,8 @@ public class UseProxyWhiteListSelector extends ProxySelector {
     /*************************************************************************
      * Constructor
      * 
+     * @param whiteList
+     *            the whitelist to use.
      * @param proxySelector
      *            the proxy selector to use.
      ************************************************************************/

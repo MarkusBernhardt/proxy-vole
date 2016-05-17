@@ -32,15 +32,15 @@ import com.github.markusbernhardt.proxy.util.ProxyUtil;
  * <p>
  * The following settings are extracted from this file:
  * </p>
- * Some generic settings:<br/>
+ * Some generic settings:<br>
  * <ul>
- * <li><i>network.proxy.type</i> -> n/a = use system settings, 0 = direct, 1 =
+ * <li><i>network.proxy.type</i> -&gt; n/a = use system settings, 0 = direct, 1 =
  * Fixed proxy settings, 2 = proxy script (PAC), 3 = also direct , 4 = auto
  * detect (WPAD)</li>
- * <li><i>network.proxy.share_proxy_settings</i> -> true = use same proxy for
+ * <li><i>network.proxy.share_proxy_settings</i> -&gt; true = use same proxy for
  * all protocols</li>
- * <li><i>network.proxy.no_proxies_on</i> -> a comma separated ignore list.</li>
- * <li><i>network.proxy.autoconfig_url</i> -> a URL to an proxy configuration
+ * <li><i>network.proxy.no_proxies_on</i> -&gt; a comma separated ignore list.</li>
+ * <li><i>network.proxy.autoconfig_url</i> -&gt; a URL to an proxy configuration
  * script</li>
  * </ul>
  * Host names and ports per protocol are stored in the following settings:
@@ -55,7 +55,7 @@ import com.github.markusbernhardt.proxy.util.ProxyUtil;
  * <li><i>network.proxy.gopher_port</i></li>
  * <li><i>network.proxy.socks</i></li>
  * <li><i>network.proxy.socks_port</i></li>
- * <li><i>network.proxy.socks_version</i> -> 4 or 5</li> </u>
+ * <li><i>network.proxy.socks_version</i> -&gt; 4 or 5</li> </ul>
  * <p>
  * Note that if there are more than one profile the first profile found will be
  * used.
@@ -148,7 +148,7 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
     /*************************************************************************
      * Gets the printable name of the search strategy.
      * 
-     * @return
+     * @return the printable name of the search strategy
      ************************************************************************/
 
     @Override

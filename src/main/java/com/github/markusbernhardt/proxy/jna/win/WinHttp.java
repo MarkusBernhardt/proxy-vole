@@ -79,7 +79,7 @@ public interface WinHttp extends StdCallLibrary {
      * The WinHttpGetDefaultProxyConfiguration function retrieves the default
      * WinHTTP proxy configuration from the registry.
      * 
-     * @param info
+     * @param pProxyInfo
      *            A pointer to a variable of type WINHTTP_PROXY_INFO that
      *            receives the default proxy configuration.
      * @return {@code true} if successful; otherwise, {@code false}.

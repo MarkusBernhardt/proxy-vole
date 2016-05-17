@@ -8,8 +8,8 @@ import java.io.InputStreamReader;
 import java.util.Properties;
 
 import com.github.markusbernhardt.proxy.util.Logger;
-import com.github.markusbernhardt.proxy.util.PlatformUtil;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
+import com.github.markusbernhardt.proxy.util.PlatformUtil;
 
 /*****************************************************************************
  * Parser for the KDE settings file. The KDE proxy settings are stored in the
@@ -36,6 +36,9 @@ public class KdeSettingsParser {
 
     /*************************************************************************
      * Constructor
+     * 
+     * @param settingsFile
+     *            the settings file to use.
      ************************************************************************/
 
     public KdeSettingsParser(File settingsFile) {

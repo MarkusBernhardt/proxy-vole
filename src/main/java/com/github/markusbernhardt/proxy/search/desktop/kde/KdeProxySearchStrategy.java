@@ -13,9 +13,9 @@ import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.github.markusbernhardt.proxy.selector.whitelist.UseProxyWhiteListSelector;
 import com.github.markusbernhardt.proxy.util.Logger;
+import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 import com.github.markusbernhardt.proxy.util.ProxyUtil;
-import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
 /*****************************************************************************
  * Loads the KDE4 proxy settings from the KDE <i>kioslaverc</i> file. This will
@@ -28,19 +28,19 @@ import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
  * The following settings are extracted from the section "[Proxy Settings]":
  * </p>
  * <ul>
- * <li><i>AuthMode</i> -> 0 = no auth., 1 = use login.</li>
- * <li><i>ProxyType</i> -> 0 = direct 1 = use fixed settings, 2 = use PAC, 3 =
- * automatic (WPAD) , 4 = Use environment variables?</li>
- * <li><i>Proxy Config</i> Script -> URL to PAC file</li>
- * <li><i>ftpProxy</i> -> Fixed ftp proxy address e.g.
+ * <li><i>AuthMode</i> -&gt; 0 = no auth., 1 = use login.</li>
+ * <li><i>ProxyType</i> -&gt; 0 = direct 1 = use fixed settings, 2 = use PAC, 3
+ * = automatic (WPAD) , 4 = Use environment variables?</li>
+ * <li><i>Proxy Config</i> Script -&gt; URL to PAC file</li>
+ * <li><i>ftpProxy</i> -&gt; Fixed ftp proxy address e.g.
  * http://www.ftp-proxy.com:8080</li>
- * <li><i>httpProxy</i> -> Fixed http proxy e.g http://www.http-proxy.com:8080
- * </li>
- * <li><i>httpsProxy</i> -> Fixed https proxy e.g
+ * <li><i>httpProxy</i> -&gt; Fixed http proxy e.g
+ * http://www.http-proxy.com:8080</li>
+ * <li><i>httpsProxy</i> -&gt; Fixed https proxy e.g
  * http://www.https-proxy.com:8080</li>
- * <li><i>NoProxyFor</i> -> Proxy white list</li>
- * <li><i>ReversedException</i> -> false = use NoProxyFor, true = revert meaning
- * of the NoProxyFor list</li>
+ * <li><i>NoProxyFor</i> -&gt; Proxy white list</li>
+ * <li><i>ReversedException</i> -&gt; false = use NoProxyFor, true = revert
+ * meaning of the NoProxyFor list</li>
  * </ul>
  *
  *
@@ -64,6 +64,8 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
     /*************************************************************************
      * ProxySelector
      * 
+     * @param settingsParser
+     *            the KdeSettingsParser instance to use.
      * @see java.net.ProxySelector#ProxySelector()
      ************************************************************************/
 
@@ -124,8 +126,8 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 
     /*************************************************************************
      * Gets the printable name of the search strategy.
-     *  
-     * @return
+     * 
+     * @return the printable name of the search strategy
      ************************************************************************/
 
     @Override

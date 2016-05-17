@@ -213,7 +213,7 @@ public interface ScriptMethods {
      * parameters filled. The real meaning of the parameters is guessed from
      * it's value. If "from" and "to" are specified then the bounds are
      * inclusive. If the "GMT" parameter is specified, times are taken to be in
-     * GMT, otherwise the local time zone is used.<br/>
+     * GMT, otherwise the local time zone is used.<br>
      * 
      * <pre>
      * timeRange(hour)

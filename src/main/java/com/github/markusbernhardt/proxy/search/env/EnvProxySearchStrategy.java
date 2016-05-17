@@ -15,11 +15,11 @@ import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
  * These variables are mainly set on linux / unix environments. The following
  * variables are read per default:
  * <ul>
- * <li><i>http_proxy</i> -> This will be used for http / https</li>
- * <li><i>https_proxy</i> -> Will be used for https, if not set then http_proxy
+ * <li><i>http_proxy</i> -&gt; This will be used for http / https</li>
+ * <li><i>https_proxy</i> -&gt; Will be used for https, if not set then http_proxy
  * is used instead.</li>
- * <li><i>ftp_proxy</i> -> Used for FTP.</li>
- * <li><i>no_proxy</i> -> a no proxy white list.</li>
+ * <li><i>ftp_proxy</i> -&gt; Used for FTP.</li>
+ * <li><i>no_proxy</i> -&gt; a no proxy white list.</li>
  * </ul>
  * 
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
@@ -138,7 +138,7 @@ public class EnvProxySearchStrategy implements ProxySearchStrategy {
     /*************************************************************************
      * Gets the printable name of the search strategy.
      *  
-     * @return
+     * @return the printable name of the search strategy
      ************************************************************************/
 
     @Override

@@ -25,13 +25,13 @@ import com.github.markusbernhardt.proxy.util.PlatformUtil;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 
 /*****************************************************************************
- * Main class to setup and initialize the proxy detection system.<br/>
- * This class can be used to select a proxy discovery strategy.<br/>
- * Implements the "Builder" pattern.<br/>
- * Use <code>addStrategy</code> to add one or more search strategies.<br/>
- * If you are done call the <code>getProxySelector</code> method. <br/>
+ * Main class to setup and initialize the proxy detection system.<br>
+ * This class can be used to select a proxy discovery strategy.<br>
+ * Implements the "Builder" pattern.<br>
+ * Use <code>addStrategy</code> to add one or more search strategies.<br>
+ * If you are done call the <code>getProxySelector</code> method. <br>
  * Then the strategies are asked one after the other for a ProxySelector until
- * an valid selector is found. <br/>
+ * an valid selector is found. <br>
  * <p>
  * Invoke the static <code>getDefaultProxySearch</code> method to use a default
  * search strategy.
@@ -226,7 +226,7 @@ public class ProxySearch implements ProxySearchStrategy {
     /*************************************************************************
      * Gets the printable name of the search strategy.
      * 
-     * @return
+     * @return the printable name of the search strategy
      ************************************************************************/
 
     @Override
@@ -269,7 +269,7 @@ public class ProxySearch implements ProxySearchStrategy {
     }
 
     /*************************************************************************
-     * For testing only. Will print the logging & proxy information to the
+     * For testing only. Will print the logging &amp; proxy information to the
      * console.
      * 
      * @param args

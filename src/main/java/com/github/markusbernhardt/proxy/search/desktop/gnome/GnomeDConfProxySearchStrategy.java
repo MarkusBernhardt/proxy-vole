@@ -24,35 +24,35 @@ import java.io.InputStreamReader;
  * <i>.gconf</i> folder found in the user's home directory:
  * </p>
  * <ul>
- * <li><i>org.gnome.system.proxy.http enabled</i> -> bool used only by gnome-vfs
+ * <li><i>org.gnome.system.proxy.http enabled</i> -&gt; bool used only by gnome-vfs
  * </li>
- * <li><i>org.gnome.system.proxy.http host</i> -> string "my-proxy.example.com"
+ * <li><i>org.gnome.system.proxy.http host</i> -&gt; string "my-proxy.example.com"
  * without "http://"</li>
- * <li><i>org.gnome.system.proxy.http port</i> -> int</li>
- * <li><i>org.gnome.system.proxy.http use-authentication</i> -> bool</li>
- * <li><i>org.gnome.system.proxy.http authentication-user</i> -> string</li>
- * <li><i>org.gnome.system.proxy.http authentication-password</i> -> string</li>
- * <li><i>org.gnome.system.proxy ignore-hosts</i> -> list-of-string</li>
- * <li><i>org.gnome.system.proxy mode</i> -> string THIS IS THE CANONICAL KEY;
+ * <li><i>org.gnome.system.proxy.http port</i> -&gt; int</li>
+ * <li><i>org.gnome.system.proxy.http use-authentication</i> -&gt; bool</li>
+ * <li><i>org.gnome.system.proxy.http authentication-user</i> -&gt; string</li>
+ * <li><i>org.gnome.system.proxy.http authentication-password</i> -&gt; string</li>
+ * <li><i>org.gnome.system.proxy ignore-hosts</i> -&gt; list-of-string</li>
+ * <li><i>org.gnome.system.proxy mode</i> -&gt; string THIS IS THE CANONICAL KEY;
  * SEE BELOW</li>
- * <li><i>org.gnome.system.proxy use-same-proxy</i> -> bool</li>
- * <li><i>org.gnome.system.proxy.https host</i> -> string
+ * <li><i>org.gnome.system.proxy use-same-proxy</i> -&gt; bool</li>
+ * <li><i>org.gnome.system.proxy.https host</i> -&gt; string
  * "proxy-for-https.example.com"</li>
- * <li><i>org.gnome.system.proxy.https port</i> -> int</li>
- * <li><i>org.gnome.system.proxy.ftp host</i> -> string
+ * <li><i>org.gnome.system.proxy.https port</i> -&gt; int</li>
+ * <li><i>org.gnome.system.proxy.ftp host</i> -&gt; string
  * "proxy-for-ftp.example.com"</li>
- * <li><i>org.gnome.system.proxy.ftp port</i> -> int</li>
- * <li><i>org.gnome.system.proxy.socks host</i> -> string
+ * <li><i>org.gnome.system.proxy.ftp port</i> -&gt; int</li>
+ * <li><i>org.gnome.system.proxy.socks host</i> -&gt; string
  * "proxy-for-socks.example.com"</li>
- * <li><i>org.gnome.system.proxy.socks port</i> -> int</li>
- * <li><i>org.gnome.system.proxy autoconfig-url</i> -> string
+ * <li><i>org.gnome.system.proxy.socks port</i> -&gt; int</li>
+ * <li><i>org.gnome.system.proxy autoconfig-url</i> -&gt; string
  * "http://proxy-autoconfig.example.com"</li>
  * </ul>
- * <i>org.gnome.system.proxy mode</i> can be either:<br/>
- * "none" -> No proxy is used<br/>
- * "manual" -> The user's configuration values are used
- * (org.gnome.system.http_proxy/{host,port,etc.})<br/>
- * "auto" -> The "org.gnome.system.proxy/autoconfig_url" key is used <br/>
+ * <i>org.gnome.system.proxy mode</i> can be either:<br>
+ * "none" -&gt; No proxy is used<br>
+ * "manual" -&gt; The user's configuration values are used
+ * (org.gnome.system.http_proxy/{host,port,etc.})<br>
+ * "auto" -&gt; The "org.gnome.system.proxy/autoconfig_url" key is used <br>
  * <p>
  * GNOME Proxy_configuration settings are explained
  * <a href="https://developer.gnome.org/ProxyConfiguration/">here</a> in detail
@@ -129,7 +129,7 @@ public class GnomeDConfProxySearchStrategy implements ProxySearchStrategy {
     /*************************************************************************
      * Gets the printable name of the search strategy.
      *  
-     * @return
+     * @return the printable name of the search strategy
      ************************************************************************/
 
     @Override
