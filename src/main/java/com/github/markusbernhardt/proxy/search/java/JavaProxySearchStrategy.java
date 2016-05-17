@@ -32,7 +32,7 @@ import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
  * <li><i>socksProxyPort</i> (default: 1080)</li>
  * </ul>
  * <p>
- * This is based on information found here: <br/>
+ * This is based on information found here: <br>
  * http://download.oracle.com/javase/6/docs/technotes/guides/net/proxies.html
  * </p>
  * If the "http.proxyHost" property is not set then the no proxy selector is
@@ -79,7 +79,7 @@ public class JavaProxySearchStrategy implements ProxySearchStrategy {
     /*************************************************************************
      * Gets the printable name of the search strategy.
      *  
-     * @return
+     * @return the printable name of the search strategy
      ************************************************************************/
 
     @Override

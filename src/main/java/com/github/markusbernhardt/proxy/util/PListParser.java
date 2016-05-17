@@ -44,24 +44,24 @@ import org.xml.sax.SAXException;
  * :
  * 
  * <pre>
- * true/false -> Boolean
- * real -> Double
- * integer -> Integer/Long (depends on size, values exceeding an int will be rendered as longs)
- * data -> byte[]
- * string -> String
- * array -> List
- * dict -> Map
+ * true/false -&gt; Boolean
+ * real -&gt; Double
+ * integer -&gt; Integer/Long (depends on size, values exceeding an int will be rendered as longs)
+ * data -&gt; byte[]
+ * string -&gt; String
+ * array -&gt; List
+ * dict -&gt; Map
  * </pre>
  * <p>
- * When converting from Map -> plist the conversion is as follows:
+ * When converting from Map -&gt; plist the conversion is as follows:
  * 
  * <pre>
- * Boolean -> true/false
- * Float/Double -> real
- * Byte/Short/Integer/Long -> integer
- * byte[] -> data
- * List -> array
- * Map -> dict
+ * Boolean -&gt; true/false
+ * Float/Double -&gt; real
+ * Byte/Short/Integer/Long -&gt; integer
+ * byte[] -&gt; data
+ * List -&gt; array
+ * Map -&gt; dict
  * </pre>
  *
  * @author Christoffer Lerno / Modified by Bernd Rosstauscher

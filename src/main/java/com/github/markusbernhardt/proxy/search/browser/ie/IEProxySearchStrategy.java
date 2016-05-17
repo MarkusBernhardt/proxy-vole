@@ -51,11 +51,11 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 		return result;
 	}
 
-	/*************************************************************************
-	 * Gets the printable name of the search strategy.
-	 * 
-	 * @return
-	 ************************************************************************/
+    /*************************************************************************
+     * Gets the printable name of the search strategy.
+     * 
+     * @return the printable name of the search strategy
+     ************************************************************************/
 
 	@Override
 	public String getName() {

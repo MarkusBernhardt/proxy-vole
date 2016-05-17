@@ -10,17 +10,14 @@ import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
 /*****************************************************************************
- * PAC parser using the Rhino JavaScript engine bundled with Java 1.6<br/>
- * If you need PAC support with Java 1.5 then you should have a look at
- * RhinoPacScriptParser.
+ * PAC parser using the Rhino JavaScript engine bundled with Java 1.6<br>
  * 
- * More information about PAC can be found there:<br/>
+ * More information about PAC can be found there:<br>
  * <a href="http://en.wikipedia.org/wiki/Proxy_auto-config">Proxy_auto-config
- * </a><br/>
+ * </a><br>
  * <a href=
  * "http://homepages.tesco.net/~J.deBoynePollard/FGA/web-browser-auto-proxy-configuration.html">
  * web-browser-auto-proxy-configuration</a>
- * </p>
  * 
  * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
  ****************************************************************************/

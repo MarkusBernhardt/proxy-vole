@@ -42,7 +42,7 @@ public class WinProxySearchStrategy implements ProxySearchStrategy {
     /*************************************************************************
      * Gets the printable name of the search strategy.
      *  
-     * @return
+     * @return the printable name of the search strategy
      ************************************************************************/
 
     @Override

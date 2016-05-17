@@ -16,15 +16,17 @@ public interface ProxySearchStrategy {
      * Gets the a ProxySelector found by applying the search strategy.
      * 
      * @return a ProxySelector, null if none is found.
+     * @throws ProxyException
+     *             on error
      ************************************************************************/
 
     public ProxySelector getProxySelector() throws ProxyException;
 
     /*************************************************************************
      * Gets the printable name of the search strategy.
-     *  
-     * @return
+     * 
+     * @return the printable name of the search strategy
      ************************************************************************/
-    
+
     public String getName();
 }
