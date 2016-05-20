@@ -95,6 +95,10 @@ It's value will always be used as myIPAddress in all PAC scripts.
 System.setProperty(PacScriptMethods.OVERRIDE_LOCAL_IP, "123.123.123.123");
 ```
 
+###Proxy Tester
+There is also a small GUI to test the different search strategies:
+![Screenshot](https://raw.githubusercontent.com/MarkusBernhardt/proxy-vole/master/src/site/screenshots/proxy-vole-tester.png "Proxy Tester")
+
 ##Motivation
 Today more and more applications try to take direct advantage of Internet connectivity and web services to bring web content
 to your desktop. Java has very good network and Internet connectivity with build in APIs for HTTP, HTTPS, FTP and a web services stack.
