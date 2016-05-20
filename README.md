@@ -95,7 +95,9 @@ System.setProperty(PacScriptMethods.OVERRIDE_LOCAL_IP, "123.123.123.123");
 ```
 
 ###Proxy Vole Tester
-There is also a small GUI to test the different search strategies:
+There is also a small GUI to test the different search strategies. Simply start the [jar-with-dependencies](http://search.maven.org/remotecontent?filepath=com/github/markusbernhardt/proxy-vole/1.0.1/proxy-vole-1.0.1-jar-with-dependencies.jar) 
+or directly the class `com.github.markusbernhardt.proxy.ui.ProxyTester`.
+
 ![Screenshot](https://raw.githubusercontent.com/MarkusBernhardt/proxy-vole/master/src/site/screenshots/proxy-vole-tester.png "Proxy Vole Tester")
 
 ##Motivation
