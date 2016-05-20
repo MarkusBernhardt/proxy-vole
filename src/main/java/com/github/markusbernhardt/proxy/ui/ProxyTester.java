@@ -114,7 +114,7 @@ public class ProxyTester extends JFrame {
     protected void testUrl() {
         try {
             if (this.urlField.getText().trim().length() == 0) {
-                JOptionPane.showMessageDialog(this, "Please enter an URL first.");
+            	ProxyTester.this.logArea.append("ERROR\tPlease enter an URL first.\n");
                 return;
             }
 
@@ -125,7 +125,7 @@ public class ProxyTester extends JFrame {
             ps.addStrategy(pss);
             ProxySelector psel = ps.getProxySelector();
             if (psel == null) {
-                JOptionPane.showMessageDialog(this, "No proxy settings available for this mode.");
+            	ProxyTester.this.logArea.append("ERROR\tNo proxy settings available for this mode.\n");
                 return;
             }
             ProxySelector.setDefault(psel);
@@ -133,12 +133,12 @@ public class ProxyTester extends JFrame {
             URL url = new URL(this.urlField.getText().trim());
             List<Proxy> result = psel.select(url.toURI());
             if (result == null || result.size() == 0) {
-                JOptionPane.showMessageDialog(this, "No proxy found for this url.");
+            	ProxyTester.this.logArea.append("INFO\tNo proxy found for this url.\n");
                 return;
             }
 
-            JOptionPane.showMessageDialog(this,
-                    "Proxy Settings found using " + pss + " strategy.\n" + "Proxy used for URL is: " + result.get(0));
+        	ProxyTester.this.logArea.append("INFO\tProxy Settings found using " + pss + " strategy.\n");
+        	ProxyTester.this.logArea.append("INFO\tProxy used for URL is: " + result.get(0)+"\n");
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error:" + e.getMessage(), "Error checking URL.",
