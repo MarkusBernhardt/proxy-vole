@@ -2,10 +2,17 @@
 This file contains the change log. The changes are marked with the following symbology.
 
 ##Unreleased
-* Fork on github
-* Made it deployable to Maven Central for me (Maven coordinates, package names)
-* Added OsxFirefoxProfileSource
-* Removed the Rhino Javascript parser needed for Java 5 
+
+##1.0.1
+* Fix NullPointerException in IEProxySearchStrategy.
+
+##1.0.0
+* Fork on github.
+* Made it deployable to Maven Central for me (Maven coordinates, package names).
+* Added OsxFirefoxProfileSource.
+* Removed the Rhino Javascript parser needed for Java 5. 
+* Removed the Windows DLL and its sources.
+* Port from JNI to JNA
 
 ##Last version off proxy-vole at Google Code repository 
 * Preparing migration to Maven
