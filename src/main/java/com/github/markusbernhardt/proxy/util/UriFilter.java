@@ -5,19 +5,20 @@ import java.net.URI;
 /*****************************************************************************
  * Interface for an URI filter.
  *
- * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
+ * @author Markus Bernhardt, Copyright 2016
+ * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
 public interface UriFilter {
 
-    /*************************************************************************
-     * Tests an URI against a given matching criteria.
-     * 
-     * @param uri
-     *            the URI to test.
-     * @return true if it matches the criteria else false.
-     ************************************************************************/
+	/*************************************************************************
+	 * Tests an URI against a given matching criteria.
+	 * 
+	 * @param uri
+	 *            the URI to test.
+	 * @return true if it matches the criteria else false.
+	 ************************************************************************/
 
-    public abstract boolean accept(URI uri);
+	public abstract boolean accept(URI uri);
 
 }

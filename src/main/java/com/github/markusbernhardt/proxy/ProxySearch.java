@@ -37,258 +37,259 @@ import com.github.markusbernhardt.proxy.util.ProxyException;
  * search strategy.
  * </p>
  * 
- * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
+ * @author Markus Bernhardt, Copyright 2016
+ * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
 public class ProxySearch implements ProxySearchStrategy {
 
-    private static final int DEFAULT_PAC_CACHE_SIZE = 20;
+	private static final int DEFAULT_PAC_CACHE_SIZE = 20;
 
-    private static final long DEFAULT_PAC_CACHE_TTL = 1000 * 60 * 10; // 10
-                                                                      // Minutes
+	private static final long DEFAULT_PAC_CACHE_TTL = 1000 * 60 * 10; // 10
+	                                                                  // Minutes
 
-    private List<ProxySearchStrategy> strategies;
-    private int pacCacheSize;
-    private long pacCacheTTL;
+	private List<ProxySearchStrategy> strategies;
+	private int pacCacheSize;
+	private long pacCacheTTL;
 
-    /*****************************************************************************
-     * Types of proxy detection supported by the builder.
-     ****************************************************************************/
+	/*****************************************************************************
+	 * Types of proxy detection supported by the builder.
+	 ****************************************************************************/
 
-    public enum Strategy {
-        /// Use the platform settings.
-        OS_DEFAULT,
-        /// Use the settings of the platforms default browser.
-        BROWSER,
-        /// Use Firefox settings
-        FIREFOX,
-        /// Use InternetExplorer settings
-        IE,
-        /// Use environment variables for proxy settings.
-        ENV_VAR,
-        /// Use windows default proxy settings.
-        WIN,
-        /// Use KDE desktop default proxy settings.
-        KDE,
-        /// Use KDE desktop default proxy settings.
-        GNOME,
-        /// Use Java Networking system properties
-        JAVA
-    }
+	public enum Strategy {
+	    /// Use the platform settings.
+		OS_DEFAULT,
+		/// Use the settings of the platforms default browser.
+		BROWSER,
+		/// Use Firefox settings
+		FIREFOX,
+		/// Use InternetExplorer settings
+		IE,
+		/// Use environment variables for proxy settings.
+		ENV_VAR,
+		/// Use windows default proxy settings.
+		WIN,
+		/// Use KDE desktop default proxy settings.
+		KDE,
+		/// Use KDE desktop default proxy settings.
+		GNOME,
+		/// Use Java Networking system properties
+		JAVA
+	}
 
-    /*************************************************************************
-     * Constructor
-     ************************************************************************/
+	/*************************************************************************
+	 * Constructor
+	 ************************************************************************/
 
-    public ProxySearch() {
-        super();
-        this.strategies = new ArrayList<ProxySearchStrategy>();
-        this.pacCacheSize = DEFAULT_PAC_CACHE_SIZE;
-        this.pacCacheTTL = DEFAULT_PAC_CACHE_TTL;
-    }
+	public ProxySearch() {
+		super();
+		this.strategies = new ArrayList<ProxySearchStrategy>();
+		this.pacCacheSize = DEFAULT_PAC_CACHE_SIZE;
+		this.pacCacheTTL = DEFAULT_PAC_CACHE_TTL;
+	}
 
-    /*************************************************************************
-     * Sets up a ProxySearch that uses a default search strategy suitable for
-     * every platform.
-     * 
-     * @return a ProxySearch initialized with default settings.
-     ************************************************************************/
+	/*************************************************************************
+	 * Sets up a ProxySearch that uses a default search strategy suitable for
+	 * every platform.
+	 * 
+	 * @return a ProxySearch initialized with default settings.
+	 ************************************************************************/
 
-    public static ProxySearch getDefaultProxySearch() {
-        ProxySearch s = new ProxySearch();
+	public static ProxySearch getDefaultProxySearch() {
+		ProxySearch s = new ProxySearch();
 
-        // Test if we are a server or a client.
-        boolean headless = GraphicsEnvironment.isHeadless();
+		// Test if we are a server or a client.
+		boolean headless = GraphicsEnvironment.isHeadless();
 
-        if (headless) {
-            s.addStrategy(Strategy.JAVA);
-            s.addStrategy(Strategy.OS_DEFAULT);
-            s.addStrategy(Strategy.ENV_VAR);
-        } else {
-            s.addStrategy(Strategy.JAVA);
-            s.addStrategy(Strategy.BROWSER);
-            s.addStrategy(Strategy.OS_DEFAULT);
-            s.addStrategy(Strategy.ENV_VAR);
-        }
-        Logger.log(ProxySearch.class, LogLevel.TRACE, "Using default search priority: {0}", s);
+		if (headless) {
+			s.addStrategy(Strategy.JAVA);
+			s.addStrategy(Strategy.OS_DEFAULT);
+			s.addStrategy(Strategy.ENV_VAR);
+		} else {
+			s.addStrategy(Strategy.JAVA);
+			s.addStrategy(Strategy.BROWSER);
+			s.addStrategy(Strategy.OS_DEFAULT);
+			s.addStrategy(Strategy.ENV_VAR);
+		}
+		Logger.log(ProxySearch.class, LogLevel.TRACE, "Using default search priority: {0}", s);
 
-        return s;
-    }
+		return s;
+	}
 
-    /*************************************************************************
-     * Adds an search strategy to the list of proxy searches strategies.
-     * 
-     * @param strategy
-     *            the search strategy to add.
-     ************************************************************************/
+	/*************************************************************************
+	 * Adds an search strategy to the list of proxy searches strategies.
+	 * 
+	 * @param strategy
+	 *            the search strategy to add.
+	 ************************************************************************/
 
-    public void addStrategy(Strategy strategy) {
-        switch (strategy) {
-        case OS_DEFAULT:
-            this.strategies.add(new DesktopProxySearchStrategy());
-            break;
-        case BROWSER:
-            this.strategies.add(getDefaultBrowserStrategy());
-            break;
-        case FIREFOX:
-            this.strategies.add(new FirefoxProxySearchStrategy());
-            break;
-        case IE:
-            this.strategies.add(new IEProxySearchStrategy());
-            break;
-        case ENV_VAR:
-            this.strategies.add(new EnvProxySearchStrategy());
-            break;
-        case WIN:
-            this.strategies.add(new WinProxySearchStrategy());
-            break;
-        case KDE:
-            this.strategies.add(new KdeProxySearchStrategy());
-            break;
-        case GNOME:
-            this.strategies.add(new GnomeDConfProxySearchStrategy());
-            this.strategies.add(new GnomeProxySearchStrategy());
-            break;
-        case JAVA:
-            this.strategies.add(new JavaProxySearchStrategy());
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown strategy code!");
-        }
-    }
+	public void addStrategy(Strategy strategy) {
+		switch (strategy) {
+		case OS_DEFAULT:
+			this.strategies.add(new DesktopProxySearchStrategy());
+			break;
+		case BROWSER:
+			this.strategies.add(getDefaultBrowserStrategy());
+			break;
+		case FIREFOX:
+			this.strategies.add(new FirefoxProxySearchStrategy());
+			break;
+		case IE:
+			this.strategies.add(new IEProxySearchStrategy());
+			break;
+		case ENV_VAR:
+			this.strategies.add(new EnvProxySearchStrategy());
+			break;
+		case WIN:
+			this.strategies.add(new WinProxySearchStrategy());
+			break;
+		case KDE:
+			this.strategies.add(new KdeProxySearchStrategy());
+			break;
+		case GNOME:
+			this.strategies.add(new GnomeDConfProxySearchStrategy());
+			this.strategies.add(new GnomeProxySearchStrategy());
+			break;
+		case JAVA:
+			this.strategies.add(new JavaProxySearchStrategy());
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown strategy code!");
+		}
+	}
 
-    /*************************************************************************
-     * Sets the cache size of the PAC proxy selector cache. This defines the
-     * number of URLs that are cached together with the PAC script result. This
-     * improves performance because for URLs that are in the cache the script is
-     * not executed again. You have to set this before you add any strategies
-     * that may create a PAC script proxy selector.
-     * 
-     * @param size
-     *            of the cache. Set it to 0 to disable caching.
-     * @param ttl
-     *            is the time to live of the cache entries as amount of
-     *            milliseconds.
-     ************************************************************************/
+	/*************************************************************************
+	 * Sets the cache size of the PAC proxy selector cache. This defines the
+	 * number of URLs that are cached together with the PAC script result. This
+	 * improves performance because for URLs that are in the cache the script is
+	 * not executed again. You have to set this before you add any strategies
+	 * that may create a PAC script proxy selector.
+	 * 
+	 * @param size
+	 *            of the cache. Set it to 0 to disable caching.
+	 * @param ttl
+	 *            is the time to live of the cache entries as amount of
+	 *            milliseconds.
+	 ************************************************************************/
 
-    public void setPacCacheSettings(int size, long ttl) {
-        this.pacCacheSize = size;
-        this.pacCacheTTL = ttl;
-    }
+	public void setPacCacheSettings(int size, long ttl) {
+		this.pacCacheSize = size;
+		this.pacCacheTTL = ttl;
+	}
 
-    /*************************************************************************
-     * Gets the search strategy for the platforms default browser.
-     * 
-     * @return a ProxySearchStrategy, null if no supported browser was found.
-     ************************************************************************/
+	/*************************************************************************
+	 * Gets the search strategy for the platforms default browser.
+	 * 
+	 * @return a ProxySearchStrategy, null if no supported browser was found.
+	 ************************************************************************/
 
-    private ProxySearchStrategy getDefaultBrowserStrategy() {
-        switch (PlatformUtil.getDefaultBrowser()) {
-        case IE:
-            return new IEProxySearchStrategy();
-        case FIREFOX:
-            return new FirefoxProxySearchStrategy();
-        }
-        return null;
-    }
+	private ProxySearchStrategy getDefaultBrowserStrategy() {
+		switch (PlatformUtil.getDefaultBrowser()) {
+		case IE:
+			return new IEProxySearchStrategy();
+		case FIREFOX:
+			return new FirefoxProxySearchStrategy();
+		}
+		return null;
+	}
 
-    /*************************************************************************
-     * Gets the proxy selector that will use the configured search order.
-     * 
-     * @return a ProxySelector, null if none was found for the current builder
-     *         configuration.
-     ************************************************************************/
+	/*************************************************************************
+	 * Gets the proxy selector that will use the configured search order.
+	 * 
+	 * @return a ProxySelector, null if none was found for the current builder
+	 *         configuration.
+	 ************************************************************************/
 
-    @Override
-    public ProxySelector getProxySelector() {
-        Logger.log(getClass(), LogLevel.TRACE, "Executing search strategies to find proxy selector");
-        for (ProxySearchStrategy strat : this.strategies) {
-            try {
-                ProxySelector selector = strat.getProxySelector();
-                if (selector != null) {
-                    selector = installBufferingAndFallbackBehaviour(selector);
-                    Logger.log(getClass(), LogLevel.INFO, "Proxy found for " + strat.getName());
+	@Override
+	public ProxySelector getProxySelector() {
+		Logger.log(getClass(), LogLevel.TRACE, "Executing search strategies to find proxy selector");
+		for (ProxySearchStrategy strat : this.strategies) {
+			try {
+				ProxySelector selector = strat.getProxySelector();
+				if (selector != null) {
+					selector = installBufferingAndFallbackBehaviour(selector);
+					Logger.log(getClass(), LogLevel.INFO, "Proxy found for " + strat.getName());
 
-                    return selector;
-                } else {
-                    Logger.log(getClass(), LogLevel.INFO,
-                            "No proxy found for " + strat.getName() + ". Trying next one.");
-                }
-            } catch (ProxyException e) {
-                Logger.log(getClass(), LogLevel.DEBUG, "Strategy {0} failed trying next one.", e);
-                // Ignore and try next strategy.
-            }
-        }
+					return selector;
+				} else {
+					Logger.log(getClass(), LogLevel.INFO,
+					        "No proxy found for " + strat.getName() + ". Trying next one.");
+				}
+			} catch (ProxyException e) {
+				Logger.log(getClass(), LogLevel.DEBUG, "Strategy {0} failed trying next one.", e);
+				// Ignore and try next strategy.
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    /*************************************************************************
-     * Gets the printable name of the search strategy.
-     * 
-     * @return the printable name of the search strategy
-     ************************************************************************/
+	/*************************************************************************
+	 * Gets the printable name of the search strategy.
+	 * 
+	 * @return the printable name of the search strategy
+	 ************************************************************************/
 
-    @Override
-    public String getName() {
-        return "default";
-    }
+	@Override
+	public String getName() {
+		return "default";
+	}
 
-    /*************************************************************************
-     * If it is PAC and we have caching enabled set it here.
-     * 
-     * @param selector
-     *            the proxy selector to wrap
-     * @return the wrapped proxy selector or the passed in selector if nothing
-     *         is done.
-     ************************************************************************/
+	/*************************************************************************
+	 * If it is PAC and we have caching enabled set it here.
+	 * 
+	 * @param selector
+	 *            the proxy selector to wrap
+	 * @return the wrapped proxy selector or the passed in selector if nothing
+	 *         is done.
+	 ************************************************************************/
 
-    private ProxySelector installBufferingAndFallbackBehaviour(ProxySelector selector) {
-        if (selector instanceof PacProxySelector) {
-            if (this.pacCacheSize > 0) {
-                selector = new BufferedProxySelector(this.pacCacheSize, this.pacCacheTTL, selector);
-            }
-            selector = new ProxyListFallbackSelector(selector);
-        }
-        return selector;
-    }
+	private ProxySelector installBufferingAndFallbackBehaviour(ProxySelector selector) {
+		if (selector instanceof PacProxySelector) {
+			if (this.pacCacheSize > 0) {
+				selector = new BufferedProxySelector(this.pacCacheSize, this.pacCacheTTL, selector);
+			}
+			selector = new ProxyListFallbackSelector(selector);
+		}
+		return selector;
+	}
 
-    /*************************************************************************
-     * toString
-     * 
-     * @see java.lang.Object#toString()
-     ************************************************************************/
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Proxy search: ");
-        for (ProxySearchStrategy strat : this.strategies) {
-            sb.append(strat);
-            sb.append(" ");
-        }
-        return sb.toString();
-    }
+	/*************************************************************************
+	 * toString
+	 * 
+	 * @see java.lang.Object#toString()
+	 ************************************************************************/
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("Proxy search: ");
+		for (ProxySearchStrategy strat : this.strategies) {
+			sb.append(strat);
+			sb.append(" ");
+		}
+		return sb.toString();
+	}
 
-    /*************************************************************************
-     * For testing only. Will print the logging &amp; proxy information to the
-     * console.
-     * 
-     * @param args
-     *            the command line arguments.
-     ************************************************************************/
+	/*************************************************************************
+	 * For testing only. Will print the logging &amp; proxy information to the
+	 * console.
+	 * 
+	 * @param args
+	 *            the command line arguments.
+	 ************************************************************************/
 
-    public static void main(String[] args) {
-        ProxySearch ps = ProxySearch.getDefaultProxySearch();
-        Logger.setBackend(new LogBackEnd() {
+	public static void main(String[] args) {
+		ProxySearch ps = ProxySearch.getDefaultProxySearch();
+		Logger.setBackend(new LogBackEnd() {
 
-            public void log(Class<?> clazz, LogLevel loglevel, String msg, Object... params) {
-                System.out.println(MessageFormat.format(msg, params));
-            }
+			public void log(Class<?> clazz, LogLevel loglevel, String msg, Object... params) {
+				System.out.println(MessageFormat.format(msg, params));
+			}
 
-            public boolean isLogginEnabled(LogLevel logLevel) {
-                return true;
-            }
-        });
-        ps.getProxySelector();
-    }
+			public boolean isLogginEnabled(LogLevel logLevel) {
+				return true;
+			}
+		});
+		ps.getProxySelector();
+	}
 
 }

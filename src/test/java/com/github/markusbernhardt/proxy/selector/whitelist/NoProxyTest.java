@@ -17,113 +17,114 @@ import com.github.markusbernhardt.proxy.selector.whitelist.ProxyBypassListSelect
 /*****************************************************************************
  * Some unit tests for the white list selector.
  * 
- * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
+ * @author Markus Bernhardt, Copyright 2016
+ * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
 public class NoProxyTest {
 
-    /*************************************************************************
-     * Test method
-     ************************************************************************/
-    @Test
-    public void testWhiteList() {
-        ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
-        ProxyBypassListSelector ps = new ProxyBypassListSelector("no_prox.*", delegate);
+	/*************************************************************************
+	 * Test method
+	 ************************************************************************/
+	@Test
+	public void testWhiteList() {
+		ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
+		ProxyBypassListSelector ps = new ProxyBypassListSelector("no_prox.*", delegate);
 
-        assertEquals(delegate.select(TestUtil.HTTP_TEST_URI).get(0), ps.select(TestUtil.HTTP_TEST_URI).get(0));
-    }
+		assertEquals(delegate.select(TestUtil.HTTP_TEST_URI).get(0), ps.select(TestUtil.HTTP_TEST_URI).get(0));
+	}
 
-    /*************************************************************************
-     * Test method
-     ************************************************************************/
-    @Test
-    public void testWhiteList2() {
-        ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
-        ProxyBypassListSelector ps = new ProxyBypassListSelector("*.unit-test.invalid", delegate);
+	/*************************************************************************
+	 * Test method
+	 ************************************************************************/
+	@Test
+	public void testWhiteList2() {
+		ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
+		ProxyBypassListSelector ps = new ProxyBypassListSelector("*.unit-test.invalid", delegate);
 
-        List<Proxy> result = ps.select(TestUtil.HTTP_TEST_URI);
-        assertEquals(Proxy.NO_PROXY, result.get(0));
-    }
+		List<Proxy> result = ps.select(TestUtil.HTTP_TEST_URI);
+		assertEquals(Proxy.NO_PROXY, result.get(0));
+	}
 
-    /*************************************************************************
-     * Test method
-     * 
-     * @throws URISyntaxException
-     *             on invalid URL syntax.
-     ************************************************************************/
-    @Test
-    public void testWhiteList3() throws URISyntaxException {
-        ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
-        ProxyBypassListSelector ps = new ProxyBypassListSelector("*.unit-test.invalid, localhost, 127.0.0.1", delegate);
+	/*************************************************************************
+	 * Test method
+	 * 
+	 * @throws URISyntaxException
+	 *             on invalid URL syntax.
+	 ************************************************************************/
+	@Test
+	public void testWhiteList3() throws URISyntaxException {
+		ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
+		ProxyBypassListSelector ps = new ProxyBypassListSelector("*.unit-test.invalid, localhost, 127.0.0.1", delegate);
 
-        List<Proxy> result = ps.select(new URI("http://localhost:65/getDocument"));
-        assertEquals(Proxy.NO_PROXY, result.get(0));
+		List<Proxy> result = ps.select(new URI("http://localhost:65/getDocument"));
+		assertEquals(Proxy.NO_PROXY, result.get(0));
 
-        result = ps.select(new URI("http://127.0.0.1:65/getDocument"));
-        assertEquals(Proxy.NO_PROXY, result.get(0));
-    }
+		result = ps.select(new URI("http://127.0.0.1:65/getDocument"));
+		assertEquals(Proxy.NO_PROXY, result.get(0));
+	}
 
-    /*************************************************************************
-     * Test method
-     ************************************************************************/
-    @Test
-    public void testWhiteList4() {
-        ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
-        ProxyBypassListSelector ps = new ProxyBypassListSelector("*.unit-test.invalid, ", delegate);
+	/*************************************************************************
+	 * Test method
+	 ************************************************************************/
+	@Test
+	public void testWhiteList4() {
+		ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
+		ProxyBypassListSelector ps = new ProxyBypassListSelector("*.unit-test.invalid, ", delegate);
 
-        List<Proxy> result = ps.select(TestUtil.HTTP_TEST_URI);
-        assertEquals(Proxy.NO_PROXY, result.get(0));
-    }
+		List<Proxy> result = ps.select(TestUtil.HTTP_TEST_URI);
+		assertEquals(Proxy.NO_PROXY, result.get(0));
+	}
 
-    /*************************************************************************
-     * Test method
-     * 
-     * @throws URISyntaxException
-     *             on invalid URL syntax.
-     ************************************************************************/
-    @Test
-    public void testWhiteList5() throws URISyntaxException {
-        ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
-        ProxyBypassListSelector ps = new ProxyBypassListSelector("*.unit-test.invalid localhost 127.0.0.1", delegate);
+	/*************************************************************************
+	 * Test method
+	 * 
+	 * @throws URISyntaxException
+	 *             on invalid URL syntax.
+	 ************************************************************************/
+	@Test
+	public void testWhiteList5() throws URISyntaxException {
+		ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
+		ProxyBypassListSelector ps = new ProxyBypassListSelector("*.unit-test.invalid localhost 127.0.0.1", delegate);
 
-        List<Proxy> result = ps.select(new URI("http://localhost:65/getDocument"));
-        assertEquals(Proxy.NO_PROXY, result.get(0));
+		List<Proxy> result = ps.select(new URI("http://localhost:65/getDocument"));
+		assertEquals(Proxy.NO_PROXY, result.get(0));
 
-        result = ps.select(new URI("http://127.0.0.1:65/getDocument"));
-        assertEquals(Proxy.NO_PROXY, result.get(0));
-    }
+		result = ps.select(new URI("http://127.0.0.1:65/getDocument"));
+		assertEquals(Proxy.NO_PROXY, result.get(0));
+	}
 
-    /*************************************************************************
-     * Test method
-     * 
-     * @throws URISyntaxException
-     *             on invalid URL syntax.
-     ************************************************************************/
-    @Test
-    public void testIpRange() throws URISyntaxException {
-        ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
-        ProxyBypassListSelector ps = new ProxyBypassListSelector("192.168.0.0/24", delegate);
+	/*************************************************************************
+	 * Test method
+	 * 
+	 * @throws URISyntaxException
+	 *             on invalid URL syntax.
+	 ************************************************************************/
+	@Test
+	public void testIpRange() throws URISyntaxException {
+		ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
+		ProxyBypassListSelector ps = new ProxyBypassListSelector("192.168.0.0/24", delegate);
 
-        List<Proxy> result = ps.select(new URI("http://192.168.0.100:81/test.data"));
-        assertEquals(Proxy.NO_PROXY, result.get(0));
+		List<Proxy> result = ps.select(new URI("http://192.168.0.100:81/test.data"));
+		assertEquals(Proxy.NO_PROXY, result.get(0));
 
-        result = ps.select(new URI("http://192.168.1.100:81/test.data"));
-        assertEquals(delegate.select(TestUtil.HTTP_TEST_URI).get(0), result.get(0));
-    }
+		result = ps.select(new URI("http://192.168.1.100:81/test.data"));
+		assertEquals(delegate.select(TestUtil.HTTP_TEST_URI).get(0), result.get(0));
+	}
 
-    /*************************************************************************
-     * Test method for issue 31
-     * 
-     * @throws URISyntaxException
-     *             on invalid URL syntax.
-     ************************************************************************/
-    @Test
-    public void ipRangeShouldNotMatchHttp() throws URISyntaxException {
-        ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
-        ProxyBypassListSelector ps = new ProxyBypassListSelector("http://192.*", delegate);
+	/*************************************************************************
+	 * Test method for issue 31
+	 * 
+	 * @throws URISyntaxException
+	 *             on invalid URL syntax.
+	 ************************************************************************/
+	@Test
+	public void ipRangeShouldNotMatchHttp() throws URISyntaxException {
+		ProxySelector delegate = new FixedProxySelector(TestUtil.HTTP_TEST_PROXY);
+		ProxyBypassListSelector ps = new ProxyBypassListSelector("http://192.*", delegate);
 
-        List<Proxy> result = ps.select(new URI("http://192.168.0.100:81/test.data"));
-        assertEquals(Proxy.NO_PROXY, result.get(0));
-    }
+		List<Proxy> result = ps.select(new URI("http://192.168.0.100:81/test.data"));
+		assertEquals(Proxy.NO_PROXY, result.get(0));
+	}
 
 }

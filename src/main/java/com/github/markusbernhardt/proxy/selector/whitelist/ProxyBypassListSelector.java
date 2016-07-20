@@ -16,78 +16,79 @@ import com.github.markusbernhardt.proxy.util.UriFilter;
  * and if it matches it will return DIRECT else it will pass the URI to an
  * delegate for inspection.
  *
- * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
+ * @author Markus Bernhardt, Copyright 2016
+ * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
 public class ProxyBypassListSelector extends ProxySelector {
 
-    private ProxySelector delegate;
-    private List<UriFilter> whiteListFilter;
+	private ProxySelector delegate;
+	private List<UriFilter> whiteListFilter;
 
-    /*************************************************************************
-     * Constructor
-     * 
-     * @param whiteListFilter
-     *            a list of filters for whitelist URLs.
-     * @param proxySelector
-     *            the proxy selector to use.
-     ************************************************************************/
+	/*************************************************************************
+	 * Constructor
+	 * 
+	 * @param whiteListFilter
+	 *            a list of filters for whitelist URLs.
+	 * @param proxySelector
+	 *            the proxy selector to use.
+	 ************************************************************************/
 
-    public ProxyBypassListSelector(List<UriFilter> whiteListFilter, ProxySelector proxySelector) {
-        super();
-        if (whiteListFilter == null) {
-            throw new NullPointerException("Whitelist must not be null.");
-        }
-        if (proxySelector == null) {
-            throw new NullPointerException("ProxySelector must not be null.");
-        }
+	public ProxyBypassListSelector(List<UriFilter> whiteListFilter, ProxySelector proxySelector) {
+		super();
+		if (whiteListFilter == null) {
+			throw new NullPointerException("Whitelist must not be null.");
+		}
+		if (proxySelector == null) {
+			throw new NullPointerException("ProxySelector must not be null.");
+		}
 
-        this.delegate = proxySelector;
-        this.whiteListFilter = whiteListFilter;
-    }
+		this.delegate = proxySelector;
+		this.whiteListFilter = whiteListFilter;
+	}
 
-    /*************************************************************************
-     * Constructor
-     * 
-     * @param whiteList
-     *            a list of filters for whitelist URLs as comma/space separated
-     *            string.
-     * @param proxySelector
-     *            the proxy selector to use.
-     ************************************************************************/
+	/*************************************************************************
+	 * Constructor
+	 * 
+	 * @param whiteList
+	 *            a list of filters for whitelist URLs as comma/space separated
+	 *            string.
+	 * @param proxySelector
+	 *            the proxy selector to use.
+	 ************************************************************************/
 
-    public ProxyBypassListSelector(String whiteList, ProxySelector proxySelector) {
-        this(new DefaultWhiteListParser().parseWhiteList(whiteList), proxySelector);
-    }
+	public ProxyBypassListSelector(String whiteList, ProxySelector proxySelector) {
+		this(new DefaultWhiteListParser().parseWhiteList(whiteList), proxySelector);
+	}
 
-    /*************************************************************************
-     * connectFailed
-     * 
-     * @see java.net.ProxySelector#connectFailed(java.net.URI,
-     *      java.net.SocketAddress, java.io.IOException)
-     ************************************************************************/
-    @Override
-    public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
-        this.delegate.connectFailed(uri, sa, ioe);
-    }
+	/*************************************************************************
+	 * connectFailed
+	 * 
+	 * @see java.net.ProxySelector#connectFailed(java.net.URI,
+	 *      java.net.SocketAddress, java.io.IOException)
+	 ************************************************************************/
+	@Override
+	public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+		this.delegate.connectFailed(uri, sa, ioe);
+	}
 
-    /*************************************************************************
-     * select
-     * 
-     * @see java.net.ProxySelector#select(java.net.URI)
-     ************************************************************************/
+	/*************************************************************************
+	 * select
+	 * 
+	 * @see java.net.ProxySelector#select(java.net.URI)
+	 ************************************************************************/
 
-    @Override
-    public List<Proxy> select(URI uri) {
+	@Override
+	public List<Proxy> select(URI uri) {
 
-        // If in white list, use DIRECT connection.
-        for (UriFilter filter : this.whiteListFilter) {
-            if (filter.accept(uri)) {
-                return ProxyUtil.noProxyList();
-            }
-        }
+		// If in white list, use DIRECT connection.
+		for (UriFilter filter : this.whiteListFilter) {
+			if (filter.accept(uri)) {
+				return ProxyUtil.noProxyList();
+			}
+		}
 
-        return this.delegate.select(uri);
-    }
+		return this.delegate.select(uri);
+	}
 
 }

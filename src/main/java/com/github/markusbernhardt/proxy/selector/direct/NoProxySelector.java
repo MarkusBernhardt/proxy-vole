@@ -13,56 +13,57 @@ import com.github.markusbernhardt.proxy.util.ProxyUtil;
  * This proxy selector will always return a "DIRECT" proxy. Implemented as
  * singleton.
  *
- * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
+ * @author Markus Bernhardt, Copyright 2016
+ * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
 public class NoProxySelector extends ProxySelector {
 
-    private static NoProxySelector instance;
+	private static NoProxySelector instance;
 
-    /*************************************************************************
-     * Constructor
-     ************************************************************************/
+	/*************************************************************************
+	 * Constructor
+	 ************************************************************************/
 
-    private NoProxySelector() {
-        super();
-    }
+	private NoProxySelector() {
+		super();
+	}
 
-    /*************************************************************************
-     * Gets the one and only instance of this selector.
-     * 
-     * @return a DirectSelector.
-     ************************************************************************/
+	/*************************************************************************
+	 * Gets the one and only instance of this selector.
+	 * 
+	 * @return a DirectSelector.
+	 ************************************************************************/
 
-    public static synchronized NoProxySelector getInstance() {
-        if (NoProxySelector.instance == null) {
-            NoProxySelector.instance = new NoProxySelector();
-        }
-        return instance;
-    }
+	public static synchronized NoProxySelector getInstance() {
+		if (NoProxySelector.instance == null) {
+			NoProxySelector.instance = new NoProxySelector();
+		}
+		return instance;
+	}
 
-    /*************************************************************************
-     * connectFailed
-     * 
-     * @see java.net.ProxySelector#connectFailed(java.net.URI,
-     *      java.net.SocketAddress, java.io.IOException)
-     ************************************************************************/
+	/*************************************************************************
+	 * connectFailed
+	 * 
+	 * @see java.net.ProxySelector#connectFailed(java.net.URI,
+	 *      java.net.SocketAddress, java.io.IOException)
+	 ************************************************************************/
 
-    @Override
-    public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
-        // Not used.
-    }
+	@Override
+	public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+		// Not used.
+	}
 
-    /*************************************************************************
-     * select
-     * 
-     * @see java.net.ProxySelector#select(java.net.URI)
-     ************************************************************************/
+	/*************************************************************************
+	 * select
+	 * 
+	 * @see java.net.ProxySelector#select(java.net.URI)
+	 ************************************************************************/
 
-    @Override
-    public List<Proxy> select(URI uri) {
-        return ProxyUtil.noProxyList();
-    }
+	@Override
+	public List<Proxy> select(URI uri) {
+		return ProxyUtil.noProxyList();
+	}
 
 }
 

@@ -30,65 +30,66 @@ import com.github.markusbernhardt.proxy.util.UriFilter;
  * Note that this implementation does not cover all variations of all browsers
  * but should cover the most used formats.
  * 
- * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
+ * @author Markus Bernhardt, Copyright 2016
+ * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
 public class DefaultWhiteListParser implements WhiteListParser {
 
-    /*************************************************************************
-     * parseWhiteList
-     * 
-     * @see com.github.markusbernhardt.proxy.selector.whitelist.WhiteListParser#parseWhiteList(java.lang.String)
-     ************************************************************************/
+	/*************************************************************************
+	 * parseWhiteList
+	 * 
+	 * @see com.github.markusbernhardt.proxy.selector.whitelist.WhiteListParser#parseWhiteList(java.lang.String)
+	 ************************************************************************/
 
-    public List<UriFilter> parseWhiteList(String whiteList) {
-        List<UriFilter> result = new ArrayList<UriFilter>();
+	public List<UriFilter> parseWhiteList(String whiteList) {
+		List<UriFilter> result = new ArrayList<UriFilter>();
 
-        String[] token = whiteList.split("[, ]+");
-        for (int i = 0; i < token.length; i++) {
-            String tkn = token[i].trim();
-            if (isIP4SubnetFilter(tkn) || isIP6SubnetFilter(tkn)) {
-                result.add(new IpRangeFilter(tkn));
-                continue;
-            } else if (tkn.endsWith("*")) {
-                tkn = tkn.substring(0, tkn.length() - 1);
-                result.add(new HostnameFilter(Mode.BEGINS_WITH, tkn));
-                continue;
-            } else if (tkn.trim().startsWith("*")) {
-                tkn = tkn.substring(1);
-                result.add(new HostnameFilter(Mode.ENDS_WITH, tkn));
-            } else if (tkn.trim().equals("<local>")) {
-                result.add(new IELocalByPassFilter());
-            } else {
-                result.add(new HostnameFilter(Mode.ENDS_WITH, tkn));
-            }
-        }
+		String[] token = whiteList.split("[, ]+");
+		for (int i = 0; i < token.length; i++) {
+			String tkn = token[i].trim();
+			if (isIP4SubnetFilter(tkn) || isIP6SubnetFilter(tkn)) {
+				result.add(new IpRangeFilter(tkn));
+				continue;
+			} else if (tkn.endsWith("*")) {
+				tkn = tkn.substring(0, tkn.length() - 1);
+				result.add(new HostnameFilter(Mode.BEGINS_WITH, tkn));
+				continue;
+			} else if (tkn.trim().startsWith("*")) {
+				tkn = tkn.substring(1);
+				result.add(new HostnameFilter(Mode.ENDS_WITH, tkn));
+			} else if (tkn.trim().equals("<local>")) {
+				result.add(new IELocalByPassFilter());
+			} else {
+				result.add(new HostnameFilter(Mode.ENDS_WITH, tkn));
+			}
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    /*************************************************************************
-     * Checks if the given token is an IP6 subnet filter.
-     * 
-     * @param token
-     *            to analyze.
-     * @return true if it is a valid IP6 subnet filter else false.
-     ************************************************************************/
+	/*************************************************************************
+	 * Checks if the given token is an IP6 subnet filter.
+	 * 
+	 * @param token
+	 *            to analyze.
+	 * @return true if it is a valid IP6 subnet filter else false.
+	 ************************************************************************/
 
-    private boolean isIP6SubnetFilter(String token) {
-        return IPWithSubnetChecker.isValidIP6Range(token);
-    }
+	private boolean isIP6SubnetFilter(String token) {
+		return IPWithSubnetChecker.isValidIP6Range(token);
+	}
 
-    /*************************************************************************
-     * Checks if the given token is an IP4 subnet filter.
-     * 
-     * @param token
-     *            to analyze.
-     * @return true if it is a valid IP4 subnet filter else false.
-     ************************************************************************/
+	/*************************************************************************
+	 * Checks if the given token is an IP4 subnet filter.
+	 * 
+	 * @param token
+	 *            to analyze.
+	 * @return true if it is a valid IP4 subnet filter else false.
+	 ************************************************************************/
 
-    private boolean isIP4SubnetFilter(String token) {
-        return IPWithSubnetChecker.isValidIP4Range(token);
-    }
+	private boolean isIP4SubnetFilter(String token) {
+		return IPWithSubnetChecker.isValidIP4Range(token);
+	}
 
 }

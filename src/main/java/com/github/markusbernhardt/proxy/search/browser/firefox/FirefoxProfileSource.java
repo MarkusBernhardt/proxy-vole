@@ -6,19 +6,20 @@ import java.io.IOException;
 /*****************************************************************************
  * A profile source for Firefox profiles.
  * 
- * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
+ * @author Markus Bernhardt, Copyright 2016
+ * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
 interface FirefoxProfileSource {
 
-    /*************************************************************************
-     * Gets the profiles.ini file found on the current system.
-     * 
-     * @return the config folder.
-     * @throws IOException
-     *             on error.
-     ************************************************************************/
+	/*************************************************************************
+	 * Gets the profiles.ini file found on the current system.
+	 * 
+	 * @return the config folder.
+	 * @throws IOException
+	 *             on error.
+	 ************************************************************************/
 
-    public File getProfilesIni() throws IOException;
+	public File getProfilesIni() throws IOException;
 
 }

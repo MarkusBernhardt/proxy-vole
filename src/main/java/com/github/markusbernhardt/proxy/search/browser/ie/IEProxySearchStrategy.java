@@ -51,11 +51,11 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 		return result;
 	}
 
-    /*************************************************************************
-     * Gets the printable name of the search strategy.
-     * 
-     * @return the printable name of the search strategy
-     ************************************************************************/
+	/*************************************************************************
+	 * Gets the printable name of the search strategy.
+	 * 
+	 * @return the printable name of the search strategy
+	 ************************************************************************/
 
 	@Override
 	public String getName() {
@@ -79,12 +79,12 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 
 		// Create IEProxyConfig instance
 		return new IEProxyConfig(winHttpCurrentUserIeProxyConfig.fAutoDetect,
-				winHttpCurrentUserIeProxyConfig.lpszAutoConfigUrl != null
-						? winHttpCurrentUserIeProxyConfig.lpszAutoConfigUrl.getValue() : null,
-				winHttpCurrentUserIeProxyConfig.lpszProxy != null ? winHttpCurrentUserIeProxyConfig.lpszProxy.getValue()
-						: null,
-				winHttpCurrentUserIeProxyConfig.lpszProxyBypass != null
-						? winHttpCurrentUserIeProxyConfig.lpszProxyBypass.getValue() : null);
+		        winHttpCurrentUserIeProxyConfig.lpszAutoConfigUrl != null
+		                ? winHttpCurrentUserIeProxyConfig.lpszAutoConfigUrl.getValue() : null,
+		        winHttpCurrentUserIeProxyConfig.lpszProxy != null ? winHttpCurrentUserIeProxyConfig.lpszProxy.getValue()
+		                : null,
+		        winHttpCurrentUserIeProxyConfig.lpszProxyBypass != null
+		                ? winHttpCurrentUserIeProxyConfig.lpszProxyBypass.getValue() : null);
 
 	}
 
@@ -103,7 +103,7 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 			Logger.log(getClass(), LogLevel.TRACE, "Autodetecting script URL.");
 			// This will take some time.
 			DWORD dwAutoDetectFlags = new DWORD(
-					WinHttp.WINHTTP_AUTO_DETECT_TYPE_DHCP | WinHttp.WINHTTP_AUTO_DETECT_TYPE_DNS_A);
+			        WinHttp.WINHTTP_AUTO_DETECT_TYPE_DHCP | WinHttp.WINHTTP_AUTO_DETECT_TYPE_DNS_A);
 			LPWSTR ppwszAutoConfigUrl = new LPWSTR();
 			boolean result = WinHttp.INSTANCE.WinHttpDetectAutoProxyConfigUrl(dwAutoDetectFlags, ppwszAutoConfigUrl);
 			if (result) {
@@ -145,7 +145,7 @@ public class IEProxySearchStrategy implements ProxySearchStrategy {
 			return null;
 		}
 		Logger.log(getClass(), LogLevel.TRACE, "IE uses manual settings: {0} with bypass list: {1}", proxyString,
-				bypassList);
+		        bypassList);
 
 		Properties p = parseProxyList(proxyString);
 

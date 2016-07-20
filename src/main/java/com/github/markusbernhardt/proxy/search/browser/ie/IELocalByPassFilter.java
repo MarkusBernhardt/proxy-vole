@@ -6,23 +6,24 @@ import com.github.markusbernhardt.proxy.util.UriFilter;
 
 /*****************************************************************************
  * 
- * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
+ * @author Markus Bernhardt, Copyright 2016
+ * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
 public class IELocalByPassFilter implements UriFilter {
 
-    /*************************************************************************
-     * accept
-     * 
-     * @see com.github.markusbernhardt.proxy.util.UriFilter#accept(java.net.URI)
-     ************************************************************************/
+	/*************************************************************************
+	 * accept
+	 * 
+	 * @see com.github.markusbernhardt.proxy.util.UriFilter#accept(java.net.URI)
+	 ************************************************************************/
 
-    public boolean accept(URI uri) {
-        if (uri == null) {
-            return false;
-        }
-        String host = uri.getAuthority();
-        return host != null && !host.contains(".");
-    }
+	public boolean accept(URI uri) {
+		if (uri == null) {
+			return false;
+		}
+		String host = uri.getAuthority();
+		return host != null && !host.contains(".");
+	}
 
 }

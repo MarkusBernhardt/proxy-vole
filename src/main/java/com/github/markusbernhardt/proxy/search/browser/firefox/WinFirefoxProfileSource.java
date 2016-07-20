@@ -14,42 +14,43 @@ import com.sun.jna.platform.win32.ShlObj;
  * </p>
  * The location of the appdata folder is read from the windows registry.
  *
- * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
+ * @author Markus Bernhardt, Copyright 2016
+ * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
 // TODO 02.06.2015 bros Format has changed in newer versions of firefox.
 
 class WinFirefoxProfileSource implements FirefoxProfileSource {
 
-    /*************************************************************************
-     * Constructor
-     ************************************************************************/
+	/*************************************************************************
+	 * Constructor
+	 ************************************************************************/
 
-    public WinFirefoxProfileSource() {
-        super();
-    }
+	public WinFirefoxProfileSource() {
+		super();
+	}
 
-    /*************************************************************************
-     * Reads the current location of the app data folder from the registry.
-     * 
-     * @return a path to the folder.
-     ************************************************************************/
+	/*************************************************************************
+	 * Reads the current location of the app data folder from the registry.
+	 * 
+	 * @return a path to the folder.
+	 ************************************************************************/
 
-    private String getAppFolder() {
-        return Shell32Util.getFolderPath(ShlObj.CSIDL_APPDATA);
-    }
+	private String getAppFolder() {
+		return Shell32Util.getFolderPath(ShlObj.CSIDL_APPDATA);
+	}
 
-    /*************************************************************************
-     * Get profiles.ini for the Windows Firefox profile
-     * 
-     * @throws IOException
-     *             on error.
-     ************************************************************************/
+	/*************************************************************************
+	 * Get profiles.ini for the Windows Firefox profile
+	 * 
+	 * @throws IOException
+	 *             on error.
+	 ************************************************************************/
 
-    @Override
-    public File getProfilesIni() throws IOException {
-        File appDataDir = new File(getAppFolder());
-        return new File(appDataDir, "Mozilla" + File.separator + "Firefox" + File.separator + "profiles.ini");
-    }
+	@Override
+	public File getProfilesIni() throws IOException {
+		File appDataDir = new File(getAppFolder());
+		return new File(appDataDir, "Mozilla" + File.separator + "Firefox" + File.separator + "profiles.ini");
+	}
 
 }

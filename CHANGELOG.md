@@ -1,7 +1,8 @@
 #Change Log
-This file contains the change log. The changes are marked with the following symbology.
+This file contains the change log.
 
 ##Unreleased
+* Changes after receiving some mails from different people about ASL2 licensing
 
 ##1.0.1
 * Fix NullPointerException in IEProxySearchStrategy.

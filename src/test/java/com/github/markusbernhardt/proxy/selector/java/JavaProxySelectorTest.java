@@ -11,18 +11,19 @@ import com.github.markusbernhardt.proxy.search.java.JavaProxySearchStrategy;
 /*****************************************************************************
  * Some unit tests for the Java Proxy search strategy.
  * 
- * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
+ * @author Markus Bernhardt, Copyright 2016
+ * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
 public class JavaProxySelectorTest {
 
-    /*************************************************************************
-     * Test method
-     ************************************************************************/
-    @Test
-    public void withoutSystemPropertyShouldReturnNull() {
-        ProxySelector ps = new JavaProxySearchStrategy().getProxySelector();
-        assertNull(ps);
-    }
+	/*************************************************************************
+	 * Test method
+	 ************************************************************************/
+	@Test
+	public void withoutSystemPropertyShouldReturnNull() {
+		ProxySelector ps = new JavaProxySearchStrategy().getProxySelector();
+		assertNull(ps);
+	}
 
 }

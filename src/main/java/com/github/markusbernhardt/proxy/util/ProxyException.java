@@ -3,54 +3,55 @@ package com.github.markusbernhardt.proxy.util;
 /*****************************************************************************
  * Indicates an exception in the proxy framework.
  *
- * @author Bernd Rosstauscher (proxyvole@rosstauscher.de) Copyright 2009
+ * @author Markus Bernhardt, Copyright 2016
+ * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
 public class ProxyException extends Exception {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    /*************************************************************************
-     * Constructor
-     ************************************************************************/
+	/*************************************************************************
+	 * Constructor
+	 ************************************************************************/
 
-    public ProxyException() {
-        super();
-    }
+	public ProxyException() {
+		super();
+	}
 
-    /*************************************************************************
-     * Constructor
-     * 
-     * @param message
-     *            the error message
-     * @param cause
-     *            the causing exception for chaining exceptions.
-     ************************************************************************/
+	/*************************************************************************
+	 * Constructor
+	 * 
+	 * @param message
+	 *            the error message
+	 * @param cause
+	 *            the causing exception for chaining exceptions.
+	 ************************************************************************/
 
-    public ProxyException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public ProxyException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    /*************************************************************************
-     * Constructor
-     * 
-     * @param message
-     *            the error message
-     ************************************************************************/
+	/*************************************************************************
+	 * Constructor
+	 * 
+	 * @param message
+	 *            the error message
+	 ************************************************************************/
 
-    public ProxyException(String message) {
-        super(message);
-    }
+	public ProxyException(String message) {
+		super(message);
+	}
 
-    /*************************************************************************
-     * Constructor
-     * 
-     * @param cause
-     *            the causing exception for chaining exceptions.
-     ************************************************************************/
+	/*************************************************************************
+	 * Constructor
+	 * 
+	 * @param cause
+	 *            the causing exception for chaining exceptions.
+	 ************************************************************************/
 
-    public ProxyException(Throwable cause) {
-        super(cause);
-    }
+	public ProxyException(Throwable cause) {
+		super(cause);
+	}
 
 }
