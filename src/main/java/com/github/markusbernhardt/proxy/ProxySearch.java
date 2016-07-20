@@ -16,6 +16,7 @@ import com.github.markusbernhardt.proxy.search.desktop.win.WinProxySearchStrateg
 import com.github.markusbernhardt.proxy.search.env.EnvProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.java.JavaProxySearchStrategy;
 import com.github.markusbernhardt.proxy.selector.misc.BufferedProxySelector;
+import com.github.markusbernhardt.proxy.selector.misc.BufferedProxySelector.CacheScope;
 import com.github.markusbernhardt.proxy.selector.misc.ProxyListFallbackSelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
 import com.github.markusbernhardt.proxy.util.Logger;
@@ -48,9 +49,12 @@ public class ProxySearch implements ProxySearchStrategy {
 	private static final long DEFAULT_PAC_CACHE_TTL = 1000 * 60 * 10; // 10
 	                                                                  // Minutes
 
+	private static final CacheScope DEFAULT_PAC_CACHE_SCOPE = CacheScope.CACHE_SCOPE_HOST;
+
 	private List<ProxySearchStrategy> strategies;
 	private int pacCacheSize;
 	private long pacCacheTTL;
+	private CacheScope pacCacheScope;
 
 	/*****************************************************************************
 	 * Types of proxy detection supported by the builder.
@@ -86,6 +90,7 @@ public class ProxySearch implements ProxySearchStrategy {
 		this.strategies = new ArrayList<ProxySearchStrategy>();
 		this.pacCacheSize = DEFAULT_PAC_CACHE_SIZE;
 		this.pacCacheTTL = DEFAULT_PAC_CACHE_TTL;
+		this.pacCacheScope = DEFAULT_PAC_CACHE_SCOPE;
 	}
 
 	/*************************************************************************
@@ -170,11 +175,14 @@ public class ProxySearch implements ProxySearchStrategy {
 	 * @param ttl
 	 *            is the time to live of the cache entries as amount of
 	 *            milliseconds.
+	 * @param cacheScope
+	 *            the desired cache scope.
 	 ************************************************************************/
 
-	public void setPacCacheSettings(int size, long ttl) {
+	public void setPacCacheSettings(int size, long ttl, CacheScope cacheScope) {
 		this.pacCacheSize = size;
 		this.pacCacheTTL = ttl;
+		this.pacCacheScope = cacheScope;
 	}
 
 	/*************************************************************************
@@ -247,7 +255,7 @@ public class ProxySearch implements ProxySearchStrategy {
 	private ProxySelector installBufferingAndFallbackBehaviour(ProxySelector selector) {
 		if (selector instanceof PacProxySelector) {
 			if (this.pacCacheSize > 0) {
-				selector = new BufferedProxySelector(this.pacCacheSize, this.pacCacheTTL, selector);
+				selector = new BufferedProxySelector(this.pacCacheSize, this.pacCacheTTL, selector, pacCacheScope);
 			}
 			selector = new ProxyListFallbackSelector(selector);
 		}
