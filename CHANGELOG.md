@@ -17,7 +17,7 @@ This file contains the change log.
 * Removed the Windows DLL and its sources.
 * Port from JNI to JNA
 
-##Last version off proxy-vole at Google Code repository 
+##Last version of proxy-vole at Google Code repository 
 * Preparing migration to Maven
 * We now support on Linux Gnome the dconf settings format
 * Fixed issue 55 : Improved shExpMatch method
