@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.markusbernhardt.proxy.util.Logger;
-import com.github.markusbernhardt.proxy.util.ProxyUtil;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
+import com.github.markusbernhardt.proxy.util.ProxyUtil;
 
 /*****************************************************************************
  * ProxySelector that will use a PAC script to find an proxy for a given URI.
@@ -126,6 +126,9 @@ public class PacProxySelector extends ProxySelector {
 		try {
 			List<Proxy> proxies = new ArrayList<Proxy>();
 			String parseResult = this.pacScriptParser.evaluate(uri.toString(), uri.getHost());
+			if (parseResult == null) {
+				parseResult = PAC_DIRECT;
+			}
 			String[] proxyDefinitions = parseResult.split("[;]");
 			for (String proxyDef : proxyDefinitions) {
 				if (proxyDef.trim().length() > 0) {
@@ -149,7 +152,7 @@ public class PacProxySelector extends ProxySelector {
 	 ************************************************************************/
 
 	private Proxy buildProxyFromPacResult(String pacResult) {
-		if (pacResult == null || pacResult.trim().length() < 6) {
+		if (pacResult.trim().length() < 6) {
 			return Proxy.NO_PROXY;
 		}
 		String proxyDef = pacResult.trim();
