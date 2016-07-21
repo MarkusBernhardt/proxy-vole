@@ -2,6 +2,8 @@
 This file contains the change log.
 
 ##Unreleased
+
+##1.0.2
 * Fixed issue #2: NullPointerException if PAC method returns null
 * Fixed issue #1: Caching with individual URLs might not be ideal  
 * Changes after receiving some mails from different people about ASL2 licensing
