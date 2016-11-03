@@ -11,7 +11,7 @@ The library provides some proxy setting search strategies to read the proxy sett
 * Can't contact Bernd Rosstauscher.
 * Google Code is dead by now.
 * proxy-vole seems to be dead even longer. Last commit mid 2015. Last release end 2013.
-* proxy-vole is not available on any public Maven repository. Need to change the Maven coordinates and Java package names
+* proxy-vole is not available on any public Maven repository. Needed to change the Maven coordinates and Java package names
   to be able to push it to Maven Central on my own.
 * I don't like the Windows DLL and usage of JNI. Replaced both by JNA.
 
@@ -94,19 +94,17 @@ if (ProxySelector.getDefault() != null) {
 
 // Find first proxy for HTTP/S. Any DIRECT proxy in the list returned is only second choice
 if (proxies != null) {
-    for (Proxy p : proxies) {
+    loop: for (Proxy p : proxies) {
         switch (pxy.type()) {
         case HTTP:
-            return p;
+            proxy = p;
+            break loop;
         case DIRECT:
             proxy = p;
             break;
         }
     }
 }
-
-// return DIRECT or NO proxy (being the same, more or less)
-return proxy;
 ```
 
 ###Logging
