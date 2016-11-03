@@ -1,7 +1,7 @@
 #proxy-vole
 
 Proxy Vole is a Java library to auto detect the platform network proxy settings.  
-**Note: This library is a fork of [proxy-vole](https://code.google.com/p/proxy-vole/) by Bernd Rosstauscher hosted at Google Code.**
+Note: This library is a fork of the now dead [proxy-vole](https://code.google.com/p/proxy-vole/) project by Bernd Rosstauscher hosted at Google Code.
 
 ##Introduction
 The library provides some proxy setting search strategies to read the proxy settings from the system config 
@@ -10,7 +10,7 @@ The library provides some proxy setting search strategies to read the proxy sett
 ##Why a fork?
 * Can't contact Bernd Rosstauscher.
 * Google Code is dead by now.
-* proxy-vole seems to be dead even longer. Last commit over a year ago. Last release end 2013.
+* proxy-vole seems to be dead even longer. Last commit mid 2015. Last release end 2013.
 * proxy-vole is not available on any public Maven repository. Need to change the Maven coordinates and Java package names
   to be able to push it to Maven Central on my own.
 * I don't like the Windows DLL and usage of JNI. Replaced both by JNA.
@@ -76,6 +76,37 @@ Authenticator.setDefault(new Authenticator() {
         }
     }               
 });
+```
+
+###Choose the right proxy
+Please be aware a Java ProxySelector returns a list of valid proxies for a given URL and sometimes simply 
+choosing the first one is not good enough. Very often a check of the supported protocol is neccessary.
+
+The following code chooses the first HTTP/S proxy.
+```Java
+Proxy  proxy = Proxy.NO_PROXY;
+
+// Get list of proxies from default ProxySelector available for given URL
+List<Proxy> proxies = null;
+if (ProxySelector.getDefault() != null) {
+    proxies = ProxySelector.getDefault().select(uri);
+}
+
+// Find first proxy for HTTP/S. Any DIRECT proxy in the list returned is only second choice
+if (proxies != null) {
+    for (Proxy p : proxies) {
+        switch (pxy.type()) {
+        case HTTP:
+            return p;
+        case DIRECT:
+            proxy = p;
+            break;
+        }
+    }
+}
+
+// return DIRECT or NO proxy (being the same, more or less)
+return proxy;
 ```
 
 ###Logging

@@ -2,6 +2,7 @@
 This file contains the change log.
 
 ##Unreleased
+* Added proxy selection to README.md. Thanks to Guido Schnepp!
 
 ##1.0.2
 * Fixed issue #2: NullPointerException if PAC method returns null
