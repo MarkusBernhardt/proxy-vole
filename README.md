@@ -84,7 +84,7 @@ choosing the first one is not good enough. Very often a check of the supported p
 
 The following code chooses the first HTTP/S proxy.
 ```Java
-Proxy  proxy = Proxy.NO_PROXY;
+Proxy proxy = Proxy.NO_PROXY;
 
 // Get list of proxies from default ProxySelector available for given URL
 List<Proxy> proxies = null;
@@ -95,7 +95,7 @@ if (ProxySelector.getDefault() != null) {
 // Find first proxy for HTTP/S. Any DIRECT proxy in the list returned is only second choice
 if (proxies != null) {
     loop: for (Proxy p : proxies) {
-        switch (pxy.type()) {
+        switch (p.type()) {
         case HTTP:
             proxy = p;
             break loop;
