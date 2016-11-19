@@ -45,104 +45,99 @@ import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
 public class JavaProxySearchStrategy implements ProxySearchStrategy {
 
-	/*************************************************************************
-	 * Constructor Will use the default environment variables.
-	 ************************************************************************/
+  /*************************************************************************
+   * Constructor Will use the default environment variables.
+   ************************************************************************/
 
-	public JavaProxySearchStrategy() {
-		super();
-	}
+  public JavaProxySearchStrategy() {
+    super();
+  }
 
-	/*************************************************************************
-	 * Loads the proxy settings from environment variables.
-	 * 
-	 * @return a configured ProxySelector, null if none is found.
-	 ************************************************************************/
+  /*************************************************************************
+   * Loads the proxy settings from environment variables.
+   * 
+   * @return a configured ProxySelector, null if none is found.
+   ************************************************************************/
 
-	@Override
-	public ProxySelector getProxySelector() {
-		ProtocolDispatchSelector ps = new ProtocolDispatchSelector();
+  @Override
+  public ProxySelector getProxySelector() {
+    ProtocolDispatchSelector ps = new ProtocolDispatchSelector();
 
-		if (!proxyPropertyPresent()) {
-			return null;
-		}
-		Logger.log(getClass(), LogLevel.TRACE, "Using settings from Java System Properties");
+    Logger.log(getClass(), LogLevel.TRACE, "Using settings from Java System Properties");
 
-		setupProxyForProtocol(ps, "http", 80);
-		setupProxyForProtocol(ps, "https", 443);
-		setupProxyForProtocol(ps, "ftp", 80);
-		setupProxyForProtocol(ps, "ftps", 80);
-		setupSocktProxy(ps);
+    setupProxyForProtocol(ps, "http", 80);
+    setupProxyForProtocol(ps, "https", 443);
+    setupProxyForProtocol(ps, "ftp", 80);
+    setupProxyForProtocol(ps, "ftps", 80);
+    setupSocktProxy(ps);
 
-		return ps;
-	}
+    if (ps.size() == 0) {
+      return null;
+    }
 
-	/*************************************************************************
-	 * Gets the printable name of the search strategy.
-	 * 
-	 * @return the printable name of the search strategy
-	 ************************************************************************/
+    return ps;
+  }
 
-	@Override
-	public String getName() {
-		return "java";
-	}
+  /*************************************************************************
+   * Gets the printable name of the search strategy.
+   * 
+   * @return the printable name of the search strategy
+   ************************************************************************/
 
-	/*************************************************************************
-	 * @return true if the http.proxyHost is available as system property.
-	 ************************************************************************/
+  @Override
+  public String getName() {
+    return "java";
+  }
 
-	private boolean proxyPropertyPresent() {
-		return System.getProperty("http.proxyHost") != null && System.getProperty("http.proxyHost").trim().length() > 0;
-	}
+  /*************************************************************************
+   * Parse SOCKS settings
+   * 
+   * @param ps
+   * @throws NumberFormatException
+   ************************************************************************/
 
-	/*************************************************************************
-	 * Parse SOCKS settings
-	 * 
-	 * @param ps
-	 * @throws NumberFormatException
-	 ************************************************************************/
+  private void setupSocktProxy(ProtocolDispatchSelector ps) {
+    String host = System.getProperty("socksProxyHost");
+    if (host == null || host.trim().length() == 0) {
+      return;
+    }
 
-	private void setupSocktProxy(ProtocolDispatchSelector ps) {
-		String host = System.getProperty("socksProxyHost");
-		String port = System.getProperty("socksProxyPort", "1080");
-		if (host != null && host.trim().length() > 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "Socks proxy {0}:{1} found", host, port);
-			ps.setSelector("socks", new FixedSocksSelector(host, Integer.parseInt(port)));
-		}
-	}
+    String port = System.getProperty("socksProxyPort", "1080");
+    Logger.log(getClass(), LogLevel.TRACE, "Socks proxy {0}:{1} found", host, port);
+    ps.setSelector("socks", new FixedSocksSelector(host, Integer.parseInt(port)));
+  }
 
-	/*************************************************************************
-	 * Parse properties for the given protocol.
-	 * 
-	 * @param ps
-	 * @param protocol
-	 * @throws NumberFormatException
-	 ************************************************************************/
+  /*************************************************************************
+   * Parse properties for the given protocol.
+   * 
+   * @param ps
+   * @param protocol
+   * @throws NumberFormatException
+   ************************************************************************/
 
-	private void setupProxyForProtocol(ProtocolDispatchSelector ps, String protocol, int defaultPort) {
-		String host = System.getProperty(protocol + ".proxyHost");
-		String port = System.getProperty(protocol + ".proxyPort", "" + defaultPort);
-		String whiteList = System.getProperty(protocol + ".nonProxyHosts", "").replace('|', ',');
+  private void setupProxyForProtocol(ProtocolDispatchSelector ps, String protocol, int defaultPort) {
+    String host = System.getProperty(protocol + ".proxyHost");
+    if (host == null || host.trim().length() == 0) {
+      return;
+    }
 
-		if ("https".equalsIgnoreCase(protocol)) { // This is dirty but https has
-		                                          // no own property for it.
-			whiteList = System.getProperty("http.nonProxyHosts", "").replace('|', ',');
-		}
+    String port = System.getProperty(protocol + ".proxyPort", Integer.toString(defaultPort));
+    String whiteList = System.getProperty(protocol + ".nonProxyHosts", "").replace('|', ',');
 
-		if (host == null || host.trim().length() == 0) {
-			return;
-		}
+    if ("https".equalsIgnoreCase(protocol)) { // This is dirty but https has
+                                              // no own property for it.
+      whiteList = System.getProperty("http.nonProxyHosts", "").replace('|', ',');
+    }
 
-		Logger.log(getClass(), LogLevel.TRACE, protocol.toUpperCase() + " proxy {0}:{1} found using whitelist: {2}",
-		        host, port, whiteList);
+    Logger.log(getClass(), LogLevel.TRACE, protocol.toUpperCase() + " proxy {0}:{1} found using whitelist: {2}", host,
+        port, whiteList);
 
-		ProxySelector protocolSelector = new FixedProxySelector(host, Integer.parseInt(port));
-		if (whiteList.trim().length() > 0) {
-			protocolSelector = new ProxyBypassListSelector(whiteList, protocolSelector);
-		}
+    ProxySelector protocolSelector = new FixedProxySelector(host, Integer.parseInt(port));
+    if (whiteList.trim().length() > 0) {
+      protocolSelector = new ProxyBypassListSelector(whiteList, protocolSelector);
+    }
 
-		ps.setSelector(protocol, protocolSelector);
-	}
+    ps.setSelector(protocol, protocolSelector);
+  }
 
 }

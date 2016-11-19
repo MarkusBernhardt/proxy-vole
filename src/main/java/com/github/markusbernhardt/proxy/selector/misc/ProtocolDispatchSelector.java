@@ -125,4 +125,14 @@ public class ProtocolDispatchSelector extends ProxySelector {
 		return selector.select(uri);
 	}
 
+  /*************************************************************************
+   * Gets the size of the selector map.
+   * 
+   * @return the size of the selector map.
+   ************************************************************************/
+
+  public int size() {
+    return this.selectors.size();
+  }
+
 }
