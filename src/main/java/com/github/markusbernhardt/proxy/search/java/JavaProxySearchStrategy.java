@@ -69,9 +69,9 @@ public class JavaProxySearchStrategy implements ProxySearchStrategy {
     setupProxyForProtocol(ps, "https", 443);
     setupProxyForProtocol(ps, "ftp", 80);
     setupProxyForProtocol(ps, "ftps", 80);
-    setupSocktProxy(ps);
+    boolean socksAvailable = setupSocktProxy(ps);
 
-    if (ps.size() == 0) {
+    if (ps.size() == 0 && !socksAvailable) {
       return null;
     }
 
@@ -96,15 +96,16 @@ public class JavaProxySearchStrategy implements ProxySearchStrategy {
    * @throws NumberFormatException
    ************************************************************************/
 
-  private void setupSocktProxy(ProtocolDispatchSelector ps) {
+  private boolean setupSocktProxy(ProtocolDispatchSelector ps) {
     String host = System.getProperty("socksProxyHost");
     if (host == null || host.trim().length() == 0) {
-      return;
+      return false;
     }
 
     String port = System.getProperty("socksProxyPort", "1080");
     Logger.log(getClass(), LogLevel.TRACE, "Socks proxy {0}:{1} found", host, port);
-    ps.setSelector("socks", new FixedSocksSelector(host, Integer.parseInt(port)));
+    ps.setFallbackSelector(new FixedSocksSelector(host, Integer.parseInt(port)));
+    return true;
   }
 
   /*************************************************************************
