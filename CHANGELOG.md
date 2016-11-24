@@ -2,6 +2,9 @@
 This file contains the change log.
 
 ##Unreleased
+
+##1.0.3
+* Fixed issue #5: Failed to find SOCKS proxy with Java search strategy. Thanks to sake!
 * Added proxy selection to README.md. Thanks to Guido Schnepp!
 
 ##1.0.2
