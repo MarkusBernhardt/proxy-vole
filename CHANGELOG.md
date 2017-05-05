@@ -2,6 +2,7 @@
 This file contains the change log.
 
 ##Unreleased
+* Fixed issue #14: WPAD search downto http://wpad/wpad.dat
 
 ##1.0.3
 * Fixed issue #5: Failed to find SOCKS proxy with Java search strategy. Thanks to sake!
