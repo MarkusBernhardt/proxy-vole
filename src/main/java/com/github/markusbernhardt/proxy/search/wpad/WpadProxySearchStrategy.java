@@ -128,7 +128,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
 
     String[] fqdnParts = fqdn.split("\\.");
     for (int i = 0; i < fqdnParts.length; i++) {
-      // Skip "wpap.<TLD>" (for instance "wpad.com"), as this is useless and unsafe
+      // Skip "wpad.<TLD>" (for instance "wpad.com"), as this is useless and unsafe
       if (i == fqdnParts.length - 2) {
 	continue;
       }
