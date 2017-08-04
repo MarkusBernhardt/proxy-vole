@@ -69,8 +69,8 @@ public interface WinHttp extends StdCallLibrary {
 	 * @param ppwszAutoConfigUrl
 	 *            A data type that returns a pointer to a null-terminated
 	 *            Unicode string that contains the configuration URL that
-	 *            receives the proxy data. You must free the string pointed to
-	 *            by ppwszAutoConfigUrl using the GlobalFree function.
+	 *            receives the proxy data.
+         * 
 	 * @return {@code true} if successful; otherwise, {@code false}.
 	 */
 	boolean WinHttpDetectAutoProxyConfigUrl(WinDef.DWORD dwAutoDetectFlags, WTypes.LPWSTR ppwszAutoConfigUrl);
