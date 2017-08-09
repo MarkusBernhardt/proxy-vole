@@ -1,9 +1,13 @@
 package com.github.markusbernhardt.proxy.search.desktop.win;
 
 import java.net.ProxySelector;
+import java.util.Properties;
 
-import com.github.markusbernhardt.proxy.ProxySearchStrategy;
-import com.github.markusbernhardt.proxy.search.browser.ie.IEProxySearchStrategy;
+import com.github.markusbernhardt.proxy.jna.win.WinHttp;
+import com.github.markusbernhardt.proxy.jna.win.WinHttpProxyInfo;
+import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
+import com.github.markusbernhardt.proxy.util.Logger;
+import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 
 /*****************************************************************************
@@ -14,7 +18,7 @@ import com.github.markusbernhardt.proxy.util.ProxyException;
  * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
-public class WinProxySearchStrategy implements ProxySearchStrategy {
+public class WinProxySearchStrategy extends CommonWindowsSearchStrategy {
 
 	/*************************************************************************
 	 * Constructor
@@ -26,23 +30,28 @@ public class WinProxySearchStrategy implements ProxySearchStrategy {
 
 	/*************************************************************************
 	 * getProxySelector
-	 * 
+	 *
 	 * @see com.github.markusbernhardt.proxy.ProxySearchStrategy#getProxySelector()
 	 ************************************************************************/
 
 	@Override
 	public ProxySelector getProxySelector() throws ProxyException {
-		// TODO Rossi 08.05.2009 Implement this by using Win API calls.
-		// new Win32ProxyUtils().winHttpGetDefaultProxyConfiguration()
-		// Current fallback is to use the IE settings. This is better
-		// because the registry settings are most of the time not set.
-		// Some Windows server installations may use it though.
-		return new IEProxySearchStrategy().getProxySelector();
+
+		Logger.log(getClass(), LogLevel.TRACE, "Detecting Windows proxy settings");
+
+		WinProxyConfig windowsProxyConfig = readWindowsProxyConfig();
+
+		if (windowsProxyConfig.getAccessType() == WinHttp.WINHTTP_ACCESS_TYPE_NO_PROXY) {
+			return null;
+		} else {
+			return createFixedProxySelector(windowsProxyConfig);
+		}
+
 	}
 
 	/*************************************************************************
 	 * Gets the printable name of the search strategy.
-	 * 
+	 *
 	 * @return the printable name of the search strategy
 	 ************************************************************************/
 
@@ -51,4 +60,46 @@ public class WinProxySearchStrategy implements ProxySearchStrategy {
 		return "windows";
 	}
 
+	public WinProxyConfig readWindowsProxyConfig() {
+
+		// Retrieve the Win proxy configuration.
+		WinHttpProxyInfo winHttpProxyInfo = new WinHttpProxyInfo();
+		boolean result = WinHttp.INSTANCE.WinHttpGetDefaultProxyConfiguration(winHttpProxyInfo);
+		if (!result) {
+			return null;
+		}
+
+		// Create WinProxyConfig instance
+		return new WinProxyConfig(
+				winHttpProxyInfo.dwAccessType != null ? winHttpProxyInfo.dwAccessType.intValue() : null,
+				winHttpProxyInfo.lpszProxy != null ? winHttpProxyInfo.lpszProxy.getValue() : null,
+				winHttpProxyInfo.lpszProxyBypass != null ? winHttpProxyInfo.lpszProxyBypass.getValue() : null);
+	}
+
+	/*************************************************************************
+	 * Parses the proxy settings into an ProxySelector.
+	 *
+	 * @param winProxySettings
+	 *            the settings to use.
+	 * @return a ProxySelector, null if no settings are set.
+	 * @throws ProxyException
+	 *             on error.
+	 ************************************************************************/
+
+	private ProxySelector createFixedProxySelector(WinProxyConfig winProxyConfig) throws ProxyException {
+		String proxyString = winProxyConfig.getProxy();
+		String bypassList = winProxyConfig.getProxyBypass();
+		if (proxyString == null) {
+			return null;
+		}
+		Logger.log(getClass(), LogLevel.TRACE, "Windows uses manual settings: {0} with bypass list: {1}", proxyString,
+		        bypassList);
+
+		Properties p = parseProxyList(proxyString);
+
+		ProtocolDispatchSelector ps = buildProtocolDispatchSelector(p);
+
+		ProxySelector result = setByPassListOnSelector(bypassList, ps);
+		return result;
+	}
 }
