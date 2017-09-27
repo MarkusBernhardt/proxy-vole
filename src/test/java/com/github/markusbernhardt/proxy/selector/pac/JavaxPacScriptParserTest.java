@@ -143,6 +143,20 @@ public class JavaxPacScriptParserTest {
 		Assert.assertEquals("number boolean string", actual);
 	}
 
+    /*************************************************************************
+     * Test method
+     * 
+     * @throws ProxyException
+     *             on proxy detection error.
+     * @throws MalformedURLException
+     *             on URL erros
+     ************************************************************************/
+    @Test(expected = Exception.class)
+    public void shouldNotExecuteCodeInPac() throws ProxyException, MalformedURLException {
+        PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testRemoteCodeExecution.pac")));
+        p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host.does.not.matter");
+    }
+
 	/*************************************************************************
 	 * Helper method to build the url to the given test file
 	 * 
