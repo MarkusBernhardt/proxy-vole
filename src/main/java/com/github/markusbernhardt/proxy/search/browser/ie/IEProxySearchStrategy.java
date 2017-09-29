@@ -3,19 +3,16 @@ package com.github.markusbernhardt.proxy.search.browser.ie;
 import java.net.ProxySelector;
 import java.util.Properties;
 
-import com.github.markusbernhardt.proxy.ProxySearchStrategy;
-import com.github.markusbernhardt.proxy.jna.win.WTypes2;
 import com.github.markusbernhardt.proxy.jna.win.WinHttp;
 import com.github.markusbernhardt.proxy.jna.win.WinHttpCurrentUserIEProxyConfig;
 import com.github.markusbernhardt.proxy.jna.win.WinHttpHelpers;
-import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
+import com.github.markusbernhardt.proxy.search.desktop.win.CommonWindowsSearchStrategy;
 import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 import com.github.markusbernhardt.proxy.util.ProxyUtil;
-import com.sun.jna.platform.win32.WTypes.LPWSTR;
 import com.sun.jna.platform.win32.WinDef.DWORD;
 
 /*****************************************************************************
