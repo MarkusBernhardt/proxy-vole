@@ -3,9 +3,12 @@ package com.github.markusbernhardt.proxy.search.browser.ie;
 import java.net.ProxySelector;
 import java.util.Properties;
 
+import com.github.markusbernhardt.proxy.ProxySearchStrategy;
+import com.github.markusbernhardt.proxy.jna.win.WTypes2;
 import com.github.markusbernhardt.proxy.jna.win.WinHttp;
 import com.github.markusbernhardt.proxy.jna.win.WinHttpCurrentUserIEProxyConfig;
-import com.github.markusbernhardt.proxy.search.desktop.win.CommonWindowsSearchStrategy;
+import com.github.markusbernhardt.proxy.jna.win.WinHttpHelpers;
+import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
 import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
 import com.github.markusbernhardt.proxy.util.Logger;
@@ -97,11 +100,7 @@ public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 			// This will take some time.
 			DWORD dwAutoDetectFlags = new DWORD(
 			        WinHttp.WINHTTP_AUTO_DETECT_TYPE_DHCP | WinHttp.WINHTTP_AUTO_DETECT_TYPE_DNS_A);
-			LPWSTR ppwszAutoConfigUrl = new LPWSTR();
-			boolean result = WinHttp.INSTANCE.WinHttpDetectAutoProxyConfigUrl(dwAutoDetectFlags, ppwszAutoConfigUrl);
-			if (result) {
-				pacUrl = ppwszAutoConfigUrl.getValue();
-			}
+                        pacUrl = WinHttpHelpers.detectAutoProxyConfigUrl(dwAutoDetectFlags);
 		}
 		if (pacUrl == null) {
 			pacUrl = ieProxyConfig.getAutoConfigUrl();
