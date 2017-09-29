@@ -43,6 +43,13 @@
         </developer>
     </developers>
 
+	<repositories>
+		<repository>
+			<id>Appjangle Releases</id>
+			<url>http://maven.appjangle.com/appjangle/releases</url>
+		</repository>
+	</repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.ini4j</groupId>
@@ -60,6 +67,11 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.javadelight</groupId>
+        	<artifactId>delight-rhino-sandbox</artifactId>
+        	<version>0.0.4</version>
         </dependency>
     </dependencies>
 
