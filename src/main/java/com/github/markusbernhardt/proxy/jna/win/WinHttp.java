@@ -1,7 +1,7 @@
 package com.github.markusbernhardt.proxy.jna.win;
 
+import com.sun.jna.LastErrorException;
 import com.sun.jna.Native;
-import com.sun.jna.platform.win32.WTypes;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.win32.StdCallLibrary;
 import com.sun.jna.win32.W32APIOptions;
@@ -31,6 +31,13 @@ public interface WinHttp extends StdCallLibrary {
 	 */
 	int WINHTTP_ACCESS_TYPE_DEFAULT_PROXY = 0;
 
+        /**
+         * Returned if WinHTTP was unable to discover the URL of the 
+         * Proxy Auto-Configuration (PAC) file using the WPAD method.
+         */
+        int ERROR_WINHTTP_AUTODETECTION_FAILED = 12180;
+        
+        
 	/**
 	 * Retrieves the static proxy or direct configuration from the registry.
 	 * WINHTTP_ACCESS_TYPE_DEFAULT_PROXY does not inherit browser proxy
@@ -71,9 +78,13 @@ public interface WinHttp extends StdCallLibrary {
 	 *            Unicode string that contains the configuration URL that
 	 *            receives the proxy data. You must free the string pointed to
 	 *            by ppwszAutoConfigUrl using the GlobalFree function.
+         * 
 	 * @return {@code true} if successful; otherwise, {@code false}.
+         * @see WinHttpHelpers#detectAutoProxyConfigUrl
 	 */
-	boolean WinHttpDetectAutoProxyConfigUrl(WinDef.DWORD dwAutoDetectFlags, WTypes.LPWSTR ppwszAutoConfigUrl);
+	boolean WinHttpDetectAutoProxyConfigUrl(
+                WinDef.DWORD dwAutoDetectFlags, 
+            WTypes2.LPWSTRByReference ppwszAutoConfigUrl) throws LastErrorException;
 
 	/**
 	 * The WinHttpGetDefaultProxyConfiguration function retrieves the default
