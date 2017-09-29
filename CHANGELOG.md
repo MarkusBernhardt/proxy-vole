@@ -3,6 +3,7 @@ This file contains the change log.
 
 ##Unreleased
 * Fixed issue #14: WPAD search downto http://wpad/wpad.dat
+* Fixed issue #16: Security improvement for issue #14. Thanks to dbdr!
 * Fixed issue #28: Remote code execution possible when evaluating untrusted PAC scripts. Thanks to jonpasski and pajswigger!
 
 ##1.0.3
