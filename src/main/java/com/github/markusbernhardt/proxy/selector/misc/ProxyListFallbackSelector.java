@@ -115,6 +115,9 @@ public class ProxyListFallbackSelector extends ProxySelector {
 				result.add(proxy);
 			}
 		}
+		if(result.isEmpty()){
+		    result.add(Proxy.NO_PROXY);
+		}
 		return result;
 	}
 

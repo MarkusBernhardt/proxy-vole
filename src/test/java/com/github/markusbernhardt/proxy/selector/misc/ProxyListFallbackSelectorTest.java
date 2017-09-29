@@ -35,7 +35,7 @@ public class ProxyListFallbackSelectorTest {
 		this.selector = new ProxyListFallbackSelector(new ProxySelector() {
 			@Override
 			public List<Proxy> select(URI uri) {
-				return Arrays.asList(TestUtil.HTTP_TEST_PROXY, TestUtil.HTTPS_TEST_PROXY, Proxy.NO_PROXY);
+				return Arrays.asList(TestUtil.HTTP_TEST_PROXY, TestUtil.HTTPS_TEST_PROXY);
 			}
 
 			@Override
@@ -51,9 +51,9 @@ public class ProxyListFallbackSelectorTest {
 	@Test
 	public void testList() {
 		List<Proxy> result = this.selector.select(TestUtil.HTTP_TEST_URI);
+        assertEquals(2, result.size());
 		assertEquals(TestUtil.HTTP_TEST_PROXY, result.get(0));
 		assertEquals(TestUtil.HTTPS_TEST_PROXY, result.get(1));
-		assertEquals(Proxy.NO_PROXY, result.get(2));
 	}
 
 	/*************************************************************************
@@ -66,28 +66,61 @@ public class ProxyListFallbackSelectorTest {
 
 		List<Proxy> result = this.selector.select(TestUtil.HTTP_TEST_URI);
 
+        assertEquals(1, result.size());
 		assertEquals(TestUtil.HTTPS_TEST_PROXY, result.get(0));
-		assertEquals(Proxy.NO_PROXY, result.get(1));
 	}
 
-	/*************************************************************************
-	 * Test method
-	 * 
-	 * @throws InterruptedException
-	 *             if the test wait period was interrupted
-	 ************************************************************************/
-	@Test
-	public void testFailedProxyRetry() throws InterruptedException {
-		this.selector.setRetryAfterMs(100);
-		this.selector.connectFailed(TestUtil.HTTP_TEST_URI, TestUtil.HTTP_TEST_PROXY.address(),
-		        new IOException("TEST"));
+    /*************************************************************************
+     * Test method
+     * 
+     * @throws InterruptedException
+     *             if the test wait period was interrupted
+     ************************************************************************/
+    @Test
+    public void testFailedProxyRetry() throws InterruptedException {
+        this.selector.setRetryAfterMs(100);
+        this.selector.connectFailed(TestUtil.HTTP_TEST_URI, TestUtil.HTTP_TEST_PROXY.address(),
+                new IOException("TEST"));
 
-		List<Proxy> result = this.selector.select(TestUtil.HTTP_TEST_URI);
-		assertEquals(2, result.size());
+        List<Proxy> result = this.selector.select(TestUtil.HTTP_TEST_URI);
+        assertEquals(1, result.size());
+        assertEquals(TestUtil.HTTPS_TEST_PROXY, result.get(0));
 
-		Thread.sleep(200);
-		result = this.selector.select(TestUtil.HTTP_TEST_URI);
-		assertEquals(3, result.size());
-	}
+        Thread.sleep(200);
+        result = this.selector.select(TestUtil.HTTP_TEST_URI);
+        assertEquals(2, result.size());
+        assertEquals(TestUtil.HTTP_TEST_PROXY, result.get(0));
+        assertEquals(TestUtil.HTTPS_TEST_PROXY, result.get(1));
+    }
+
+    /*************************************************************************
+     * Test method
+     * 
+     * @throws InterruptedException
+     *             if the test wait period was interrupted
+     ************************************************************************/
+    @Test
+    public void testFailedProxyFallbackToNoProxy() throws InterruptedException {
+        this.selector.setRetryAfterMs(100);
+        this.selector.connectFailed(TestUtil.HTTP_TEST_URI, TestUtil.HTTP_TEST_PROXY.address(),
+                new IOException("TEST"));
+
+        List<Proxy> result = this.selector.select(TestUtil.HTTP_TEST_URI);
+        assertEquals(1, result.size());
+        assertEquals(TestUtil.HTTPS_TEST_PROXY, result.get(0));
+
+        this.selector.connectFailed(TestUtil.HTTPS_TEST_URI, TestUtil.HTTPS_TEST_PROXY.address(),
+                new IOException("TEST"));
+
+        result = this.selector.select(TestUtil.HTTP_TEST_URI);
+        assertEquals(1, result.size());
+        assertEquals(Proxy.NO_PROXY, result.get(0));
+
+        Thread.sleep(200);
+        result = this.selector.select(TestUtil.HTTP_TEST_URI);
+        assertEquals(2, result.size());
+        assertEquals(TestUtil.HTTP_TEST_PROXY, result.get(0));
+        assertEquals(TestUtil.HTTPS_TEST_PROXY, result.get(1));
+    }
 
 }

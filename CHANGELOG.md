@@ -2,6 +2,7 @@
 This file contains the change log.
 
 ## Unreleased
+* Fixed issue #9: Unresponsive proxy with ProxyListFallbackSelector -> NPE 
 * Fixed issue #14: WPAD search downto http://wpad/wpad.dat
 * Fixed issue #16: Security improvement for issue #14. Thanks to dbdr!
 * Fixed issue #21: Fixes bug in calling Windows function WinHttpDetectAutoProxyConfigUrl. Thanks to phansson!
