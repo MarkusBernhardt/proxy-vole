@@ -108,9 +108,11 @@ public class PacProxySelectorTest {
 	public void testScriptMuliProxy() throws ProxyException, MalformedURLException {
 		PacProxySelector pacProxySelector = new PacProxySelector(new UrlPacScriptSource(toUrl("testMultiProxy.pac")));
 		List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
-		assertEquals(2, result.size());
-		assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy.com", 80)), result.get(0));
-		assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy2.com", 8080)), result.get(1));
+		assertEquals(4, result.size());
+        assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy.com", 80)), result.get(0));
+        assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy2.com", 8080)), result.get(1));
+        assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy3.com", 8080)), result.get(2));
+        assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy4.com", 80)), result.get(3));
 	}
 
 	/*************************************************************************
