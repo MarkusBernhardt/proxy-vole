@@ -1,11 +1,11 @@
 package com.github.markusbernhardt.proxy.selector.pac;
 
-import java.lang.reflect.Method;
-
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
-import delight.rhinosandox.RhinoSandbox;
-import delight.rhinosandox.RhinoSandboxes;
+import delight.nashornsandbox.NashornSandbox;
+import delight.nashornsandbox.NashornSandboxes;
+
+import java.lang.reflect.Method;
 
 /*****************************************************************************
  * PAC parser using the Rhino JavaScript engine bundled with Java 1.6<br>
@@ -25,7 +25,7 @@ public class JavaxPacScriptParser implements PacScriptParser {
 	static final String SOURCE_NAME = JavaxPacScriptParser.class.getName();
 
 	private final PacScriptSource source;
-	private final RhinoSandbox engine;
+	private final NashornSandbox engine;
 
 	/*************************************************************************
 	 * Constructor
@@ -47,8 +47,8 @@ public class JavaxPacScriptParser implements PacScriptParser {
 	 * @throws ProxyEvaluationException
 	 *             on error.
 	 ************************************************************************/
-	private RhinoSandbox setupEngine() throws ProxyEvaluationException {
-		RhinoSandbox engine = RhinoSandboxes.create();
+	private NashornSandbox setupEngine() throws ProxyEvaluationException {
+        NashornSandbox engine = NashornSandboxes.create();
 		engine.inject(SCRIPT_METHODS_OBJECT, new PacScriptMethods());
 		// allow String
 		engine.allow(String.class);
@@ -77,7 +77,7 @@ public class JavaxPacScriptParser implements PacScriptParser {
 			toEval.append(functionCall).append("; }");
 			try {
 				// Add functions with calls to Java object to global scope 
-				engine.evalWithGlobalScope(SOURCE_NAME, toEval.toString());
+				engine.eval(toEval.toString());
 			} catch (Exception e) {
 				Logger.log(getClass(), LogLevel.ERROR, "JS evaluation error when creating alias for " + name + ".", e);
 				throw new ProxyEvaluationException("Error setting up script engine", e);
@@ -135,7 +135,7 @@ public class JavaxPacScriptParser implements PacScriptParser {
 			StringBuilder script = new StringBuilder(this.source.getScriptContent());
 			String evalMethod = " ;FindProxyForURL (\"" + url + "\",\"" + host + "\")";
 			script.append(evalMethod);
-			Object result = this.engine.eval(SOURCE_NAME, script.toString());
+			Object result = this.engine.eval(script.toString());
 			return (String) result;
 		} catch (Exception e) {
 			Logger.log(getClass(), LogLevel.ERROR, "JS evaluation error.", e);
