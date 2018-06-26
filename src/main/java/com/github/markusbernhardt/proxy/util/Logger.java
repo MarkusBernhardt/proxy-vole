@@ -1,8 +1,8 @@
 package com.github.markusbernhardt.proxy.util;
 
 /*****************************************************************************
- * Simple logging support for the framework. You need to add an logging listener
- * that needs to send the logging events to an backend.
+ * Simple logging support for the framework. You need to add a logging listener
+ * that needs to send the logging events to a backend.
  *
  * @author Markus Bernhardt, Copyright 2016
  * @author Bernd Rosstauscher, Copyright 2009
@@ -15,7 +15,7 @@ public class Logger {
 	}
 
 	/*****************************************************************************
-	 * Interface for an logging backend that can be attached to the logger.
+	 * Interface for a logging backend that can be attached to the logger.
 	 ****************************************************************************/
 
 	public interface LogBackEnd {
