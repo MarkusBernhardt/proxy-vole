@@ -23,7 +23,7 @@ public class WinHttpHelpers {
      * <p>
      * This method is blocking and may take some time to execute.
      * 
-     * @param dwAutoDetectFlags
+     * @param dwAutoDetectFlags flags for auto detection
      * @return the url of the PAC file or {@code null} if it cannot be located
      *         using WPAD method.
      */

@@ -44,7 +44,9 @@ public class WTypes2 {
 
         /**
          * Gets the LPWSTR from this pointer. In general its a lot more
-         * convenient simply to use {@link getString()}.      
+         * convenient simply to use {@link #getString() getString}. 
+         * 
+         * @return LPWSTR from this pointer
          */
         public WTypes.LPWSTR getValue() {
             Pointer p = getPointerToString();
@@ -58,6 +60,8 @@ public class WTypes2 {
         /**
          * Gets the string as pointed to by the LPWSTR or {@code null} if
          * there's no LPWSTR.
+         * 
+         * @return LPWSTR from this pointer
          */
         public String getString() {
             return getValue() == null ? null : getValue().getValue();
@@ -70,7 +74,7 @@ public class WTypes2 {
         /**
          * Memory disposal.
          *
-         * @throws Throwable
+         * @throws Throwable Something went wrong when cleaning up the memory.
          */
         @Override
         protected void finalize() throws Throwable {
