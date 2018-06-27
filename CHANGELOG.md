@@ -2,7 +2,15 @@
 This file contains the change log.
 
 ## Unreleased
-* Fixed issue #9: Unresponsive proxy with ProxyListFallbackSelector -> NPE 
+
+## 1.0.5
+* Fixed issue #33: Problems with new Proxy-Vole 1.0.4. Thanks to gschnepp!
+* Fixed issue #35: Can't find dependent libraries using WinHttpCurrentUserIEProxyConfig. Thanks to jstammi!
+* Fixed issue #37: Replace the Logger interface with an SLF4J reference, please
+* Fixed issue #40: Using delight-nashorn-sandbox to avoid dependency on rhino
+
+## 1.0.4
+* Fixed issue  #9: Unresponsive proxy with ProxyListFallbackSelector -> NPE 
 * Fixed issue #14: WPAD search downto http://wpad/wpad.dat
 * Fixed issue #16: Security improvement for issue #14. Thanks to dbdr!
 * Fixed issue #21: Fixes bug in calling Windows function WinHttpDetectAutoProxyConfigUrl. Thanks to phansson!
