@@ -293,9 +293,6 @@ public class ProxySearch implements ProxySearchStrategy {
 				System.out.println(MessageFormat.format(msg, params));
 			}
 
-			public boolean isLogginEnabled(LogLevel logLevel) {
-				return true;
-			}
 		});
 		ps.getProxySelector();
 	}

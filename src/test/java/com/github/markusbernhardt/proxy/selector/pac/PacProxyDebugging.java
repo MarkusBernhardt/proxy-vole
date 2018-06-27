@@ -32,13 +32,11 @@ public class PacProxyDebugging {
 
 	private void installLogger() {
 		Logger.setBackend(new Logger.LogBackEnd() {
+		  
 			public void log(Class<?> clazz, LogLevel loglevel, String msg, Object... params) {
 				System.out.println(loglevel + "\t" + MessageFormat.format(msg, params));
 			}
 
-			public boolean isLogginEnabled(LogLevel logLevel) {
-				return true;
-			}
 		});
 	}
 
