@@ -9,7 +9,7 @@
 
   <groupId>com.github.markusbernhardt</groupId>
   <artifactId>proxy-vole</artifactId>
-  <version>1.0.5-SNAPSHOT</version>
+  <version>1.0.5</version>
 
   <name>Proxy Vole</name>
   <description>Proxy Vole is a Java library to auto detect the platform network proxy settings.</description>
