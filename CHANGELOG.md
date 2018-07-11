@@ -8,6 +8,7 @@ This file contains the change log.
 * Fixed issue #35: Can't find dependent libraries using WinHttpCurrentUserIEProxyConfig. Thanks to jstammi!
 * Fixed issue #37: Replace the Logger interface with an SLF4J reference, please
 * Fixed issue #40: Using delight-nashorn-sandbox to avoid dependency on rhino
+* Fixed issue #43: Proxy-vole provoking sporadic crashes in ntdll
 
 ## 1.0.4
 * Fixed issue  #9: Unresponsive proxy with ProxyListFallbackSelector -> NPE 
