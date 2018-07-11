@@ -40,6 +40,8 @@ public class WTypes2 {
 
         public LPWSTRByReference() {
             super(Pointer.SIZE);
+			// memory cleanup
+			getPointer().setPointer(0, null);
         }
 
         /**
