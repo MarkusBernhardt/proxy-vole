@@ -58,7 +58,7 @@ When a cached URL is accessed the Javascript execution will be skipped and the c
 ProxySearch proxySearch = ProxySearch.getDefaultProxySearch();
 
 // Cache 20 hosts for up to 10 minutes. This is the default.
-proxySearch.setPacCacheSettings(20, 1000*60*5, CacheScope.CACHE_SCOPE_HOST);
+proxySearch.setPacCacheSettings(20, 1000*60*10, CacheScope.CACHE_SCOPE_HOST);
 ```
 
 ### How to handle proxy authentication
