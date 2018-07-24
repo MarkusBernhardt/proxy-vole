@@ -10,6 +10,7 @@ import java.util.Properties;
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.browser.ie.IELocalByPassFilter;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
+import com.github.markusbernhardt.proxy.selector.fixed.FixedSocksSelector;
 import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.github.markusbernhardt.proxy.util.Logger;
@@ -131,8 +132,31 @@ public abstract class CommonWindowsSearchStrategy implements ProxySearchStrategy
 		addSelectorForProtocol(properties, "https", ps);
 		addSelectorForProtocol(properties, "ftp", ps);
 		addSelectorForProtocol(properties, "gopher", ps);
-		addSelectorForProtocol(properties, "socks", ps);
+
+		// these are the "default" settings, which may be overridden by "socks" (below)
 		addFallbackSelector(properties, ps);
+
+		// "socks" is a special case: it can be used as a fallback for the protocols above (e.g. http),
+		// so it must be specified as such (URLs won't specify socks:// that addSelectorForProtocol() would
+		// use as lookup key).
+		String socksProperties = properties.getProperty("socks");
+		if (socksProperties != null) {
+			String[] hostAndPort = socksProperties.split(":");
+			String host = "";
+			int port = 0;
+			if (hostAndPort.length > 0) {
+				host = hostAndPort[0];
+			}
+			if (hostAndPort.length > 1) {
+				try {
+					port = Integer.parseInt(hostAndPort[1]);
+				} catch (NumberFormatException e) {
+					Logger.log(CommonWindowsSearchStrategy.class, Logger.LogLevel.WARNING, "Cannot parse SOCKS proxy port {0}", hostAndPort[1]);
+				}
+			}
+			ps.setFallbackSelector(new FixedSocksSelector(host, port));
+		}
+
 		return ps;
 	}
 }
