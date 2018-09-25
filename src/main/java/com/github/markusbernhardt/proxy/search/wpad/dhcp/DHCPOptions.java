@@ -82,6 +82,8 @@ public class DHCPOptions {
 	public static final int OPTION_DHCP_REBIND_TIME = 59;
 	public static final int OPTION_DHCP_CLASS_IDENTIFIER = 60;
 	public static final int OPTION_DHCP_CLIENT_IDENTIFIER = 61;
+	
+	public static final int OPTION_PROXY_AUTODISCOVERY = 252;
 
 	/**
 	 * This inner class represent an entry in the Option Table
