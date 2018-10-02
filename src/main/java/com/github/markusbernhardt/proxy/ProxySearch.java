@@ -15,6 +15,7 @@ import com.github.markusbernhardt.proxy.search.desktop.kde.KdeProxySearchStrateg
 import com.github.markusbernhardt.proxy.search.desktop.win.WinProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.env.EnvProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.java.JavaProxySearchStrategy;
+import com.github.markusbernhardt.proxy.search.wpad.WpadProxySearchStrategy;
 import com.github.markusbernhardt.proxy.selector.misc.BufferedProxySelector;
 import com.github.markusbernhardt.proxy.selector.misc.BufferedProxySelector.CacheScope;
 import com.github.markusbernhardt.proxy.selector.misc.ProxyListFallbackSelector;
@@ -63,6 +64,8 @@ public class ProxySearch implements ProxySearchStrategy {
 	public enum Strategy {
 	    /// Use the platform settings.
 		OS_DEFAULT,
+		/// Use WPAD resolution
+		WPAD,
 		/// Use the settings of the platforms default browser.
 		BROWSER,
 		/// Use Firefox settings
@@ -132,6 +135,9 @@ public class ProxySearch implements ProxySearchStrategy {
 		switch (strategy) {
 		case OS_DEFAULT:
 			this.strategies.add(new DesktopProxySearchStrategy());
+			break;
+		case WPAD:
+			this.strategies.add(new WpadProxySearchStrategy());
 			break;
 		case BROWSER:
 			this.strategies.add(getDefaultBrowserStrategy());

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -41,6 +42,22 @@ public class DHCPSocket extends DatagramSocket {
 	 */
 	public DHCPSocket(int inPort) throws SocketException {
 		super(inPort);
+		setSoTimeout(this.SOCKET_TIMEOUT);
+	}
+
+	/**
+	 * Constructor for creating DHCPSocket on a specific local address and port
+	 * on the local machine.
+	 * 
+	 * @param inPort
+	 *            The port for the application to bind.
+	 * @param lAddr
+	 *            The local address for the application to bind.
+	 * @throws SocketException
+	 *             As thrown by the {@link Socket} constructor
+	 */
+	public DHCPSocket(int inPort, InetAddress lAddr) throws SocketException {
+		super(inPort, lAddr);
 		setSoTimeout(this.SOCKET_TIMEOUT);
 	}
 
