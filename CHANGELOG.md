@@ -2,6 +2,7 @@
 This file contains the change log.
 
 ## Unreleased
+* Fixed issue #50: NullPointerException in Proxy-vole 1.0.5
 
 ## 1.0.5
 * Fixed issue #33: Problems with new Proxy-Vole 1.0.4. Thanks to gschnepp!
