@@ -2,7 +2,9 @@
 This file contains the change log.
 
 ## Unreleased
+* Fixed issue #10: IE fixed socks proxy parsed as http. Thanks to OnixGH!
 * Fixed issue #50: NullPointerException in Proxy-vole 1.0.5
+* Fixed issue #53: Added support for DHCP resolution to WpadProxySearchStrategy. Thanks to RocusHalbasch!
 
 ## 1.0.5
 * Fixed issue #33: Problems with new Proxy-Vole 1.0.4. Thanks to gschnepp!
