@@ -16,6 +16,19 @@ The library provides some proxy setting search strategies to read the proxy sett
 * I don't like the Windows DLL and usage of JNI. Replaced both by JNA.
 
 ## Usage
+### Adding the jar to your build
+Add the dependency to your pom.xml
+```Xml
+<dependency>
+  <groupId>com.github.markusbernhardt</groupId>
+  <artifactId>proxy-vole</artifactId>
+  <version>1.0.5</version>
+</dependency>
+```
+or to you gradle.build:
+```
+compile 'com.github.markusbernhardt:proxy-vole:1.0.5'
+```
 
 ### Using the default strategy to find the settings
 ```Java
