@@ -6,3 +6,5 @@ bin/
 
 # Maven
 target/
+
+.idea/
