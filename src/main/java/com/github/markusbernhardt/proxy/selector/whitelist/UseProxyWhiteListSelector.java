@@ -79,4 +79,11 @@ public class UseProxyWhiteListSelector extends ProxySelector {
 		return ProxyUtil.noProxyList();
 	}
 
+	@Override
+	public String toString() {
+		return "UseProxyWhiteListSelector{" +
+				"delegate=" + delegate +
+				", whiteListFilter=" + whiteListFilter +
+				'}';
+	}
 }

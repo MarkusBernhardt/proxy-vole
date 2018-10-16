@@ -50,6 +50,17 @@ public class BufferedProxySelector extends ProxySelector {
 		CACHE_SCOPE_URL
 	}
 
+	@Override
+	public String toString() {
+		return "BufferedProxySelector{" +
+				"delegate=" + delegate +
+				", cache=" + cache +
+				", maxSize=" + maxSize +
+				", ttl=" + ttl +
+				", cacheScope=" + cacheScope +
+				'}';
+	}
+
 	private ProxySelector delegate;
 
 	private ConcurrentHashMap<String, CacheEntry> cache;

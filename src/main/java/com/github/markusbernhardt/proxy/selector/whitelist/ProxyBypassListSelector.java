@@ -72,6 +72,14 @@ public class ProxyBypassListSelector extends ProxySelector {
 		this.delegate.connectFailed(uri, sa, ioe);
 	}
 
+	@Override
+	public String toString() {
+		return "ProxyBypassListSelector{" +
+				"delegate=" + delegate +
+				", whiteListFilter=" + whiteListFilter +
+				'}';
+	}
+
 	/*************************************************************************
 	 * select
 	 * 
