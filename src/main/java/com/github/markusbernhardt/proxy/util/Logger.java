@@ -46,7 +46,7 @@ public class Logger {
    * Slf4j logging backend.
    ****************************************************************************/
 
-  public class Slf4jLogBackEnd implements LogBackEnd {
+  public static class Slf4jLogBackEnd implements LogBackEnd {
 
     protected Map<Class<?>, org.slf4j.Logger> loggers = new ConcurrentHashMap<Class<?>, org.slf4j.Logger>();
 
@@ -133,9 +133,10 @@ public class Logger {
    ************************************************************************/
 
   public static void log(Class<?> clazz, LogLevel loglevel, String msg, Object... params) {
-    if (backend != null) {
-      backend.log(clazz, loglevel, msg, params);
+    if (backend == null) {
+      backend = new Slf4jLogBackEnd();
     }
+    backend.log(clazz, loglevel, msg, params);
   }
 
 }
