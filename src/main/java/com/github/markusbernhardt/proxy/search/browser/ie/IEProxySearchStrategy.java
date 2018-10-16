@@ -84,7 +84,7 @@ public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 	/*************************************************************************
 	 * Parses the settings and creates an PAC ProxySelector for it.
 	 * 
-	 * @param ieSettings
+	 * @param ieProxyConfig
 	 *            the IE settings to use.
 	 * @return a PacProxySelector the selector or null.
 	 ************************************************************************/
@@ -120,7 +120,7 @@ public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 	/*************************************************************************
 	 * Parses the proxy settings into an ProxySelector.
 	 * 
-	 * @param ieSettings
+	 * @param ieProxyConfig
 	 *            the settings to use.
 	 * @return a ProxySelector, null if no settings are set.
 	 * @throws ProxyException

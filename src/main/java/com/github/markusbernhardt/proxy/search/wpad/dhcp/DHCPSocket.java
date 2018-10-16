@@ -1,13 +1,7 @@
 package com.github.markusbernhardt.proxy.search.wpad.dhcp;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 
 /**
  * This class represents a Socket for sending DHCP Messages

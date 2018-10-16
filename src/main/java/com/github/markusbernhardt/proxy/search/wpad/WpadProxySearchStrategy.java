@@ -235,8 +235,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
     // fields MUST be set all-zero.
     byte[] addr = new byte[16];
     if (mac != null)
-      for (int i = 0; i < 6; i++)
-        addr[i] = mac[i];
+      System.arraycopy(mac, 0, addr, 0, 6);
     // Despite what the spec says above if these are set to 0 you may
     // not get a response from some dhcp servers
     messageOut.setHtype((byte) 1); // 1 for Ethernet

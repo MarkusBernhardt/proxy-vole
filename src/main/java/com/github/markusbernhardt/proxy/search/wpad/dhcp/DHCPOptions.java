@@ -186,9 +186,7 @@ public class DHCPOptions {
 	 */
 	private byte[] getArrayOption(int length, int position, byte options[]) {
 		byte value[] = new byte[length];
-		for (int i = 0; i < length; i++) {
-			value[i] = options[position + i];
-		}
+		System.arraycopy(options, position, value, 0, length);
 		return value;
 	}
 
