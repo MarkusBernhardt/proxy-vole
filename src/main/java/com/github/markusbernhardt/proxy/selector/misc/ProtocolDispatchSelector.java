@@ -135,4 +135,11 @@ public class ProtocolDispatchSelector extends ProxySelector {
     return this.selectors.size();
   }
 
+	@Override
+	public String toString() {
+		return "ProtocolDispatchSelector{" +
+				"selectors=" + selectors +
+				", fallbackSelector=" + fallbackSelector +
+				'}';
+	}
 }

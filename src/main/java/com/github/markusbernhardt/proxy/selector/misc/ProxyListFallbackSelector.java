@@ -168,4 +168,12 @@ public class ProxyListFallbackSelector extends ProxySelector {
 		this.retryAfterMs = retryAfterMs;
 	}
 
+	@Override
+	public String toString() {
+		return "ProxyListFallbackSelector{" +
+				"delegate=" + delegate +
+				", failedDelayCache=" + failedDelayCache +
+				", retryAfterMs=" + retryAfterMs +
+				'}';
+	}
 }

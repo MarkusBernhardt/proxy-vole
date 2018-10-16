@@ -65,6 +65,10 @@ public class NoProxySelector extends ProxySelector {
 		return ProxyUtil.noProxyList();
 	}
 
+	@Override
+	public String toString() {
+		return "NoProxySelector{}";
+	}
 }
 
 /*

@@ -73,4 +73,10 @@ public class FixedProxySelector extends ProxySelector {
 		return this.proxyList;
 	}
 
+	@Override
+	public String toString() {
+		return "FixedProxySelector{" +
+				"proxyList=" + proxyList +
+				'}';
+	}
 }
