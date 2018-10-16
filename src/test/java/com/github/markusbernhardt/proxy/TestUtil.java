@@ -61,7 +61,7 @@ public class TestUtil {
 	 *            the name of the test folder.
 	 ************************************************************************/
 
-	public static final void setTestDataFolder(String folder) {
+	public static void setTestDataFolder(String folder) {
 		System.setProperty(PlatformUtil.OVERRIDE_HOME_DIR,
 		        System.getProperty("user.dir") + File.separator + TestUtil.TEST_DATA_FOLDER + folder);
 	}

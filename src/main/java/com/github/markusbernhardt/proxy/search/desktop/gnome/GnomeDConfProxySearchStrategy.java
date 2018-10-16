@@ -280,8 +280,6 @@ public class GnomeDConfProxySearchStrategy implements ProxySearchStrategy {
 	/*************************************************************************
 	 * Parse the settings file and extract all network.proxy.* settings from it.
 	 * 
-	 * @param context
-	 *            the gconf context to parse.
 	 * @param settings
 	 *            the settings object to fill.
 	 * @return the parsed properties.
