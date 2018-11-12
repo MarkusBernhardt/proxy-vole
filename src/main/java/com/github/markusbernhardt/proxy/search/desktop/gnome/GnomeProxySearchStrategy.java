@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.selector.direct.NoProxySelector;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
 import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
@@ -73,6 +74,8 @@ import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
 public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 
+    private ScriptingEngineType engineType = ScriptingEngineType.NASHORHN;
+    
 	/*************************************************************************
 	 * ProxySelector
 	 * 
@@ -82,7 +85,12 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 	public GnomeProxySearchStrategy() {
 		super();
 	}
-
+	
+    public GnomeProxySearchStrategy(ScriptingEngineType engineType) {
+        this();
+        this.engineType = engineType;
+    }
+    
 	/*************************************************************************
 	 * Loads the proxy settings and initializes a proxy selector for the Gnome
 	 * proxy settings.
@@ -120,7 +128,7 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 		if ("auto".equals(type)) {
 			String pacScriptUrl = settings.getProperty("/system/proxy/autoconfig_url", "");
 			Logger.log(getClass(), LogLevel.TRACE, "Gnome uses autodetect script {0}", pacScriptUrl);
-			result = ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
+			result = ProxyUtil.buildPacSelectorForUrl(engineType, pacScriptUrl);
 		}
 
 		// Wrap into white-list filter?

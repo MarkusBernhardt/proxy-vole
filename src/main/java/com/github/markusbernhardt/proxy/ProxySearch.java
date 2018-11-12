@@ -56,6 +56,7 @@ public class ProxySearch implements ProxySearchStrategy {
 	private int pacCacheSize;
 	private long pacCacheTTL;
 	private CacheScope pacCacheScope;
+	private ScriptingEngineType engineType = ScriptingEngineType.NASHORHN;
 
 	/*****************************************************************************
 	 * Types of proxy detection supported by the builder.
@@ -82,6 +83,18 @@ public class ProxySearch implements ProxySearchStrategy {
 		GNOME,
 		/// Use Java Networking system properties
 		JAVA
+	}
+	
+    /*****************************************************************************
+     * Types of supported scripting engines.
+     ****************************************************************************/
+	
+	public enum ScriptingEngineType {
+	    // embedded in java
+	    NASHORHN, 
+	    
+	    // Mozilla Rhino,  open-source implementation of JavaScript written entirely in Java.
+	    RHINO
 	}
 
 	/*************************************************************************
@@ -137,16 +150,16 @@ public class ProxySearch implements ProxySearchStrategy {
 			this.strategies.add(new DesktopProxySearchStrategy());
 			break;
 		case WPAD:
-			this.strategies.add(new WpadProxySearchStrategy());
+			this.strategies.add(new WpadProxySearchStrategy(engineType));
 			break;
 		case BROWSER:
 			this.strategies.add(getDefaultBrowserStrategy());
 			break;
 		case FIREFOX:
-			this.strategies.add(new FirefoxProxySearchStrategy());
+			this.strategies.add(new FirefoxProxySearchStrategy(engineType));
 			break;
 		case IE:
-			this.strategies.add(new IEProxySearchStrategy());
+			this.strategies.add(new IEProxySearchStrategy(engineType));
 			break;
 		case ENV_VAR:
 			this.strategies.add(new EnvProxySearchStrategy());
@@ -155,11 +168,11 @@ public class ProxySearch implements ProxySearchStrategy {
 			this.strategies.add(new WinProxySearchStrategy());
 			break;
 		case KDE:
-			this.strategies.add(new KdeProxySearchStrategy());
+			this.strategies.add(new KdeProxySearchStrategy(engineType));
 			break;
 		case GNOME:
-			this.strategies.add(new GnomeDConfProxySearchStrategy());
-			this.strategies.add(new GnomeProxySearchStrategy());
+			this.strategies.add(new GnomeDConfProxySearchStrategy(engineType));
+			this.strategies.add(new GnomeProxySearchStrategy(engineType));
 			break;
 		case JAVA:
 			this.strategies.add(new JavaProxySearchStrategy());
@@ -200,9 +213,9 @@ public class ProxySearch implements ProxySearchStrategy {
 	private ProxySearchStrategy getDefaultBrowserStrategy() {
 		switch (PlatformUtil.getDefaultBrowser()) {
 		case IE:
-			return new IEProxySearchStrategy();
+			return new IEProxySearchStrategy(engineType);
 		case FIREFOX:
-			return new FirefoxProxySearchStrategy();
+			return new FirefoxProxySearchStrategy(engineType);
 		}
 		return null;
 	}
@@ -302,5 +315,24 @@ public class ProxySearch implements ProxySearchStrategy {
 		});
 		ps.getProxySelector();
 	}
+
+    /*************************************************************************
+     * 
+     * Returns scripting engine used to evaluate PAC scripts 
+     * 
+     ************************************************************************/
+    public ScriptingEngineType getScriptingEngine() {
+        return engineType;
+    }
+
+    /*************************************************************************
+     * 
+     * Configures scripting engine used to evaluate PAC scripts 
+     * 
+     * @param scriptingEngine
+     ************************************************************************/
+    public void setScriptingEngine(ScriptingEngineType scriptingEngine) {
+        this.engineType = scriptingEngine;
+    }
 
 }

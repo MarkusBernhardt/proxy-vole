@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
 import com.github.markusbernhardt.proxy.selector.pac.UrlPacScriptSource;
 
@@ -35,7 +36,7 @@ public class PacPerProtocolTest {
 
 		new URI("socket://host1.unit-test.invalid/");
 
-		List<Proxy> result = new PacProxySelector(new UrlPacScriptSource(toUrl("test1.pac")))
+		List<Proxy> result = new PacProxySelector(ScriptingEngineType.NASHORHN, new UrlPacScriptSource(toUrl("test1.pac")))
 		        .select(TestUtil.SOCKET_TEST_URI);
 
 		assertEquals(TestUtil.HTTP_TEST_PROXY, result.get(0));

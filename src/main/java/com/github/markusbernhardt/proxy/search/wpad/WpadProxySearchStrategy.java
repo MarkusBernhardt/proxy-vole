@@ -14,6 +14,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.search.wpad.dhcp.DHCPMessage;
 import com.github.markusbernhardt.proxy.search.wpad.dhcp.DHCPOptions;
 import com.github.markusbernhardt.proxy.search.wpad.dhcp.DHCPSocket;
@@ -45,12 +46,19 @@ import com.github.markusbernhardt.proxy.util.ProxyUtil;
 
 public class WpadProxySearchStrategy implements ProxySearchStrategy {
 
+    private ScriptingEngineType engineType = ScriptingEngineType.NASHORHN;
+    
   /*************************************************************************
    * Constructor
    ************************************************************************/
 
   public WpadProxySearchStrategy() {
     super();
+  }
+  
+  public WpadProxySearchStrategy(ScriptingEngineType engineType) {
+      this();
+      this.engineType = engineType;
   }
 
   /*************************************************************************
@@ -75,7 +83,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
         return null;
       }
       Logger.log(getClass(), LogLevel.TRACE, "PAC script url found: {0}", pacScriptUrl);
-      return ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
+      return ProxyUtil.buildPacSelectorForUrl(engineType, pacScriptUrl);
     } catch (IOException e) {
       Logger.log(getClass(), LogLevel.ERROR, "Error during WPAD search.", e);
       throw new ProxyException(e);

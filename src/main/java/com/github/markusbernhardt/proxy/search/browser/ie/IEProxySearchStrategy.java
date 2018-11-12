@@ -3,6 +3,7 @@ package com.github.markusbernhardt.proxy.search.browser.ie;
 import java.net.ProxySelector;
 import java.util.Properties;
 
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.jna.win.WinHttp;
 import com.github.markusbernhardt.proxy.jna.win.WinHttpCurrentUserIEProxyConfig;
 import com.github.markusbernhardt.proxy.jna.win.WinHttpHelpers;
@@ -24,6 +25,17 @@ import com.sun.jna.platform.win32.WinDef.DWORD;
 
 public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 
+    public IEProxySearchStrategy() {
+    }
+    
+    public IEProxySearchStrategy(ScriptingEngineType engineType) {
+        this();
+        this.engineType = engineType;
+    }
+        
+
+    private ScriptingEngineType engineType = ScriptingEngineType.NASHORHN;
+    
 	/*************************************************************************
 	 * getProxySelector
 	 * 
@@ -111,7 +123,7 @@ public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 			if (pacUrl.startsWith("file://") && !pacUrl.startsWith("file:///")) {
 				pacUrl = "file:///" + pacUrl.substring(7);
 			}
-			return ProxyUtil.buildPacSelectorForUrl(pacUrl);
+			return ProxyUtil.buildPacSelectorForUrl(engineType, pacUrl);
 		}
 
 		return null;

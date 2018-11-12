@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import java.util.Properties;
 
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.search.wpad.dhcp.DHCPMessage;
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.ProxyException;
@@ -39,6 +40,8 @@ import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
 public class WpadProxySearchStrategyWithDHPC implements ProxySearchStrategy {
 
+    private ScriptingEngineType engineType = ScriptingEngineType.NASHORHN;
+    
 	/*************************************************************************
 	 * Constructor
 	 ************************************************************************/
@@ -46,6 +49,11 @@ public class WpadProxySearchStrategyWithDHPC implements ProxySearchStrategy {
 	public WpadProxySearchStrategyWithDHPC() {
 		super();
 	}
+	
+    public WpadProxySearchStrategyWithDHPC(ScriptingEngineType engineType) {
+        this();
+        this.engineType = engineType;
+    }
 
 	/*************************************************************************
 	 * Loads the proxy settings from a PAC file. The location of the PAC file is
@@ -69,7 +77,7 @@ public class WpadProxySearchStrategyWithDHPC implements ProxySearchStrategy {
 				return null;
 			}
 			Logger.log(getClass(), LogLevel.TRACE, "PAC script url found: {0}", pacScriptUrl);
-			return ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
+			return ProxyUtil.buildPacSelectorForUrl(engineType, pacScriptUrl);
 		} catch (IOException e) {
 			Logger.log(getClass(), LogLevel.ERROR, "Error during WPAD search.", e);
 			throw new ProxyException(e);
