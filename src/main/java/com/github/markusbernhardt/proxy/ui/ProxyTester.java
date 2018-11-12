@@ -22,6 +22,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import com.github.markusbernhardt.proxy.ProxySearch;
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.ProxySearch.Strategy;
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
@@ -38,7 +39,8 @@ public class ProxyTester extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private JComboBox<ProxySearch.Strategy> modes;
+    private JComboBox<ProxySearch.Strategy> modes;
+    private JComboBox<ProxySearch.ScriptingEngineType> engines;
 	private JButton testButton;
 	private JTextField urlField;
 
@@ -64,9 +66,11 @@ public class ProxyTester extends JFrame {
 		JPanel p = new JPanel();
 
 		p.add(new JLabel("Mode:"));
-
-		this.modes = new JComboBox<ProxySearch.Strategy>(ProxySearch.Strategy.values());
-		p.add(this.modes);
+        this.modes = new JComboBox<ProxySearch.Strategy>(ProxySearch.Strategy.values());
+        p.add(this.modes);
+        p.add(new JLabel("ScriptingEngine:"));
+        this.engines = new JComboBox<ProxySearch.ScriptingEngineType>(ProxySearch.ScriptingEngineType.values());
+        p.add(this.engines);
 
 		p.add(new JLabel("URL:"));
 		this.urlField = new JTextField(30);
@@ -118,7 +122,9 @@ public class ProxyTester extends JFrame {
 			this.logArea.setText("");
 
 			Strategy pss = (Strategy) this.modes.getSelectedItem();
+			ScriptingEngineType engineType = (ScriptingEngineType) this.engines.getSelectedItem();
 			ProxySearch ps = new ProxySearch();
+			ps.setScriptingEngine(engineType);
 			ps.addStrategy(pss);
 			ProxySelector psel = ps.getProxySelector();
 			if (psel == null) {

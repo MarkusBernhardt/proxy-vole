@@ -19,7 +19,7 @@ import com.github.markusbernhardt.proxy.util.ProxyException;
  * @author Bernd Rosstauscher, Copyright 2009
  ****************************************************************************/
 
-public class JavaxPacScriptParserTest {
+public class RhinoPacScriptParserTest {
 
   /*************************************************************************
    * Set calendar for date and time base tests. Current date for all tests is: 15.
@@ -37,7 +37,7 @@ public class JavaxPacScriptParserTest {
     cal.set(Calendar.MILLISECOND, 00);
 
     // TODO Rossi 26.08.2010 need to fake time
-    // JavaxPacScriptParser.setCurrentTime(cal);
+    // RhinoPacScriptParser.setCurrentTime(cal);
   }
 
   /*************************************************************************
@@ -45,7 +45,7 @@ public class JavaxPacScriptParserTest {
    ************************************************************************/
   @AfterClass
   public static void teadDown() {
-    // JavaxPacScriptParser.setCurrentTime(null);
+    // RhinoPacScriptParser.setCurrentTime(null);
   }
 
   /*************************************************************************
@@ -58,19 +58,8 @@ public class JavaxPacScriptParserTest {
    ************************************************************************/
   @Test
   public void testScriptExecution() throws ProxyException, MalformedURLException {
-    PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("test1.pac")));
+    PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("test1.pac")));
     p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
-  }
-  
-  /*************************************************************************
-   * Test method
- * @throws Exception 
-   ************************************************************************/
-  @Test(expected = Exception.class)
-  public void testSemicolonBeforeElse() throws Exception {
-      PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testSemicolonBeforeElse.pac")));
-      String evaluate = p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
-      Assert.assertEquals("PROXY proxy:3128", evaluate);
   }
   
   /*************************************************************************
@@ -82,8 +71,23 @@ public class JavaxPacScriptParserTest {
    *           on URL erros
    ************************************************************************/
   @Test
+  public void testSemicolonBeforeElse() throws ProxyException, MalformedURLException {
+    PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("testSemicolonBeforeElse.pac")));
+    String evaluate = p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
+    Assert.assertEquals("PROXY proxy.:3128; PROXY dmzproxy:3128", evaluate);
+  }  
+
+  /*************************************************************************
+   * Test method
+   * 
+   * @throws ProxyException
+   *           on proxy detection error.
+   * @throws MalformedURLException
+   *           on URL erros
+   ************************************************************************/
+  @Test
   public void testCommentsInScript() throws ProxyException, MalformedURLException {
-    PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("test2.pac")));
+    PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("test2.pac")));
     p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
   }
 
@@ -97,7 +101,7 @@ public class JavaxPacScriptParserTest {
    ************************************************************************/
   @Test
   public void testScriptWeekDayScript() throws ProxyException, MalformedURLException {
-    PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testWeekDay.pac")));
+    PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("testWeekDay.pac")));
     p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
   }
 
@@ -111,7 +115,7 @@ public class JavaxPacScriptParserTest {
    ************************************************************************/
   @Test
   public void testDateRangeScript() throws ProxyException, MalformedURLException {
-    PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testDateRange.pac")));
+    PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("testDateRange.pac")));
     p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
   }
 
@@ -125,10 +129,10 @@ public class JavaxPacScriptParserTest {
    ************************************************************************/
   @Test
   public void testTimeRangeScript() throws ProxyException, MalformedURLException {
-    PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testTimeRange.pac")));
+    PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("testTimeRange.pac")));
     p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
   }
-
+  
   /*************************************************************************
    * Test method
    * 
@@ -139,7 +143,7 @@ public class JavaxPacScriptParserTest {
    ************************************************************************/
   @Test
   public void methodsShouldReturnJsStrings() throws ProxyException, MalformedURLException {
-    PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testReturnTypes.pac")));
+    PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("testReturnTypes.pac")));
     String actual = p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
     Assert.assertEquals("number boolean string", actual);
   }
@@ -154,7 +158,7 @@ public class JavaxPacScriptParserTest {
    ************************************************************************/
   @Test(expected = Exception.class)
   public void shouldNotExecuteCodeInPac() throws ProxyException, MalformedURLException {
-    PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("testRemoteCodeExecution.pac")));
+    PacScriptParser p = new RhinoPacScriptParser(new UrlPacScriptSource(toUrl("testRemoteCodeExecution.pac")));
     p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host.does.not.matter");
   }
 

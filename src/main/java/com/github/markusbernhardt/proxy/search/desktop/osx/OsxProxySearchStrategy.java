@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.search.browser.ie.IELocalByPassFilter;
 import com.github.markusbernhardt.proxy.search.wpad.WpadProxySearchStrategy;
 import com.github.markusbernhardt.proxy.selector.direct.NoProxySelector;
@@ -62,6 +63,8 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 
 	private static final String SETTINGS_FILE = "/Library/Preferences/SystemConfiguration/preferences.plist";
 
+    private ScriptingEngineType engineType = ScriptingEngineType.NASHORHN;
+	
 	/*************************************************************************
 	 * ProxySelector
 	 * 
@@ -71,6 +74,11 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 	public OsxProxySearchStrategy() {
 		super();
 	}
+	
+    public OsxProxySearchStrategy(ScriptingEngineType engineType) {
+        this();
+        this.engineType = engineType;
+    }
 
 	/*************************************************************************
 	 * Loads the proxy settings and initializes a proxy selector for the OSX
@@ -323,7 +331,7 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 	private ProxySelector installPacProxyIfAvailable(Dict proxySettings, ProxySelector result) {
 		if (isActive(proxySettings.get("ProxyAutoConfigEnable"))) {
 			String url = (String) proxySettings.get("ProxyAutoConfigURLString");
-			result = ProxyUtil.buildPacSelectorForUrl(url);
+			result = ProxyUtil.buildPacSelectorForUrl(engineType, url);
 		}
 		return result;
 	}

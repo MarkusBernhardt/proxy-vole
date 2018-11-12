@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacScriptSource;
@@ -83,11 +84,11 @@ public class ProxyUtil {
 	 *         working selector.
 	 ************************************************************************/
 
-	public static PacProxySelector buildPacSelectorForUrl(String url) {
+	public static PacProxySelector buildPacSelectorForUrl(ScriptingEngineType engineType, String url) {
 		PacProxySelector result = null;
 		PacScriptSource pacSource = new UrlPacScriptSource(url);
 		if (pacSource.isScriptValid()) {
-			result = new PacProxySelector(pacSource);
+			result = new PacProxySelector(engineType, pacSource);
 		}
 		return result;
 	}

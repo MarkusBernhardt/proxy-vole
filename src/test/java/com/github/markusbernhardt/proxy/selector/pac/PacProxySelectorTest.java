@@ -16,6 +16,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.github.markusbernhardt.proxy.TestUtil;
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.selector.pac.PacProxySelector;
 import com.github.markusbernhardt.proxy.selector.pac.PacScriptMethods;
 import com.github.markusbernhardt.proxy.selector.pac.UrlPacScriptSource;
@@ -40,7 +41,7 @@ public class PacProxySelectorTest {
 	 ************************************************************************/
 	@Test
 	public void testScriptExecution() throws ProxyException, MalformedURLException {
-		List<Proxy> result = new PacProxySelector(new UrlPacScriptSource(toUrl("test1.pac")))
+		List<Proxy> result = new PacProxySelector(ScriptingEngineType.NASHORHN, new UrlPacScriptSource(toUrl("test1.pac")))
 		        .select(TestUtil.HTTP_TEST_URI);
 
 		assertEquals(TestUtil.HTTP_TEST_PROXY, result.get(0));
@@ -56,7 +57,7 @@ public class PacProxySelectorTest {
 	 ************************************************************************/
 	@Test
 	public void testScriptExecution2() throws ProxyException, MalformedURLException {
-		PacProxySelector pacProxySelector = new PacProxySelector(new UrlPacScriptSource(toUrl("test2.pac")));
+		PacProxySelector pacProxySelector = new PacProxySelector(ScriptingEngineType.NASHORHN, new UrlPacScriptSource(toUrl("test2.pac")));
 		List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
 		assertEquals(Proxy.NO_PROXY, result.get(0));
 
@@ -89,7 +90,7 @@ public class PacProxySelectorTest {
 			});
 
 			PacProxySelector pacProxySelector = new PacProxySelector(
-			        new UrlPacScriptSource("http://www.test.invalid/wpad.pac"));
+			        ScriptingEngineType.NASHORHN, new UrlPacScriptSource("http://www.test.invalid/wpad.pac"));
 			pacProxySelector.select(TestUtil.HTTPS_TEST_URI);
 		} finally {
 			ProxySelector.setDefault(oldOne);
@@ -106,7 +107,8 @@ public class PacProxySelectorTest {
 	 ************************************************************************/
 	@Test
 	public void testScriptMuliProxy() throws ProxyException, MalformedURLException {
-		PacProxySelector pacProxySelector = new PacProxySelector(new UrlPacScriptSource(toUrl("testMultiProxy.pac")));
+		PacProxySelector pacProxySelector = new PacProxySelector(ScriptingEngineType.NASHORHN, 
+		        new UrlPacScriptSource(toUrl("testMultiProxy.pac")));
 		List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
 		assertEquals(4, result.size());
         assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy.com", 80)), result.get(0));
@@ -127,7 +129,8 @@ public class PacProxySelectorTest {
 	public void testLocalIPOverride() throws ProxyException, MalformedURLException {
 		System.setProperty(PacScriptMethods.OVERRIDE_LOCAL_IP, "123.123.123.123");
 		try {
-			PacProxySelector pacProxySelector = new PacProxySelector(new UrlPacScriptSource(toUrl("testLocalIP.pac")));
+			PacProxySelector pacProxySelector = new PacProxySelector(ScriptingEngineType.NASHORHN, 
+			        new UrlPacScriptSource(toUrl("testLocalIP.pac")));
 			List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
 			assertEquals(result.get(0),
 			        new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("123.123.123.123", 8080)));

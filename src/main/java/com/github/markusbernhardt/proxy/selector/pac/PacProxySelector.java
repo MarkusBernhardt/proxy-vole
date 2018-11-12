@@ -9,6 +9,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.ProxyUtil;
@@ -36,9 +37,9 @@ public class PacProxySelector extends ProxySelector {
    *          the source for the PAC file.
    ************************************************************************/
 
-  public PacProxySelector(PacScriptSource pacSource) {
+  public PacProxySelector(ScriptingEngineType engineType, PacScriptSource pacSource) {
     super();
-    selectEngine(pacSource);
+    selectEngine(engineType, pacSource);
   }
 
   /*************************************************************************
@@ -70,13 +71,25 @@ public class PacProxySelector extends ProxySelector {
    *          to use as input.
    ************************************************************************/
 
-  private void selectEngine(PacScriptSource pacSource) {
+  private void selectEngine(ScriptingEngineType engineType, PacScriptSource pacSource) {
     try {
       Logger.log(getClass(), LogLevel.INFO, "Using javax.script JavaScript engine.");
-      pacScriptParser = new JavaxPacScriptParser(pacSource);
+      if (ScriptingEngineType.RHINO.equals(engineType)) {
+          pacScriptParser = createRhinoPacScriptParser(pacSource);
+      } else {
+          pacScriptParser = createJavaxPacScriptParser(pacSource);
+      }
     } catch (Exception e) {
       Logger.log(getClass(), LogLevel.ERROR, "PAC parser error.", e);
     }
+  }
+  
+  private PacScriptParser createJavaxPacScriptParser(PacScriptSource pacSource) throws ProxyEvaluationException {
+      return new JavaxPacScriptParser(pacSource);
+  }
+
+  private PacScriptParser createRhinoPacScriptParser(PacScriptSource pacSource) throws ProxyEvaluationException {
+      return new RhinoPacScriptParser(pacSource);
   }
 
   /*************************************************************************

@@ -5,6 +5,7 @@ import java.net.ProxySelector;
 import java.util.Properties;
 
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.search.env.EnvProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.wpad.WpadProxySearchStrategy;
 import com.github.markusbernhardt.proxy.selector.direct.NoProxySelector;
@@ -49,6 +50,8 @@ import com.github.markusbernhardt.proxy.util.ProxyUtil;
 
 public class KdeProxySearchStrategy implements ProxySearchStrategy {
 
+    private ScriptingEngineType engineType = ScriptingEngineType.NASHORHN;
+    
 	private KdeSettingsParser settingsParser;
 
 	/*************************************************************************
@@ -60,6 +63,11 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 	public KdeProxySearchStrategy() {
 		this(new KdeSettingsParser());
 	}
+	
+    public KdeProxySearchStrategy(ScriptingEngineType engineType) {
+        this();
+        this.engineType = engineType;
+    }
 
 	/*************************************************************************
 	 * ProxySelector
@@ -107,7 +115,7 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 		case 2: // PAC Script
 			String pacScriptUrl = settings.getProperty("Proxy Config Script", "");
 			Logger.log(getClass(), LogLevel.TRACE, "Kde uses autodetect script {0}", pacScriptUrl);
-			result = ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
+			result = ProxyUtil.buildPacSelectorForUrl(engineType, pacScriptUrl);
 			break;
 		case 3: // WPAD
 			Logger.log(getClass(), LogLevel.TRACE, "Kde uses WPAD to detect the proxy");

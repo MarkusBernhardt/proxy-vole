@@ -5,6 +5,7 @@ import java.net.ProxySelector;
 import java.util.Properties;
 
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
+import com.github.markusbernhardt.proxy.ProxySearch.ScriptingEngineType;
 import com.github.markusbernhardt.proxy.search.desktop.DesktopProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.wpad.WpadProxySearchStrategy;
 import com.github.markusbernhardt.proxy.selector.direct.NoProxySelector;
@@ -71,6 +72,7 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
 
 	private FirefoxProfileSource profileScanner;
 	private FirefoxSettingParser settingsParser;
+	private ScriptingEngineType engineType = ScriptingEngineType.NASHORHN;
 
 	/*************************************************************************
 	 * ProxySelector
@@ -89,6 +91,18 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
 		}
 		this.settingsParser = new FirefoxSettingParser();
 	}
+	
+    /*************************************************************************
+     * ProxySelector
+     * 
+     * @see java.net.ProxySelector#ProxySelector()
+     ************************************************************************/
+
+    public FirefoxProxySearchStrategy(ScriptingEngineType engineType) {
+        this();
+        this.engineType = engineType;
+    }
+	
 
 	/*************************************************************************
 	 * Loads the proxy settings and initializes a proxy selector for the firefox
@@ -123,7 +137,7 @@ public class FirefoxProxySearchStrategy implements ProxySearchStrategy {
 		case 2: // PAC Script
 			String pacScriptUrl = settings.getProperty("network.proxy.autoconfig_url", "");
 			Logger.log(getClass(), LogLevel.TRACE, "Firefox uses script (PAC) {0}", pacScriptUrl);
-			result = ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
+			result = ProxyUtil.buildPacSelectorForUrl(engineType, pacScriptUrl);
 			break;
 		case 3: // Backward compatibility to netscape.
 			Logger.log(getClass(), LogLevel.TRACE, "Netscape compability mode -> uses no proxy");
