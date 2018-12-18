@@ -25,7 +25,7 @@ public class PacProxySelector extends ProxySelector {
   private static final String PAC_SOCKS = "SOCKS";
   private static final String PAC_DIRECT = "DIRECT";
 
-  private PacScriptParser pacScriptParser;
+  private final PacScriptParser pacScriptParser;
 
   private static volatile boolean enabled = true;
 
@@ -38,7 +38,7 @@ public class PacProxySelector extends ProxySelector {
 
   public PacProxySelector(PacScriptSource pacSource) {
     super();
-    selectEngine(pacSource);
+    pacScriptParser = selectEngine(pacSource);
   }
 
   /*************************************************************************
@@ -70,12 +70,13 @@ public class PacProxySelector extends ProxySelector {
    *          to use as input.
    ************************************************************************/
 
-  private void selectEngine(PacScriptSource pacSource) {
+  protected PacScriptParser selectEngine(PacScriptSource pacSource) {
     try {
       Logger.log(getClass(), LogLevel.INFO, "Using javax.script JavaScript engine.");
-      pacScriptParser = new JavaxPacScriptParser(pacSource);
+      return new JavaxPacScriptParser(pacSource);
     } catch (Exception e) {
       Logger.log(getClass(), LogLevel.ERROR, "PAC parser error.", e);
+      return null;
     }
   }
 
