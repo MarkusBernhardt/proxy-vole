@@ -155,21 +155,20 @@ public class PacProxySelector extends ProxySelector {
    ************************************************************************/
 
   private Proxy buildProxyFromPacResult(String pacResult) {
-    if (pacResult.trim().length() < 6) {
-      return Proxy.NO_PROXY;
-    }
-    String proxyDef = pacResult.trim();
-    if (proxyDef.toUpperCase().startsWith(PAC_DIRECT)) {
-      return Proxy.NO_PROXY;
-    }
+    String[] words = pacResult.trim().split("\\s+");
+
+    if (words.length == 0) return Proxy.NO_PROXY;
+    if (words.length == 1) return Proxy.NO_PROXY;
+
+    String proxyType = words[0];
+    String host  = concat(words,1);
 
     // Check proxy type.
     Proxy.Type type = Proxy.Type.HTTP;
-    if (proxyDef.toUpperCase().startsWith(PAC_SOCKS)) {
+    if (proxyType.toUpperCase().startsWith(PAC_SOCKS)) {
       type = Proxy.Type.SOCKS;
     }
 
-    String host = proxyDef.substring(6);
     Integer port = ProxyUtil.DEFAULT_PROXY_PORT;
 
     // Split port from host
@@ -183,5 +182,12 @@ public class PacProxySelector extends ProxySelector {
     SocketAddress adr = InetSocketAddress.createUnresolved(host, port);
     return new Proxy(type, adr);
   }
+  private static String concat(String[] strings, int startIndex){
+    StringBuilder b = new StringBuilder();
+    for (int i = startIndex; i < strings.length; i++) {
+      b.append(strings[i]);
+    }
+    return b.toString();
 
+  }
 }

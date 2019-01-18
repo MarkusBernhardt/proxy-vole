@@ -116,6 +116,27 @@ public class PacProxySelectorTest {
 	}
 
 	/*************************************************************************
+	 * Test method
+	 *
+	 * @throws ProxyException
+	 *             on proxy detection error.
+	 * @throws MalformedURLException
+	 *             on URL erros
+	 ************************************************************************/
+	@Test
+	public void testScriptProxyTypes() throws ProxyException, MalformedURLException {
+		PacProxySelector pacProxySelector = new PacProxySelector(new UrlPacScriptSource(toUrl("testProxyTypes.pac")));
+		List<Proxy> result = pacProxySelector.select(TestUtil.HTTP_TEST_URI);
+		assertEquals(6, result.size());
+		assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy.com", 80)), result.get(0));
+		assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy2.com", 80)), result.get(1));
+		assertEquals(new Proxy(Type.HTTP, InetSocketAddress.createUnresolved("my-proxy3.com", 486)), result.get(2));
+		assertEquals(new Proxy(Type.SOCKS, InetSocketAddress.createUnresolved("my-proxy4.com", 80)), result.get(3));
+		assertEquals(new Proxy(Type.SOCKS, InetSocketAddress.createUnresolved("my-proxy5.com", 80)), result.get(4));
+		assertEquals(new Proxy(Type.SOCKS, InetSocketAddress.createUnresolved("my-proxy6.com", 80)), result.get(5));
+	}
+
+	/*************************************************************************
 	 * Test method for the override local IP feature.
 	 * 
 	 * @throws ProxyException
