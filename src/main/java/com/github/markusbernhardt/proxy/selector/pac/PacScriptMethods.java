@@ -36,6 +36,10 @@ public class PacScriptMethods implements ScriptMethods {
 
 	public static final String OVERRIDE_LOCAL_IP = "com.btr.proxy.pac.overrideLocalIP";
 
+        //Cache IP addresses when found in cqse myIpAddress() is called too often
+        private String ipAddress = null;
+        private String ipAddressEx = null;
+        
 	private final static String GMT = "GMT";
 
 	private final static List<String> DAYS = Collections
@@ -186,12 +190,15 @@ public class PacScriptMethods implements ScriptMethods {
 	/*************************************************************************
 	 * Returns the IP address of the host that the process is running on, as a
 	 * string in the dot-separated integer format.
+         * IP is cached during the pac processing time to avoid requeting it too often.
 	 * 
 	 * @return an IP as string.
 	 ************************************************************************/
-
 	public String myIpAddress() {
-		return getLocalAddressOfType(Inet4Address.class);
+            if(ipAddress == null || ipAddress.isEmpty()){
+                ipAddress = getLocalAddressOfType(Inet4Address.class);
+            }
+            return ipAddress;
 	}
 
 	/*************************************************************************
@@ -665,7 +672,10 @@ public class PacScriptMethods implements ScriptMethods {
 	 ************************************************************************/
 
 	public String myIpAddressEx() {
-		return getLocalAddressOfType(Inet6Address.class);
+            if(ipAddressEx == null || ipAddressEx.isEmpty()){
+                ipAddressEx = getLocalAddressOfType(Inet6Address.class);
+            }
+            return ipAddressEx;
 	}
 
 	/*************************************************************************
