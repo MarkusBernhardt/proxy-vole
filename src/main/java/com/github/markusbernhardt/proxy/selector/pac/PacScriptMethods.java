@@ -156,7 +156,8 @@ public class PacScriptMethods implements ScriptMethods {
 		String[] parts = address.split("\\.");
 		long shift = 24;
 		for (String part : parts) {
-			long lpart = Long.parseLong(part);
+                    //Trim the string in case a space has been added to prevent exceptions
+			long lpart = Long.parseLong(part.trim());
 
 			result |= (lpart << shift);
 			shift -= 8;

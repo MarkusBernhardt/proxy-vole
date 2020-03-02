@@ -75,6 +75,21 @@ public class JavaxPacScriptParserTest {
     PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("test2.pac")));
     p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
   }
+  
+  
+  /*************************************************************************
+   * Test that a space in an IP address can still be parsed.
+   * 
+   * @throws ProxyException
+   *           on proxy detection error.
+   * @throws MalformedURLException
+   *           on URL erros
+   ************************************************************************/
+  @Test
+  public void testSpaceInScript() throws ProxyException, MalformedURLException {
+    PacScriptParser p = new JavaxPacScriptParser(new UrlPacScriptSource(toUrl("test3.pac")));
+    p.evaluate(TestUtil.HTTP_TEST_URI.toString(), "host1.unit-test.invalid");
+  }
 
   /*************************************************************************
    * Test method
