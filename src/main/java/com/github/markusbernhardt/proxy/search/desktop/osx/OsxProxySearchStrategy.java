@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
-
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.browser.ie.IELocalByPassFilter;
 import com.github.markusbernhardt.proxy.search.wpad.WpadProxySearchStrategy;
@@ -262,7 +261,7 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 	private ProxySelector installExceptionList(Dict proxySettings, ProxySelector result) {
 		List<?> proxyExceptions = (List<?>) proxySettings.get("ExceptionsList");
 		if (proxyExceptions != null && proxyExceptions.size() > 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "OSX uses proxy bypass list: {0}", proxyExceptions);
+			Logger.log(getClass(), LogLevel.TRACE, "OSX uses proxy bypass list: {}", proxyExceptions);
 			String noProxyList = toCommaSeparatedString(proxyExceptions);
 			result = new ProxyBypassListSelector(noProxyList, result);
 		}
@@ -342,7 +341,7 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 			String proxyHost = (String) proxySettings.get("SOCKSProxy");
 			int proxyPort = (Integer) proxySettings.get("SOCKSPort");
 			ps.setSelector("socks", new FixedSocksSelector(proxyHost, proxyPort));
-			Logger.log(getClass(), LogLevel.TRACE, "OSX socks proxy is {0}:{1}", proxyHost, proxyPort);
+			Logger.log(getClass(), LogLevel.TRACE, "OSX socks proxy is {}:{}", proxyHost, proxyPort);
 		}
 	}
 
@@ -365,7 +364,7 @@ public class OsxProxySearchStrategy implements ProxySearchStrategy {
 			int proxyPort = (Integer) proxySettings.get(prefix + "Port");
 			FixedProxySelector fp = new FixedProxySelector(proxyHost, proxyPort);
 			ps.setSelector(protocol.toLowerCase(), fp);
-			Logger.log(getClass(), LogLevel.TRACE, "OSX uses for {0} the proxy {1}:{2}", protocol, proxyHost,
+			Logger.log(getClass(), LogLevel.TRACE, "OSX uses for {} the proxy {}:{}", protocol, proxyHost,
 			        proxyPort);
 		}
 	}

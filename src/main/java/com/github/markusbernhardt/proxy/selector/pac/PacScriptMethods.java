@@ -107,7 +107,7 @@ public class PacScriptMethods implements ScriptMethods {
 			InetAddress.getByName(host).getHostAddress();
 			return true;
 		} catch (UnknownHostException ex) {
-			Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "Hostname not resolveable {0}.", host);
+			Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "Hostname not resolveable {}.", host);
 		}
 		return false;
 	}
@@ -178,7 +178,7 @@ public class PacScriptMethods implements ScriptMethods {
 			InetAddress ina = InetAddress.getByName(host);
 			return ina.getHostAddress();
 		} catch (UnknownHostException e) {
-			Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "DNS name not resolvable {0}.", host);
+			Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "DNS name not resolvable {}.", host);
 		}
 		return "";
 	}
@@ -220,7 +220,7 @@ public class PacScriptMethods implements ScriptMethods {
 				while (addresses.hasMoreElements()) {
 					InetAddress adr = addresses.nextElement();
 					if (cl.isInstance(adr)) {
-						Logger.log(JavaxPacScriptParser.class, LogLevel.TRACE, "Local address resolved to {0}", adr);
+						Logger.log(JavaxPacScriptParser.class, LogLevel.TRACE, "Local address resolved to {}", adr);
 						return adr.getHostAddress();
 					}
 				}
@@ -653,7 +653,7 @@ public class PacScriptMethods implements ScriptMethods {
 				result.append("; ");
 			}
 		} catch (UnknownHostException e) {
-			Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "DNS name not resolvable {0}.", host);
+			Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "DNS name not resolvable {}.", host);
 		}
 		return result.toString();
 	}
@@ -703,7 +703,7 @@ public class PacScriptMethods implements ScriptMethods {
 			}
 			return result.toString();
 		} catch (Exception e) {
-			Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "Cannot sort invalid IP list: {0}.", ipAddressList);
+			Logger.log(JavaxPacScriptParser.class, LogLevel.DEBUG, "Cannot sort invalid IP list: {}.", ipAddressList);
 			return "";
 		}
 	}

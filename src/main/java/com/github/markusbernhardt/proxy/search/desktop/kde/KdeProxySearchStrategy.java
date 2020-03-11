@@ -3,7 +3,6 @@ package com.github.markusbernhardt.proxy.search.desktop.kde;
 import java.io.IOException;
 import java.net.ProxySelector;
 import java.util.Properties;
-
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.env.EnvProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.wpad.WpadProxySearchStrategy;
@@ -106,7 +105,7 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 			break;
 		case 2: // PAC Script
 			String pacScriptUrl = settings.getProperty("Proxy Config Script", "");
-			Logger.log(getClass(), LogLevel.TRACE, "Kde uses autodetect script {0}", pacScriptUrl);
+			Logger.log(getClass(), LogLevel.TRACE, "Kde uses autodetect script {}", pacScriptUrl);
 			result = ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
 			break;
 		case 3: // WPAD
@@ -178,7 +177,7 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 		String proxyVar = settings.getProperty("httpProxy", null);
 		FixedProxySelector httpPS = ProxyUtil.parseProxySettings(proxyVar);
 		if (httpPS == null) {
-			Logger.log(getClass(), LogLevel.TRACE, "Kde http proxy is {0}", proxyVar);
+			Logger.log(getClass(), LogLevel.TRACE, "Kde http proxy is {}", proxyVar);
 			return null;
 		}
 
@@ -188,14 +187,14 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 		proxyVar = settings.getProperty("httpsProxy", null);
 		FixedProxySelector httpsPS = ProxyUtil.parseProxySettings(proxyVar);
 		if (httpsPS != null) {
-			Logger.log(getClass(), LogLevel.TRACE, "Kde https proxy is {0}", proxyVar);
+			Logger.log(getClass(), LogLevel.TRACE, "Kde https proxy is {}", proxyVar);
 			ps.setSelector("https", httpsPS);
 		}
 
 		proxyVar = settings.getProperty("ftpProxy", null);
 		FixedProxySelector ftpPS = ProxyUtil.parseProxySettings(proxyVar);
 		if (ftpPS != null) {
-			Logger.log(getClass(), LogLevel.TRACE, "Kde ftp proxy is {0}", proxyVar);
+			Logger.log(getClass(), LogLevel.TRACE, "Kde ftp proxy is {}", proxyVar);
 			ps.setSelector("ftp", ftpPS);
 		}
 
@@ -204,10 +203,10 @@ public class KdeProxySearchStrategy implements ProxySearchStrategy {
 		if (noProxyList != null && noProxyList.trim().length() > 0) {
 			boolean reverse = "true".equals(settings.getProperty("ReversedException", "false"));
 			if (reverse) {
-				Logger.log(getClass(), LogLevel.TRACE, "Kde proxy blacklist is {0}", noProxyList);
+				Logger.log(getClass(), LogLevel.TRACE, "Kde proxy blacklist is {}", noProxyList);
 				return new UseProxyWhiteListSelector(noProxyList, ps);
 			} else {
-				Logger.log(getClass(), LogLevel.TRACE, "Kde proxy whitelist is {0}", noProxyList);
+				Logger.log(getClass(), LogLevel.TRACE, "Kde proxy whitelist is {}", noProxyList);
 				return new ProxyBypassListSelector(noProxyList, ps);
 			}
 		}

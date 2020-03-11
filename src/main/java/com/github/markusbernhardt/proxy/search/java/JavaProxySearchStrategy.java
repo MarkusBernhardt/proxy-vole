@@ -103,7 +103,7 @@ public class JavaProxySearchStrategy implements ProxySearchStrategy {
     }
 
     String port = System.getProperty("socksProxyPort", "1080");
-    Logger.log(getClass(), LogLevel.TRACE, "Socks proxy {0}:{1} found", host, port);
+    Logger.log(getClass(), LogLevel.TRACE, "Socks proxy {}:{} found", host, port);
     ps.setFallbackSelector(new FixedSocksSelector(host, Integer.parseInt(port)));
     return true;
   }
@@ -130,7 +130,7 @@ public class JavaProxySearchStrategy implements ProxySearchStrategy {
       whiteList = System.getProperty("http.nonProxyHosts", "").replace('|', ',');
     }
 
-    Logger.log(getClass(), LogLevel.TRACE, protocol.toUpperCase() + " proxy {0}:{1} found using whitelist: {2}", host,
+    Logger.log(getClass(), LogLevel.TRACE, protocol.toUpperCase() + " proxy {}:{} found using whitelist: {}", host,
         port, whiteList);
 
     ProxySelector protocolSelector = new FixedProxySelector(host, Integer.parseInt(port));

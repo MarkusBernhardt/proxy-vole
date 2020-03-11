@@ -2,7 +2,6 @@ package com.github.markusbernhardt.proxy.search.browser.ie;
 
 import java.net.ProxySelector;
 import java.util.Properties;
-
 import com.github.markusbernhardt.proxy.jna.win.WinHttp;
 import com.github.markusbernhardt.proxy.jna.win.WinHttpCurrentUserIEProxyConfig;
 import com.github.markusbernhardt.proxy.jna.win.WinHttpHelpers;
@@ -133,7 +132,7 @@ public class IEProxySearchStrategy extends CommonWindowsSearchStrategy {
 		if (proxyString == null) {
 			return null;
 		}
-		Logger.log(getClass(), LogLevel.TRACE, "IE uses manual settings: {0} with bypass list: {1}", proxyString,
+		Logger.log(getClass(), LogLevel.TRACE, "IE uses manual settings: {} with bypass list: {}", proxyString,
 		        bypassList);
 
 		Properties p = parseProxyList(proxyString);

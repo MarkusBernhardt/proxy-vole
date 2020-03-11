@@ -4,17 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ProxySelector;
 import java.util.Properties;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
 import com.github.markusbernhardt.proxy.selector.direct.NoProxySelector;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
@@ -22,10 +19,10 @@ import com.github.markusbernhardt.proxy.selector.misc.ProtocolDispatchSelector;
 import com.github.markusbernhardt.proxy.selector.whitelist.ProxyBypassListSelector;
 import com.github.markusbernhardt.proxy.util.EmptyXMLResolver;
 import com.github.markusbernhardt.proxy.util.Logger;
+import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.PlatformUtil;
 import com.github.markusbernhardt.proxy.util.ProxyException;
 import com.github.markusbernhardt.proxy.util.ProxyUtil;
-import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
 /*****************************************************************************
  * Loads the Gnome proxy settings from the Gnome GConf settings.
@@ -119,14 +116,14 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 		}
 		if ("auto".equals(type)) {
 			String pacScriptUrl = settings.getProperty("/system/proxy/autoconfig_url", "");
-			Logger.log(getClass(), LogLevel.TRACE, "Gnome uses autodetect script {0}", pacScriptUrl);
+			Logger.log(getClass(), LogLevel.TRACE, "Gnome uses autodetect script {}", pacScriptUrl);
 			result = ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
 		}
 
 		// Wrap into white-list filter?
 		String noProxyList = settings.getProperty("/system/http_proxy/ignore_hosts", null);
 		if (result != null && noProxyList != null && noProxyList.trim().length() > 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "Gnome uses proxy bypass list: {0}", noProxyList);
+			Logger.log(getClass(), LogLevel.TRACE, "Gnome uses proxy bypass list: {}", noProxyList);
 			result = new ProxyBypassListSelector(noProxyList, result);
 		}
 
@@ -189,7 +186,7 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 
 		File settingsFile = new File(userDir, ".gconf" + File.separator + path.toString() + "%gconf.xml");
 		if (!settingsFile.exists()) {
-			Logger.log(getClass(), LogLevel.WARNING, "Gnome settings: {0} not found.", settingsFile);
+			Logger.log(getClass(), LogLevel.WARNING, "Gnome settings: {} not found.", settingsFile);
 			return null;
 		}
 		return settingsFile;
@@ -259,7 +256,7 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 		String proxyHost = settings.getProperty("/system/http_proxy/host", null);
 		int proxyPort = Integer.parseInt(settings.getProperty("/system/http_proxy/port", "0").trim());
 		if (proxyHost != null && proxyHost.length() > 0 && proxyPort > 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "Gnome http proxy is {0}:{1}", proxyHost, proxyPort);
+			Logger.log(getClass(), LogLevel.TRACE, "Gnome http proxy is {}:{}", proxyHost, proxyPort);
 			ps.setSelector("http", new FixedProxySelector(proxyHost.trim(), proxyPort));
 		}
 	}
@@ -278,7 +275,7 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 		String proxyHost = settings.getProperty("/system/proxy/socks_host", null);
 		int proxyPort = Integer.parseInt(settings.getProperty("/system/proxy/socks_port", "0").trim());
 		if (proxyHost != null && proxyHost.length() > 0 && proxyPort > 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "Gnome socks proxy is {0}:{1}", proxyHost, proxyPort);
+			Logger.log(getClass(), LogLevel.TRACE, "Gnome socks proxy is {}:{}", proxyHost, proxyPort);
 			ps.setSelector("socks", new FixedProxySelector(proxyHost.trim(), proxyPort));
 		}
 	}
@@ -293,7 +290,7 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 		String proxyHost = settings.getProperty("/system/proxy/ftp_host", null);
 		int proxyPort = Integer.parseInt(settings.getProperty("/system/proxy/ftp_port", "0").trim());
 		if (proxyHost != null && proxyHost.length() > 0 && proxyPort > 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "Gnome ftp proxy is {0}:{1}", proxyHost, proxyPort);
+			Logger.log(getClass(), LogLevel.TRACE, "Gnome ftp proxy is {}:{}", proxyHost, proxyPort);
 			ps.setSelector("ftp", new FixedProxySelector(proxyHost.trim(), proxyPort));
 		}
 	}
@@ -308,7 +305,7 @@ public class GnomeProxySearchStrategy implements ProxySearchStrategy {
 		String proxyHost = settings.getProperty("/system/proxy/secure_host", null);
 		int proxyPort = Integer.parseInt(settings.getProperty("/system/proxy/secure_port", "0").trim());
 		if (proxyHost != null && proxyHost.length() > 0 && proxyPort > 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "Gnome secure proxy is {0}:{1}", proxyHost, proxyPort);
+			Logger.log(getClass(), LogLevel.TRACE, "Gnome secure proxy is {}:{}", proxyHost, proxyPort);
 			ps.setSelector("https", new FixedProxySelector(proxyHost.trim(), proxyPort));
 			ps.setSelector("sftp", new FixedProxySelector(proxyHost.trim(), proxyPort));
 		}

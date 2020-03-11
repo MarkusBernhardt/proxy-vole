@@ -44,7 +44,7 @@ public class WinHttpHelpers {
             // Something more serious is wrong. There isn't much we can do
             // about it but at least we would like to log it.
             Logger.log(WinHttpHelpers.class, Logger.LogLevel.ERROR,
-                    "Windows function WinHttpDetectAutoProxyConfigUrl returned error : {0}", ex.getMessage());
+                    "Windows function WinHttpDetectAutoProxyConfigUrl returned error : {}", ex.getMessage());
             return null;
         }
         if (result) {

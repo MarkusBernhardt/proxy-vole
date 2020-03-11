@@ -119,7 +119,7 @@ public class ProxySearch implements ProxySearchStrategy {
 			s.addStrategy(Strategy.OS_DEFAULT);
 			s.addStrategy(Strategy.ENV_VAR);
 		}
-		Logger.log(ProxySearch.class, LogLevel.TRACE, "Using default search priority: {0}", s);
+		Logger.log(ProxySearch.class, LogLevel.TRACE, "Using default search priority: {}", s);
 
 		return s;
 	}
@@ -230,7 +230,7 @@ public class ProxySearch implements ProxySearchStrategy {
 					        "No proxy found for " + strat.getName() + ". Trying next one.");
 				}
 			} catch (ProxyException e) {
-				Logger.log(getClass(), LogLevel.DEBUG, "Strategy {0} failed trying next one.", e);
+				Logger.log(getClass(), LogLevel.DEBUG, "Strategy {} failed trying next one.", e);
 				// Ignore and try next strategy.
 			}
 		}

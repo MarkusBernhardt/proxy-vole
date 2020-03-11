@@ -74,7 +74,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
       if (pacScriptUrl == null) {
         return null;
       }
-      Logger.log(getClass(), LogLevel.TRACE, "PAC script url found: {0}", pacScriptUrl);
+      Logger.log(getClass(), LogLevel.TRACE, "PAC script url found: {}", pacScriptUrl);
       return ProxyUtil.buildPacSelectorForUrl(pacScriptUrl);
     } catch (IOException e) {
       Logger.log(getClass(), LogLevel.ERROR, "Error during WPAD search.", e);
@@ -151,7 +151,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
       // Try to connect to URL
       try {
         URL lookupURL = new URL(stringBuilder.toString());
-        Logger.log(getClass(), LogLevel.TRACE, "Trying url: {0}", lookupURL);
+        Logger.log(getClass(), LogLevel.TRACE, "Trying url: {}", lookupURL);
 
         HttpURLConnection con = (HttpURLConnection) lookupURL.openConnection(Proxy.NO_PROXY);
         con.setInstanceFollowRedirects(true);

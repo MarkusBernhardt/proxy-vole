@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map.Entry;
 import java.util.Properties;
-
 import org.ini4j.Ini;
 import org.ini4j.Profile.Section;
-
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 
@@ -60,7 +58,7 @@ class FirefoxSettingParser {
 			}
 		}
 		if (profileFolder != null) {
-			Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder is {0}", profileFolder);
+			Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder is {}", profileFolder);
 		} else {
 			Logger.log(getClass(), LogLevel.DEBUG, "Firefox settings folder not found!");
 		}

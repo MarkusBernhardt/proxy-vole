@@ -91,7 +91,7 @@ public class WTypes2 {
                         // happen. If it really does happen, there isn't much we 
                         // can do about it other than logging it.
                         Logger.log(getClass(), Logger.LogLevel.ERROR,
-                                "Windows function GlobalFree failed while freeing memory for {0} object", 
+                                "Windows function GlobalFree failed while freeing memory for {} object", 
                                 getClass().getSimpleName());
                     }
                 }

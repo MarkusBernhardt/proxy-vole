@@ -112,24 +112,24 @@ public class EnvProxySearchStrategy implements ProxySearchStrategy {
 			return null;
 		}
 
-		Logger.log(getClass(), LogLevel.TRACE, "Http Proxy is {0}", this.httpProxy);
+		Logger.log(getClass(), LogLevel.TRACE, "Http Proxy is {}", this.httpProxy);
 		ProtocolDispatchSelector ps = new ProtocolDispatchSelector();
 		ps.setSelector("http", httpPS);
 
 		ProxySelector httpsPS = ProxyUtil.parseProxySettings(this.httpsProxy);
-		Logger.log(getClass(), LogLevel.TRACE, "Https Proxy is {0}", httpsPS == null ? this.httpsProxy : httpsPS);
+		Logger.log(getClass(), LogLevel.TRACE, "Https Proxy is {}", httpsPS == null ? this.httpsProxy : httpsPS);
 		ps.setSelector("https", httpsPS != null ? httpsPS : httpPS);
 
 		ProxySelector ftpPS = ProxyUtil.parseProxySettings(this.ftpProxy);
 		if (ftpPS != null) {
-			Logger.log(getClass(), LogLevel.TRACE, "Ftp Proxy is {0}", this.ftpProxy);
+			Logger.log(getClass(), LogLevel.TRACE, "Ftp Proxy is {}", this.ftpProxy);
 			ps.setSelector("ftp", ftpPS);
 		}
 
 		// Wrap with white list support
 		ProxySelector result = ps;
 		if (this.noProxy != null && this.noProxy.trim().length() > 0) {
-			Logger.log(getClass(), LogLevel.TRACE, "Using proxy bypass list: {0}", this.noProxy);
+			Logger.log(getClass(), LogLevel.TRACE, "Using proxy bypass list: {}", this.noProxy);
 			result = new ProxyBypassListSelector(this.noProxy, ps);
 		}
 

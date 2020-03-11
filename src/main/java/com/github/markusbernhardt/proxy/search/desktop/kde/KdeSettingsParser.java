@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
-
 import com.github.markusbernhardt.proxy.util.Logger;
 import com.github.markusbernhardt.proxy.util.Logger.LogLevel;
 import com.github.markusbernhardt.proxy.util.PlatformUtil;
@@ -128,7 +127,7 @@ public class KdeSettingsParser {
 	 ************************************************************************/
 
 	private File findSettingsFile(File settingsFile) {
-		Logger.log(getClass(), LogLevel.TRACE, "Searching Kde settings in {0}", settingsFile);
+		Logger.log(getClass(), LogLevel.TRACE, "Searching Kde settings in {}", settingsFile);
 		if (!settingsFile.exists()) {
 			Logger.log(getClass(), LogLevel.DEBUG, "Settings not found");
 			return null;

@@ -33,22 +33,22 @@ public class PlatformUtil {
 
 	public static Platform getCurrentPlattform() {
 		String osName = System.getProperty("os.name");
-		Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detecting platform. Name is: {0}", osName);
+		Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detecting platform. Name is: {}", osName);
 
 		if (osName.toLowerCase().contains("windows")) {
-			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Windows platform: {0}", osName);
+			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Windows platform: {}", osName);
 			return Platform.WIN;
 		}
 		if (osName.toLowerCase().contains("linux")) {
-			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Linux platform: {0}", osName);
+			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Linux platform: {}", osName);
 			return Platform.LINUX;
 		}
 		if (osName.startsWith("Mac OS")) {
-			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Mac OS platform: {0}", osName);
+			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Mac OS platform: {}", osName);
 			return Platform.MAC_OS;
 		}
 		if (osName.startsWith("SunOS")) {
-			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Solaris platform: {0}", osName);
+			Logger.log(PlatformUtil.class, LogLevel.TRACE, "Detected Solaris platform: {}", osName);
 			return Platform.SOLARIS;
 		}
 
