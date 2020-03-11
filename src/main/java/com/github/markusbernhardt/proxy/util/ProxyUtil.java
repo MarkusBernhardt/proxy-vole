@@ -53,7 +53,7 @@ public class ProxyUtil {
 			}
 			return new FixedProxySelector(host.trim(), port);
 		} catch (MalformedURLException e) {
-			Logger.log(ProxyUtil.class, Logger.LogLevel.WARNING, "Cannot parse Proxy Settings {0}", proxyVar);
+			Logger.log(ProxyUtil.class, Logger.LogLevel.WARNING, "Cannot parse Proxy Settings {}", proxyVar);
 			return null;
 		}
 	}

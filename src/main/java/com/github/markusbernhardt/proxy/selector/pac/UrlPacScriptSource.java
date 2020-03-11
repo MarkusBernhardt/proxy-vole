@@ -67,7 +67,7 @@ public class UrlPacScriptSource implements PacScriptSource {
 					this.scriptContent = downloadPacContent(this.scriptUrl);
 				}
 			} catch (IOException e) {
-				Logger.log(getClass(), LogLevel.ERROR, "Loading script failed from: {0} with error {1}", this.scriptUrl,
+				Logger.log(getClass(), LogLevel.ERROR, "Loading script failed from: {} with error {}", this.scriptUrl,
 				        e);
 				this.scriptContent = "";
 				throw e;
@@ -229,7 +229,7 @@ public class UrlPacScriptSource implements PacScriptSource {
 			try {
 				timeout = Integer.parseInt(prop.trim());
 			} catch (NumberFormatException e) {
-				Logger.log(getClass(), LogLevel.DEBUG, "Invalid override property : {0}={1}", overrideProperty, prop);
+				Logger.log(getClass(), LogLevel.DEBUG, "Invalid override property : {}={}", overrideProperty, prop);
 				// In this case use the default value.
 			}
 		}
@@ -286,7 +286,7 @@ public class UrlPacScriptSource implements PacScriptSource {
 			}
 			return true;
 		} catch (IOException e) {
-			Logger.log(getClass(), LogLevel.DEBUG, "File reading error: {0}", e);
+			Logger.log(getClass(), LogLevel.DEBUG, "File reading error: {}", e);
 			return false;
 		}
 	}

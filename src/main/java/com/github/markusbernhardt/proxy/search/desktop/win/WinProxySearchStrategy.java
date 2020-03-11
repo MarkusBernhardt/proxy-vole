@@ -92,7 +92,7 @@ public class WinProxySearchStrategy extends CommonWindowsSearchStrategy {
 		if (proxyString == null) {
 			return null;
 		}
-		Logger.log(getClass(), LogLevel.TRACE, "Windows uses manual settings: {0} with bypass list: {1}", proxyString,
+		Logger.log(getClass(), LogLevel.TRACE, "Windows uses manual settings: {} with bypass list: {}", proxyString,
 		        bypassList);
 
 		Properties p = parseProxyList(proxyString);

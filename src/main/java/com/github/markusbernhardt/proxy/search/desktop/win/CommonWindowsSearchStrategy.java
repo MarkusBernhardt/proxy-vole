@@ -6,7 +6,6 @@ import java.net.ProxySelector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 import com.github.markusbernhardt.proxy.ProxySearchStrategy;
 import com.github.markusbernhardt.proxy.search.browser.ie.IELocalByPassFilter;
 import com.github.markusbernhardt.proxy.selector.fixed.FixedProxySelector;
@@ -118,7 +117,7 @@ public abstract class CommonWindowsSearchStrategy implements ProxySearchStrategy
 				proxyString = proxyString.replace(';', '\n');
 				p.load(new ByteArrayInputStream(proxyString.getBytes("ISO-8859-1")));
 			} catch (IOException e) {
-				Logger.log(getClass(), LogLevel.ERROR, "Error reading IE settings as properties: {0}", e);
+				Logger.log(getClass(), LogLevel.ERROR, "Error reading IE settings as properties: {}", e);
 
 				throw new ProxyException(e);
 			}
@@ -151,7 +150,7 @@ public abstract class CommonWindowsSearchStrategy implements ProxySearchStrategy
 				try {
 					port = Integer.parseInt(hostAndPort[1]);
 				} catch (NumberFormatException e) {
-					Logger.log(CommonWindowsSearchStrategy.class, Logger.LogLevel.WARNING, "Cannot parse SOCKS proxy port {0}", hostAndPort[1]);
+					Logger.log(CommonWindowsSearchStrategy.class, Logger.LogLevel.WARNING, "Cannot parse SOCKS proxy port {}", hostAndPort[1]);
 				}
 			}
 			ps.setFallbackSelector(new FixedSocksSelector(host, port));
