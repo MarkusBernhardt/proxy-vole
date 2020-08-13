@@ -1,6 +1,7 @@
 package com.github.markusbernhardt.proxy.jna.win;
 
 import com.github.markusbernhardt.proxy.util.Logger;
+import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Kernel32;
 import com.sun.jna.platform.win32.WTypes;
@@ -39,7 +40,7 @@ public class WTypes2 {
     public static class LPWSTRByReference extends ByReference {
 
         public LPWSTRByReference() {
-            super(Pointer.SIZE);
+            super(Native.POINTER_SIZE);
 			// memory cleanup
 			getPointer().setPointer(0, null);
         }

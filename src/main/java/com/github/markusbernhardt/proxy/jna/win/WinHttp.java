@@ -13,7 +13,7 @@ import com.sun.jna.win32.W32APIOptions;
  */
 public interface WinHttp extends StdCallLibrary {
 
-	WinHttp INSTANCE = (WinHttp) Native.loadLibrary("winhttp", WinHttp.class, W32APIOptions.UNICODE_OPTIONS);
+	WinHttp INSTANCE = (WinHttp) Native.load("winhttp", WinHttp.class, W32APIOptions.UNICODE_OPTIONS);
 
 	/**
 	 * Use DHCP to locate the proxy auto-configuration file.
