@@ -1,7 +1,7 @@
 # proxy-vole
 
-Proxy Vole is a Java library to auto detect the platform network proxy settings.  
-Note: This library is a fork of the now dead [proxy-vole](https://code.google.com/p/proxy-vole/) project by Bernd Rosstauscher hosted at Google Code.
+Proxy Vole is a Java library to auto detect the platform network proxy settings.
+Note: This library is a fork of (https://github.com/MarkusBernhardt/proxy-vole) project by Markus Bernhardt. The only difference is that this version uses Mozilla Rhino instead of Nashorn. Because Nashorn was deprecated in new JDK versions.
 
 ## Introduction
 The library provides some proxy setting search strategies to read the proxy settings from the system config 
