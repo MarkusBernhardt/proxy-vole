@@ -38,7 +38,7 @@ public class ProxyTester extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private JComboBox<ProxySearch.Strategy> modes;
+	private JComboBox modes;
 	private JButton testButton;
 	private JTextField urlField;
 
@@ -65,7 +65,7 @@ public class ProxyTester extends JFrame {
 
 		p.add(new JLabel("Mode:"));
 
-		this.modes = new JComboBox<ProxySearch.Strategy>(ProxySearch.Strategy.values());
+		this.modes = new JComboBox(ProxySearch.Strategy.values());
 		p.add(this.modes);
 
 		p.add(new JLabel("URL:"));

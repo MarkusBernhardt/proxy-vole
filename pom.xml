@@ -8,9 +8,9 @@
     <version>9</version>
   </parent>
 
-  <groupId>com.github.markusbernhardt</groupId>
+  <groupId>com.github.dbeaver</groupId>
   <artifactId>proxy-vole</artifactId>
-  <version>1.0.6-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
 
   <name>Proxy Vole</name>
   <description>Proxy Vole is a Java library to auto detect the platform network proxy settings.</description>
@@ -20,14 +20,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <downloadSources>true</downloadSources>
     <downloadJavadocs>true</downloadJavadocs>
-    <java.version>1.6</java.version>
+    <java.version>1.8</java.version>
+    <maven.test.failure.ignore>true</maven.test.failure.ignore>
   </properties>
-
-  <scm>
-    <url>https://github.com/MarkusBernhardt/proxy-vole</url>
-    <connection>scm:git://github.com/MarkusBernhardt/proxy-vole.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/MarkusBernhardt/proxy-vole.git</developerConnection>
-  </scm>
 
   <licenses>
     <license>
@@ -41,6 +36,10 @@
     <developer>
       <name>Markus Bernhardt</name>
       <email>markus.bernhardt@me.com</email>
+    </developer>
+    <developer>
+      <name>Serge Rider</name>
+      <email>serge@jkiss.org</email>
     </developer>
   </developers>
 
@@ -59,7 +58,7 @@
     </dependency>
     <dependency>
       <groupId>org.javadelight</groupId>
-      <artifactId>delight-nashorn-sandbox</artifactId>
+      <artifactId>delight-rhino-sandbox</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -96,8 +95,8 @@
       </dependency>
       <dependency>
         <groupId>org.javadelight</groupId>
-        <artifactId>delight-nashorn-sandbox</artifactId>
-        <version>0.1.14</version>
+        <artifactId>delight-rhino-sandbox</artifactId>
+        <version>0.0.14</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -220,6 +219,27 @@
           </execution>
         </executions>
       </plugin>
+
+      <!-- Deps collector -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.8</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <includeScope>runtime</includeScope>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
     <pluginManagement>
       <plugins>
