@@ -197,7 +197,7 @@ public class WpadProxySearchStrategy implements ProxySearchStrategy {
         }
       }
     } catch (SocketException e) {
-      e.printStackTrace();
+      Logger.log(getClass(), LogLevel.DEBUG, "Socket Exception: ", e);
     }
     return url;
   }
